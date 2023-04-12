@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { leftNavState } from '@/recoil/atom';
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -62,12 +63,11 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     padding-top: 24px;
     box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
       0 2px 8px hsla(0, 0%, 0%, 0.05);
-    > div {
+    ol {
+      display: flex;
+      flex-direction: column;
       width: 100%;
-      nav {
-        width: 100%;
-      }
-      ol {
+      li {
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -237,6 +237,9 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
 `;
 
 const Header = () => {
+  const router = useRouter();
+  const currentPath = router.pathname;
+  //좌측 네비를 위한 상태 및 함수
   const [leftNav, setLeftNav] = useRecoilState(leftNavState);
   const leftNavHandler = () => {
     setLeftNav(!leftNav);
@@ -249,6 +252,9 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener('resize', offLeftNav);
   }, []);
+
+  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
+
   return (
     <HeaderContainer leftNav={leftNav}>
       <div>
@@ -260,26 +266,36 @@ const Header = () => {
           <div>
             <nav>
               <ol className="nav-links">
-                <li className="nav-main">
+                <li
+                  className={
+                    currentPath === '/' ? 'nav-main focus-link' : 'nav-main'
+                  }
+                >
                   <a href="/">Home</a>
                 </li>
                 <li>
                   <ol>
                     <li className="nav-main">PUBLIC</li>
-                    <li className="nav-serve">
-                      <a href="/questions">Questions</a>
-                    </li>
-                    <li className="nav-serve">
-                      <a href="/tags">Tags</a>Tags
-                    </li>
-                    <li className="nav-serve">
-                      <a href="/users">Users</a>
-                    </li>
-                    <li className="nav-serve">
-                      <a href="/companies">Companies</a>
-                    </li>
+                    {publicLi.map((li) => (
+                      <li
+                        key={li}
+                        className={
+                          currentPath === `/${li.toLowerCase()}`
+                            ? 'nav-serve focus-link'
+                            : 'nav-serve'
+                        }
+                      >
+                        <a href={`/${li.toLowerCase()}`}>{li}</a>
+                      </li>
+                    ))}
                     <li className="nav-main">COLLECTIVES</li>
-                    <li className="nav-serve">
+                    <li
+                      className={
+                        currentPath === '/collectives'
+                          ? 'nav-serve focus-link'
+                          : 'nav-serve'
+                      }
+                    >
                       <a href="/collectives">Explore Collectives</a>
                     </li>
                   </ol>
@@ -342,12 +358,12 @@ const Header = () => {
             </li>
             <li>
               <Button color={'var(--text-aqua)'}>
-                <Link href="/users/login">Login </Link>
+                <Link href="/users/login">Login</Link>
               </Button>
             </li>
             <li>
               <Button color={'var(--text-white)'}>
-                <Link href="/users/signup">Sign Up </Link>
+                <Link href="/users/signup">Sign Up</Link>
               </Button>
             </li>
           </ol>
