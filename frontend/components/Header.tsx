@@ -6,7 +6,7 @@ import { IoEarthSharp } from 'react-icons/io5';
 import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
-import { leftNavState } from '@/recoil/atom';
+import { leftNavState, productsNavState } from '@/recoil/atom';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -209,7 +209,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   nav {
-    ol {
+    .right-ol {
       @media (max-width: 350px) {
         overflow-x: scroll;
         width: calc((100vw - 100%));
@@ -262,14 +262,15 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       width: 240px;
       display: flex;
       flex-direction: column;
-      padding: 10px 32px;
+      padding: 10px 10px;
       font-size: 0.7rem;
       white-space: pre-wrap;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      border-top: 1px solid #dfdfdf;
       > img {
         width: 130px;
-        margin: 8px 20px;
+        margin: 8px 50px;
       }
       button {
         background-color: #f78b34;
@@ -285,7 +286,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         display: flex;
         justify-content: center;
         margin: 6px 0px;
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         opacity: 0.7;
       }
     }
@@ -295,7 +296,9 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
 const Header = () => {
   const router = useRouter();
   const currentPath = router.pathname;
+
   //좌측 네비를 위한 상태 및 함수
+  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
   const [leftNav, setLeftNav] = useRecoilState(leftNavState);
   const leftNavHandler = () => {
     setLeftNav(!leftNav);
@@ -309,7 +312,8 @@ const Header = () => {
     window.addEventListener('resize', offLeftNav);
   }, []);
 
-  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
+  //products 버튼을 위한 상태 및 함수
+  const [productsNav, setProductNav] = useRecoilState(productsNavState);
 
   return (
     <HeaderContainer leftNav={leftNav}>
@@ -364,7 +368,7 @@ const Header = () => {
                 <li>
                   <div className="nav-main">TEAMS</div>
                   <div className="teams-message">
-                    <strong>Stack Overflow for Teams –</strong>Start
+                    <strong>Stack Overflow for Teams – Start</strong>
                     collaborating and sharing organizational knowledge.
                     <img
                       src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
@@ -420,7 +424,7 @@ const Header = () => {
         </form>
         <nav>
           {/* 네비바 */}
-          <ol>
+          <ol className="right-ol">
             <li></li>
             <li className="nav-search">
               <GoSearch />
