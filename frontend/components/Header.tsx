@@ -58,8 +58,25 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     z-index: 999;
     position: absolute;
     text-align: left;
+    padding-top: 24px;
     box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
       0 2px 8px hsla(0, 0%, 0%, 0.05);
+
+    > div {
+      width: 100%;
+      nav {
+        width: 100%;
+      }
+      ol {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+      }
+    }
+    .nav-main {
+      padding: 10px;
+    }
   }
   .logo {
     height: 100%;
@@ -111,6 +128,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         display: flex;
         position: relative;
         vertical-align: middle;
+        cursor: pointer;
         :hover {
           color: black;
           background-color: #ececec;
@@ -210,13 +228,13 @@ const Header = () => {
   const leftNavHandler = () => {
     setLeftNav(!leftNav);
   };
-  const handleResize = () => {
+  const offLeftNav = () => {
     if (window.innerWidth > 640) {
       setLeftNav(false);
     }
   };
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', offLeftNav);
   }, []);
   return (
     <HeaderContainer leftNav={leftNav}>
@@ -226,21 +244,44 @@ const Header = () => {
           <RxHamburgerMenu />
         </a>
         <div className="s-menu">
-          <div></div>
+          <div>
+            <nav>
+              <ol className="nav-links">
+                <li className="nav-main">Home</li>
+                <li>
+                  <ol>
+                    <li className="nav-main">PUBLIC</li>
+                    <li>Questions</li>
+                    <li>Tags</li>
+                    <li>Users</li>
+                    <li className="nav-main">Companies</li>
+                    <li>COLLECTIVES</li>
+                    <li>Explore Collectives</li>
+                  </ol>
+                </li>
+                <li>
+                  <div className="nav-main">TEAMS</div>
+                  <div>
+                    {/* <strong>Stack Overflow for Teams</strong>– Start
+                    collaborating and sharing organizational knowledge. */}
+                  </div>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
         <a className="logo" href="/">
           <span>Stack Overflow</span>
         </a>
         <ol className="s-navigation">
-          {/* products 버튼 */}
           <li className="about">
-            <a href="#">About</a>
+            <a>About</a>
           </li>
           <li>
-            <a href="#">Products</a>
+            <a>Products</a>
           </li>
           <li className="for-teams">
-            <a href="#">For Teams</a>
+            <a>For Teams</a>
           </li>
         </ol>
         <div>
@@ -275,10 +316,8 @@ const Header = () => {
               <GoSearch />
             </li>
             <li>
-              <Button message={'Log in'} checkGray={true} />
             </li>
             <li>
-              <Button message={'Sign up'} />
             </li>
           </ol>
         </nav>
