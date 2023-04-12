@@ -5,6 +5,7 @@ import Button from './Button';
 import { useRecoilState } from 'recoil';
 import { leftNavState } from '@/recoil/atom';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -61,7 +62,6 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     padding-top: 24px;
     box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
       0 2px 8px hsla(0, 0%, 0%, 0.05);
-
     > div {
       width: 100%;
       nav {
@@ -75,7 +75,18 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
     }
     .nav-main {
-      padding: 10px;
+      padding: 8px 10px;
+      font-size: 0.73rem;
+      opacity: 0.6;
+    }
+    .nav-serve {
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      cursor: pointer;
+      :hover {
+        opacity: 1;
+      }
     }
   }
   .logo {
@@ -138,6 +149,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
     }
+  }
+  .products-menu {
   }
   form {
     width: 57.5%;
@@ -247,16 +260,28 @@ const Header = () => {
           <div>
             <nav>
               <ol className="nav-links">
-                <li className="nav-main">Home</li>
+                <li className="nav-main">
+                  <a href="/">Home</a>
+                </li>
                 <li>
                   <ol>
                     <li className="nav-main">PUBLIC</li>
-                    <li>Questions</li>
-                    <li>Tags</li>
-                    <li>Users</li>
-                    <li className="nav-main">Companies</li>
-                    <li>COLLECTIVES</li>
-                    <li>Explore Collectives</li>
+                    <li className="nav-serve">
+                      <a href="/questions">Questions</a>
+                    </li>
+                    <li className="nav-serve">
+                      <a href="/tags">Tags</a>Tags
+                    </li>
+                    <li className="nav-serve">
+                      <a href="/users">Users</a>
+                    </li>
+                    <li className="nav-serve">
+                      <a href="/companies">Companies</a>
+                    </li>
+                    <li className="nav-main">COLLECTIVES</li>
+                    <li className="nav-serve">
+                      <a href="/collectives">Explore Collectives</a>
+                    </li>
                   </ol>
                 </li>
                 <li>
@@ -270,9 +295,9 @@ const Header = () => {
             </nav>
           </div>
         </div>
-        <a className="logo" href="/">
+        <Link className="logo" href="/">
           <span>Stack Overflow</span>
-        </a>
+        </Link>
         <ol className="s-navigation">
           <li className="about">
             <a>About</a>
@@ -284,7 +309,7 @@ const Header = () => {
             <a>For Teams</a>
           </li>
         </ol>
-        <div>
+        <div className="products-menu">
           {/* products 버튼 누르면 나오는 div*/}
           <div></div>
           <ol>
@@ -316,8 +341,14 @@ const Header = () => {
               <GoSearch />
             </li>
             <li>
+              <Button color={'var(--text-aqua)'}>
+                <Link href="/users/login">Login </Link>
+              </Button>
             </li>
             <li>
+              <Button color={'var(--text-white)'}>
+                <Link href="/users/signup">Sign Up </Link>
+              </Button>
             </li>
           </ol>
         </nav>
