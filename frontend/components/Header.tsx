@@ -1,6 +1,17 @@
 import styled from 'styled-components';
+import { GoSearch } from 'react-icons/go';
+import { RxHamburgerMenu } from 'react-icons/rx';
+import Button from './Button';
+import { useRecoilState } from 'recoil';
+import { leftNavState } from '@/recoil/atom';
+import { useEffect } from 'react';
 
-const HeaderContainer = styled.header`
+type HeaderContainerProps = {
+  leftNav: boolean;
+};
+
+const HeaderContainer = styled.header<HeaderContainerProps>`
+  position: fixed;
   width: 100%;
   display: flex;
   align-items: center;
@@ -15,11 +26,40 @@ const HeaderContainer = styled.header`
     height: 100%;
     width: 100%;
     display: flex;
-    margin: 0 calc((100% - 1100px) / 2);
+    margin: 0 calc((100% - 1280px) / 2);
     align-items: center;
-    @media (max-width: 1100px) {
+    @media (max-width: 1285px) {
       margin: 0;
+      padding-right: 10px;
     }
+  }
+  .s-menu-bar {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 47px;
+    :hover {
+      background-color: #ececec;
+    }
+    padding: 0px 16px;
+    svg {
+      font-size: 1.3rem;
+    }
+    @media (max-width: 640px) {
+      display: flex;
+    }
+  }
+  .s-menu {
+    width: 240px;
+    height: 500px;
+    display: ${(props) => (props.leftNav ? 'block' : 'none')};
+    top: 47px;
+    z-index: 999;
+    position: absolute;
+    text-align: left;
+    box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
+      0 2px 8px hsla(0, 0%, 0%, 0.05);
   }
   .logo {
     height: 100%;
@@ -38,17 +78,30 @@ const HeaderContainer = styled.header`
       margin-top: -4px;
       background-position: 0 -500px;
       background-image: url('https://cdn.sstatic.net/Img/unified/sprites.svg?v=fcc0ea44ba27');
+      @media (max-width: 640px) {
+        width: 25px;
+      }
     }
   }
   .s-navigation {
     display: flex;
     list-style: none;
     margin: 0;
+    > .about,
+    .for-teams {
+      @media (max-width: 980px) {
+        display: none;
+      }
+    }
     li {
       border: 0;
       font: inherit;
       font-size: 100%;
       vertical-align: baseline;
+      white-space: nowrap;
+      @media (max-width: 640px) {
+        margin-top: -6px;
+      }
       a {
         font-size: 0.8rem;
         color: #867f78;
@@ -62,11 +115,14 @@ const HeaderContainer = styled.header`
           color: black;
           background-color: #ececec;
         }
+        @media (max-width: 640px) {
+          font-size: 0.7rem;
+        }
       }
     }
   }
   form {
-    width: 65%;
+    width: 57.5%;
     height: 100%;
     padding: 0px calc(8px * 1);
     > div {
@@ -78,7 +134,8 @@ const HeaderContainer = styled.header`
         border: 1px solid #d1cdcd;
         border-radius: 3px;
         width: 100%;
-        padding: 6px 6px 6px 24px;
+        font-size: 0.8rem;
+        padding: 8px 6px 8px 32px;
         line-height: 14px;
         color: #3d3c3b;
         :focus {
@@ -86,17 +143,89 @@ const HeaderContainer = styled.header`
           box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
         }
       }
+      svg {
+        position: absolute;
+        margin: 8px;
+        font-size: 1.1rem;
+        opacity: 0.5;
+      }
+    }
+    @media (max-width: 640px) {
+      display: none;
+    }
+  }
+  nav {
+    ol {
+      @media (max-width: 350px) {
+        overflow-x: scroll;
+        width: calc((100vw - 100%));
+        ::-webkit-scrollbar {
+          width: 1px;
+          height: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: #c7c4c4;
+          border-radius: 50px;
+        }
+      }
+      @media (max-width: 220px) {
+        width: 50px;
+      }
+      display: flex;
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap; //부모 요소 내에서 텍스트가 줄 바꿈 유지
+        @media (max-width: 350px) {
+          margin-bottom: -1px;
+        }
+      }
+    }
+    @media (max-width: 640px) {
+      margin-left: auto;
+    }
+    .nav-search {
+      display: none;
+      cursor: pointer;
+      height: 47px;
+      padding: 0px 10px;
+      font-size: 1.15rem;
+      opacity: 0.7;
+      :hover {
+        background-color: #ececec;
+      }
+      @media (max-width: 350px) {
+        height: 38px;
+      }
+      @media (max-width: 640px) {
+        display: flex;
+      }
     }
   }
 `;
 
 const Header = () => {
+  const [leftNav, setLeftNav] = useRecoilState(leftNavState);
+  const leftNavHandler = () => {
+    setLeftNav(!leftNav);
+  };
+  const handleResize = () => {
+    if (window.innerWidth > 640) {
+      setLeftNav(false);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  }, []);
   return (
-    <HeaderContainer>
+    <HeaderContainer leftNav={leftNav}>
       <div>
         {/* 반응형으로 생기는 것들인듯 */}
-        <a href="#"></a>
-        <div>
+        <a className="s-menu-bar" onClick={leftNavHandler}>
+          <RxHamburgerMenu />
+        </a>
+        <div className="s-menu">
           <div></div>
         </div>
         <a className="logo" href="/">
@@ -104,8 +233,14 @@ const Header = () => {
         </a>
         <ol className="s-navigation">
           {/* products 버튼 */}
+          <li className="about">
+            <a href="#">About</a>
+          </li>
           <li>
             <a href="#">Products</a>
+          </li>
+          <li className="for-teams">
+            <a href="#">For Teams</a>
           </li>
         </ol>
         <div>
@@ -120,10 +255,9 @@ const Header = () => {
           </ol>
         </div>
         <form action="#">
-          {/* 검색창 */}
           <div>
-            <input type="text" />
-            <img src="#" alt="#" />
+            <input type="text" placeholder="Search..." />
+            <GoSearch />
             <div>
               <div></div>
               <div></div>
@@ -137,22 +271,15 @@ const Header = () => {
           {/* 네비바 */}
           <ol>
             <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <div>
-              <div>
-                <ul>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                </ul>
-              </div>
-            </div>
-            <li></li>
-            <li></li>
+            <li className="nav-search">
+              <GoSearch />
+            </li>
+            <li>
+              <Button message={'Log in'} checkGray={true} />
+            </li>
+            <li>
+              <Button message={'Sign up'} />
+            </li>
           </ol>
         </nav>
       </div>
