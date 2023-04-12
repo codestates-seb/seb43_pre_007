@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { IoEarthSharp } from 'react-icons/io5';
+import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
 import { leftNavState } from '@/recoil/atom';
@@ -22,8 +25,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   z-index: 100;
   min-width: auto;
   background-color: hsl(210, 8%, 97.5%);
-  box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
-    0 2px 8px hsla(0, 0%, 0%, 0.05);
+  box-shadow: var(--box-shadow);
+
   > div {
     height: 100%;
     width: 100%;
@@ -35,6 +38,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       padding-right: 10px;
     }
   }
+
   .s-menu-bar {
     display: none;
     align-items: center;
@@ -52,17 +56,16 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       display: flex;
     }
   }
+
   .s-menu {
     width: 240px;
-    height: 500px;
     display: ${(props) => (props.leftNav ? 'block' : 'none')};
     top: 47px;
     z-index: 999;
     position: absolute;
     text-align: left;
     padding-top: 24px;
-    box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
-      0 2px 8px hsla(0, 0%, 0%, 0.05);
+    box-shadow: var(--box-shadow);
     ol {
       display: flex;
       flex-direction: column;
@@ -78,17 +81,33 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       padding: 8px 10px;
       font-size: 0.73rem;
       opacity: 0.6;
+      margin: 2px 0px;
     }
     .nav-serve {
-      padding: 8px 20px;
+      padding: 8px 28px;
       font-size: 0.8rem;
       opacity: 0.6;
+      margin: 1px 0px;
+      display: flex;
+      position: relative;
       cursor: pointer;
       :hover {
         opacity: 1;
       }
+      svg {
+        position: absolute;
+        left: 6px;
+        bottom: 6px;
+        font-size: 1.2rem;
+      }
+    }
+    .collect-link {
+      > svg {
+        color: #ff7300;
+      }
     }
   }
+
   .logo {
     height: 100%;
     display: flex;
@@ -111,6 +130,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
     }
   }
+
   .s-navigation {
     display: flex;
     list-style: none;
@@ -150,8 +170,10 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
     }
   }
+
   .products-menu {
   }
+
   form {
     width: 57.5%;
     height: 100%;
@@ -185,6 +207,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       display: none;
     }
   }
+
   nav {
     ol {
       @media (max-width: 350px) {
@@ -216,6 +239,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     @media (max-width: 640px) {
       margin-left: auto;
     }
+
     .nav-search {
       display: none;
       cursor: pointer;
@@ -231,6 +255,38 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
       @media (max-width: 640px) {
         display: flex;
+      }
+    }
+
+    .teams-message {
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 32px;
+      font-size: 0.7rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      > img {
+        width: 130px;
+        margin: 8px 20px;
+      }
+      button {
+        background-color: #f78b34;
+        border: 1px solid #f78b34;
+        padding: 5.5px;
+        > a {
+          font-size: 0.68rem;
+          color: white;
+        }
+      }
+      > a {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 6px 0px;
+        font-size: 0.68rem;
+        opacity: 0.7;
       }
     }
   }
@@ -258,7 +314,6 @@ const Header = () => {
   return (
     <HeaderContainer leftNav={leftNav}>
       <div>
-        {/* 반응형으로 생기는 것들인듯 */}
         <a className="s-menu-bar" onClick={leftNavHandler}>
           <RxHamburgerMenu />
         </a>
@@ -285,7 +340,10 @@ const Header = () => {
                             : 'nav-serve'
                         }
                       >
-                        <a href={`/${li.toLowerCase()}`}>{li}</a>
+                        <a href={`/${li.toLowerCase()}`}>
+                          {li === 'Questions' && <IoEarthSharp />}
+                          {li}
+                        </a>
                       </li>
                     ))}
                     <li className="nav-main">COLLECTIVES</li>
@@ -296,15 +354,26 @@ const Header = () => {
                           : 'nav-serve'
                       }
                     >
-                      <a href="/collectives">Explore Collectives</a>
+                      <a href="/collectives" className="collect-link">
+                        <MdOutlineStars />
+                        Explore Collectives
+                      </a>
                     </li>
                   </ol>
                 </li>
                 <li>
                   <div className="nav-main">TEAMS</div>
-                  <div>
-                    {/* <strong>Stack Overflow for Teams</strong>– Start
-                    collaborating and sharing organizational knowledge. */}
+                  <div className="teams-message">
+                    <strong>Stack Overflow for Teams –</strong>Start
+                    collaborating and sharing organizational knowledge.
+                    <img
+                      src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
+                      alt="for-teams"
+                    />
+                    <Button>
+                      <a href="#">Create a free Team</a>
+                    </Button>
+                    <a href="#">Why Teams?</a>
                   </div>
                 </li>
               </ol>
