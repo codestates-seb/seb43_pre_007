@@ -5,6 +5,7 @@ import Button from './Button';
 import { useRecoilState } from 'recoil';
 import { leftNavState } from '@/recoil/atom';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -121,6 +122,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
     }
   }
+  .products-menu {
+  }
   form {
     width: 57.5%;
     height: 100%;
@@ -228,9 +231,9 @@ const Header = () => {
         <div className="s-menu">
           <div></div>
         </div>
-        <a className="logo" href="/">
+        <Link className="logo" href="/">
           <span>Stack Overflow</span>
-        </a>
+        </Link>
         <ol className="s-navigation">
           {/* products 버튼 */}
           <li className="about">
@@ -243,7 +246,7 @@ const Header = () => {
             <a href="#">For Teams</a>
           </li>
         </ol>
-        <div>
+        <div className="products-menu">
           {/* products 버튼 누르면 나오는 div*/}
           <div></div>
           <ol>
@@ -275,10 +278,14 @@ const Header = () => {
               <GoSearch />
             </li>
             <li>
-              <Button message={'Log in'} checkGray={true} />
+              <Button color={'var(--text-aqua)'}>
+                <Link href="/users/login">Login </Link>
+              </Button>
             </li>
             <li>
-              <Button message={'Sign up'} />
+              <Button color={'var(--text-white)'}>
+                <Link href="/users/signup">Sign Up </Link>
+              </Button>
             </li>
           </ol>
         </nav>
