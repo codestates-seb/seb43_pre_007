@@ -56,6 +56,38 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     @media (max-width: 640px) {
       display: flex;
     }
+    > span {
+      width: 16px;
+      height: 2px;
+      background-color: ${(props) =>
+        props.leftNav ? '' : 'var(--bg-left-nav)'};
+      ::before {
+        position: absolute;
+        content: '';
+        background-color: var(--bg-left-nav);
+        width: 16px;
+        height: 2px;
+        left: 10;
+        top: ${(props) => (props.leftNav ? '24px' : '18px')};
+        transition: top, transform;
+        transition-duration: 0.1s;
+        transition-timing-function: ease-in-out;
+        transform: ${(props) => (props.leftNav ? 'rotate(45deg)' : '')};
+      }
+      ::after {
+        position: absolute;
+        content: '';
+        background-color: var(--bg-left-nav);
+        width: 16px;
+        height: 2px;
+        left: 10;
+        top: ${(props) => (props.leftNav ? '24px' : '28px')};
+        transition: top, transform;
+        transition-duration: 0.1s;
+        transition-timing-function: ease-in-out;
+        transform: ${(props) => (props.leftNav ? 'rotate(-45deg)' : '')};
+      }
+    }
   }
 
   .s-menu {
@@ -190,6 +222,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     margin: 0px;
     transform: translate(158px, 174px);
     box-shadow: var(--box-shadow);
+    background-color: white;
     display: ${(props) => (props.productsNav ? 'flex' : 'none')};
     @media (max-width: 980px) {
       transform: translate(98px, 174px);
@@ -197,6 +230,20 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     @media (max-width: 640px) {
       transform: translate(37px, 174px);
       width: 178px;
+    }
+    > div {
+      position: absolute;
+      left: 100px;
+      width: 12px;
+      height: 12px;
+      background-color: white;
+      top: -7px;
+      border-top: 1px solid #eeeeed;
+      border-left: 1px solid #eeeeed;
+      transform: rotate(45deg);
+      @media (max-width: 640px) {
+        left: 85px;
+      }
     }
   }
 
@@ -340,6 +387,15 @@ const Header = () => {
 
   //products 버튼을 위한 상태 및 함수
   const [productsNav, setProductNav] = useRecoilState(productsNavState);
+  useEffect(() => {
+    const offProducts = (e: MouseEvent) => {
+      const target = e.target as HTMLElement; // e.target이 null인 경우를 대비한 처리
+      if (productsNav && !target.closest('.products')) {
+        setProductNav(false);
+      }
+    };
+    document.addEventListener('click', offProducts);
+  }, [productsNav, setProductNav]);
   const prodeutsNavHandler = () => {
     setProductNav(!productsNav);
   };
@@ -348,7 +404,8 @@ const Header = () => {
     <HeaderContainer leftNav={leftNav} productsNav={productsNav}>
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
-          <RxHamburgerMenu />
+          <span></span>
+          {/* <RxHamburgerMenu /> */}
         </a>
         <div className="s-menu">
           <div>
