@@ -4,19 +4,288 @@ import { GoSearch } from 'react-icons/go';
 import { IoEarthSharp } from 'react-icons/io5';
 import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
-import { useRecoilState } from 'recoil';
-import { leftNavState } from '@/recoil/atom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useOffClick } from '@/hooks/useOffClick';
 import useInput from '@/hooks/useInput';
+import { useRecoilState } from 'recoil';
+import { userLogState } from '@/recoil/atom';
 
 type HeaderContainerProps = {
   leftNav: boolean;
   productsNav: boolean;
   searchNav: boolean;
 };
+
+const Header = () => {
+  const router = useRouter();
+  const currentPath = router.pathname;
+
+  //좌측 네비를 위한 상태 및 함수
+  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
+  const [leftNav, setLeftNav] = useState(false);
+  const leftNavHandler = () => {
+    setProductNav(false);
+    setSearchNav(false);
+    setLeftNav(!leftNav);
+  };
+
+  //화면 크기에 따라 nav들 off
+  const offNav = () => {
+    if (window.innerWidth > 640) {
+      setLeftNav(false);
+      setSearchNav(false);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('resize', offNav);
+  }, []);
+
+  //products 네비를 위한 상태 및 함수
+  const [productsNav, setProductNav, productsNavRef] =
+    useOffClick<HTMLLIElement>(false);
+  const prodeutsNavHandler = () => {
+    setProductNav(!productsNav);
+  };
+
+  //search 네비를 위한 상태 및 함수
+  const [searchNav, setSearchNav, searchNavRef] =
+    useOffClick<HTMLInputElement>(false);
+  const onSearchNav = () => {
+    setSearchNav(true);
+  };
+
+  //search input val
+  const [form, onChange] = useInput({ searchContent: '' });
+
+  //유저 로그인 상태
+  const [userLog, setUserLog] = useRecoilState(userLogState);
+
+  return (
+    <HeaderContainer
+      leftNav={leftNav}
+      productsNav={productsNav}
+      searchNav={searchNav}
+    >
+      <div>
+        <a className="s-menu-bar" onClick={leftNavHandler}>
+          {/* 왼쪽 네비 버튼 */}
+          <span></span>
+        </a>
+        <div className="s-menu">
+          <div>
+            <nav>
+              <ol className="nav-links">
+                <li
+                  className={
+                    currentPath === '/' ? 'nav-main focus-link' : 'nav-main'
+                  }
+                >
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <ol>
+                    <li className="nav-main">PUBLIC</li>
+                    {publicLi.map((li) => (
+                      <li
+                        key={li}
+                        className={
+                          currentPath === `/${li.toLowerCase()}`
+                            ? 'nav-serve focus-link'
+                            : 'nav-serve'
+                        }
+                      >
+                        <a href={`/${li.toLowerCase()}`}>
+                          {li === 'Questions' && <IoEarthSharp />}
+                          {li}
+                        </a>
+                      </li>
+                    ))}
+                    <li className="nav-main">COLLECTIVES</li>
+                    <li
+                      className={
+                        currentPath === '/collectives'
+                          ? 'nav-serve focus-link'
+                          : 'nav-serve'
+                      }
+                    >
+                      <a href="/collectives" className="collect-link">
+                        <MdOutlineStars />
+                        Explore Collectives
+                      </a>
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <div className="nav-main">TEAMS</div>
+                  <div className="teams-message">
+                    <strong>Stack Overflow for Teams – Start</strong>
+                    collaborating and sharing organizational knowledge.
+                    <img
+                      src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
+                      alt="for-teams"
+                    />
+                    <Button>
+                      <a href="#">Create a free Team</a>
+                    </Button>
+                    <a href="#">Why Teams?</a>
+                  </div>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <Link className="logo" href="/">
+          <span>Stack Overflow</span>
+        </Link>
+        <ol className="s-navigation">
+          <li className="about">
+            <a>About</a>
+          </li>
+          <li
+            ref={productsNavRef}
+            className="products"
+            onClick={prodeutsNavHandler}
+          >
+            <a>Products</a>
+          </li>
+          <li className="for-teams">
+            <a>For Teams</a>
+          </li>
+        </ol>
+        <div className="products-menu">
+          {/* products 버튼 누르면 나오는 div*/}
+          <div></div>
+          <ol>
+            <li>
+              <Link href="/questions">
+                <span>Stack Overflow</span>
+                <span>Public questions & answers</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/questions">
+                <span>Stack Overflow for Teams</span>
+                <span>
+                  Where developers & technologists share private knowledge with
+                  coworkers
+                </span>
+              </Link>
+            </li>
+            <li>
+              <a href="#">
+                <span>Talent</span>
+                <span>Build your employer brand</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span>Advertising</span>
+                <span>Reach developers & technologists worldwide</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span>About the company</span>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <form action="#">
+          <div>
+            <input
+              type="text"
+              placeholder="Search..."
+              ref={searchNavRef}
+              name="searchContent"
+              value={form.searchContent}
+              onChange={onChange}
+              onClick={onSearchNav}
+            />
+            <GoSearch />
+            <div className="search-nav">
+              <div></div>
+              <div>
+                <div>
+                  <div>
+                    <div>
+                      <span>[tag]</span>
+                      <span>search within a tag</span>
+                    </div>
+                    <div>
+                      <span>user:1234</span>
+                      <span>search by author</span>
+                    </div>
+                    <div>
+                      <span>&quot;words here&quot;</span>
+                      <span>exact phrase</span>
+                    </div>
+                    <div>
+                      <span>collective:&quot;Name&quot;</span>
+                      <span>collective content</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>answers:0</span>
+                      <span>unanswered questions</span>
+                    </div>
+                    <div>
+                      <span>score:3</span>
+                      <span>posts with a 3+ score</span>
+                    </div>
+                    <div>
+                      <span>is:question</span>
+                      <span>type of post</span>
+                    </div>
+                    <div>
+                      <span>isaccepted:yes</span>
+                      <span>search within status</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <Button color={'var(--text-aqua)'}>
+                      <Link href="/questions/ask">Ask a question</Link>
+                    </Button>
+                  </div>
+                  <div>Search help</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <nav>
+          {/* 네비바 */}
+          <ol className="right-ol">
+            <li className="nav-search">
+              <GoSearch />
+            </li>
+            {userLog ? (
+              <li></li>
+            ) : (
+              <>
+                <li>
+                  <Button color={'var(--text-aqua)'}>
+                    <Link href="/users/login">Log in</Link>
+                  </Button>
+                </li>
+                <li>
+                  <Button color={'var(--text-white)'}>
+                    <Link href="/users/signup">Sign Up</Link>
+                  </Button>
+                </li>
+              </>
+            )}
+          </ol>
+        </nav>
+      </div>
+    </HeaderContainer>
+  );
+};
+export default Header;
 
 const HeaderContainer = styled.header<HeaderContainerProps>`
   position: fixed;
@@ -457,264 +726,3 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     }
   }
 `;
-
-const Header = () => {
-  const router = useRouter();
-  const currentPath = router.pathname;
-
-  //좌측 네비를 위한 상태 및 함수
-  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
-  const [leftNav, setLeftNav] = useRecoilState(leftNavState);
-  const leftNavHandler = () => {
-    setProductNav(false);
-    setSearchNav(false);
-    setLeftNav(!leftNav);
-  };
-
-  //화면 크기에 따라 nav들 off
-  const offNav = () => {
-    if (window.innerWidth > 640) {
-      setLeftNav(false);
-      setSearchNav(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener('resize', offNav);
-  }, []);
-
-  //products 네비를 위한 상태 및 함수
-  const [productsNav, setProductNav, productsNavRef] =
-    useOffClick<HTMLLIElement>(false);
-  const prodeutsNavHandler = () => {
-    setProductNav(!productsNav);
-  };
-
-  //search 네비를 위한 상태 및 함수
-  const [searchNav, setSearchNav, searchNavRef] =
-    useOffClick<HTMLInputElement>(false);
-  const onSearchNav = () => {
-    setSearchNav(true);
-  };
-
-  //search input val
-  const [form, onChange] = useInput({ searchContent: '' });
-
-  return (
-    <HeaderContainer
-      leftNav={leftNav}
-      productsNav={productsNav}
-      searchNav={searchNav}
-    >
-      <div>
-        <a className="s-menu-bar" onClick={leftNavHandler}>
-          {/* 왼쪽 네비 버튼 */}
-          <span></span>
-        </a>
-        <div className="s-menu">
-          <div>
-            <nav>
-              <ol className="nav-links">
-                <li
-                  className={
-                    currentPath === '/' ? 'nav-main focus-link' : 'nav-main'
-                  }
-                >
-                  <a href="/">Home</a>
-                </li>
-                <li>
-                  <ol>
-                    <li className="nav-main">PUBLIC</li>
-                    {publicLi.map((li) => (
-                      <li
-                        key={li}
-                        className={
-                          currentPath === `/${li.toLowerCase()}`
-                            ? 'nav-serve focus-link'
-                            : 'nav-serve'
-                        }
-                      >
-                        <a href={`/${li.toLowerCase()}`}>
-                          {li === 'Questions' && <IoEarthSharp />}
-                          {li}
-                        </a>
-                      </li>
-                    ))}
-                    <li className="nav-main">COLLECTIVES</li>
-                    <li
-                      className={
-                        currentPath === '/collectives'
-                          ? 'nav-serve focus-link'
-                          : 'nav-serve'
-                      }
-                    >
-                      <a href="/collectives" className="collect-link">
-                        <MdOutlineStars />
-                        Explore Collectives
-                      </a>
-                    </li>
-                  </ol>
-                </li>
-                <li>
-                  <div className="nav-main">TEAMS</div>
-                  <div className="teams-message">
-                    <strong>Stack Overflow for Teams – Start</strong>
-                    collaborating and sharing organizational knowledge.
-                    <img
-                      src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
-                      alt="for-teams"
-                    />
-                    <Button>
-                      <a href="#">Create a free Team</a>
-                    </Button>
-                    <a href="#">Why Teams?</a>
-                  </div>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-        <Link className="logo" href="/">
-          <span>Stack Overflow</span>
-        </Link>
-        <ol className="s-navigation">
-          <li className="about">
-            <a>About</a>
-          </li>
-          <li
-            ref={productsNavRef}
-            className="products"
-            onClick={prodeutsNavHandler}
-          >
-            <a>Products</a>
-          </li>
-          <li className="for-teams">
-            <a>For Teams</a>
-          </li>
-        </ol>
-        <div className="products-menu">
-          {/* products 버튼 누르면 나오는 div*/}
-          <div></div>
-          <ol>
-            <li>
-              <Link href="/questions">
-                <span>Stack Overflow</span>
-                <span>Public questions & answers</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/questions">
-                <span>Stack Overflow for Teams</span>
-                <span>
-                  Where developers & technologists share private knowledge with
-                  coworkers
-                </span>
-              </Link>
-            </li>
-            <li>
-              <a href="#">
-                <span>Talent</span>
-                <span>Build your employer brand</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span>Advertising</span>
-                <span>Reach developers & technologists worldwide</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span>About the company</span>
-              </a>
-            </li>
-          </ol>
-        </div>
-        <form action="#">
-          <div>
-            <input
-              type="text"
-              placeholder="Search..."
-              ref={searchNavRef}
-              name="searchContent"
-              value={form.searchContent}
-              onChange={onChange}
-              onClick={onSearchNav}
-            />
-            <GoSearch />
-            <div className="search-nav">
-              <div></div>
-              <div>
-                <div>
-                  <div>
-                    <div>
-                      <span>[tag]</span>
-                      <span>search within a tag</span>
-                    </div>
-                    <div>
-                      <span>user:1234</span>
-                      <span>search by author</span>
-                    </div>
-                    <div>
-                      <span>&quot;words here&quot;</span>
-                      <span>exact phrase</span>
-                    </div>
-                    <div>
-                      <span>collective:&quot;Name&quot;</span>
-                      <span>collective content</span>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <span>answers:0</span>
-                      <span>unanswered questions</span>
-                    </div>
-                    <div>
-                      <span>score:3</span>
-                      <span>posts with a 3+ score</span>
-                    </div>
-                    <div>
-                      <span>is:question</span>
-                      <span>type of post</span>
-                    </div>
-                    <div>
-                      <span>isaccepted:yes</span>
-                      <span>search within status</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <Button color={'var(--text-aqua)'}>
-                      <Link href="/questions/ask">Ask a question</Link>
-                    </Button>
-                  </div>
-                  <div>Search help</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-        <nav>
-          {/* 네비바 */}
-          <ol className="right-ol">
-            <li></li>
-            <li className="nav-search">
-              <GoSearch />
-            </li>
-            <li>
-              <Button color={'var(--text-aqua)'}>
-                <Link href="/users/login">Login</Link>
-              </Button>
-            </li>
-            <li>
-              <Button color={'var(--text-white)'}>
-                <Link href="/users/signup">Sign Up</Link>
-              </Button>
-            </li>
-          </ol>
-        </nav>
-      </div>
-    </HeaderContainer>
-  );
-};
-export default Header;
