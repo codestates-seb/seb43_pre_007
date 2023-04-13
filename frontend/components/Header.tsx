@@ -1,12 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
-import { IoEarthSharp } from 'react-icons/io5';
-import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useOffClick } from '@/hooks/useOffClick';
 import useInput from '@/hooks/useInput';
 import { useRecoilState } from 'recoil';
