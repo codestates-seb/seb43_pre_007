@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export const leftNavState = atom({
-  key: 'leftNavState',
-  default: false,
+export const userLogState = atom({
+  key: 'userLogState',
+  default: false, //true로하고 작업
 });

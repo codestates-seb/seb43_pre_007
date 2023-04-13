@@ -1,16 +1,25 @@
 @import url('./reset.css');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-:root {
+* {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+}
+
+:root {
+  --box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
+    0 2px 8px hsla(0, 0%, 0%, 0.05);
   --text-aqua: #4d7c97;
   --text-white: #ffffff;
+  --text-blue: #0a95ff;
+  --bg-left-nav: #4b4848;
   --bg-gray: #e7e7e7;
   --bg-blue: #0a95ff;
+  --bg-orange: #f78b34;
   --btn-boxshadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
   --btn-border: 1px solid hsl(205, 41%, 63%);
+  --thin-white-border-color: #eeeeed;
 }
 
 ul,
@@ -22,8 +31,4 @@ ol {
 a {
   text-decoration: none;
   color: rgb(0, 0, 0);
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
 }
