@@ -11,11 +11,14 @@ import { useOffClick } from '@/hooks/useOffClick';
 import useInput from '@/hooks/useInput';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
+import useOffResize from '@/hooks/useOffResize';
 
 type HeaderContainerProps = {
   leftNav: boolean;
   productsNav: boolean;
   searchNav: boolean;
+  userLog: boolean;
+  rightNav: boolean;
 };
 
 const Header = () => {
@@ -31,17 +34,6 @@ const Header = () => {
     setLeftNav(!leftNav);
   };
 
-  //화면 크기에 따라 nav들 off
-  const offNav = () => {
-    if (window.innerWidth > 640) {
-      setLeftNav(false);
-      setSearchNav(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener('resize', offNav);
-  }, []);
-
   //products 네비를 위한 상태 및 함수
   const [productsNav, setProductNav, productsNavRef] =
     useOffClick<HTMLLIElement>(false);
@@ -56,17 +48,31 @@ const Header = () => {
     setSearchNav(true);
   };
 
+  //right 네비를 위한 상태 및 함수
+  const [rightNav, setRightNav, rightNavRef] =
+    useOffClick<HTMLLIElement>(false);
+  const onRightNav = () => {
+    setRightNav(true);
+  };
+
   //search input val
   const [form, onChange] = useInput({ searchContent: '' });
 
   //유저 로그인 상태
   const [userLog, setUserLog] = useRecoilState(userLogState);
 
+  //resize로 인해 off
+  useOffResize(740, 'up', setLeftNav);
+  useOffResize(740, 'down', setSearchNav);
+  useOffResize(350, 'down', setRightNav);
+
   return (
     <HeaderContainer
       leftNav={leftNav}
       productsNav={productsNav}
       searchNav={searchNav}
+      rightNav={rightNav}
+      userLog={userLog}
     >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
@@ -258,13 +264,57 @@ const Header = () => {
           </div>
         </form>
         <nav>
-          {/* 네비바 */}
           <ol className="right-ol">
             <li className="nav-search">
               <GoSearch />
             </li>
             {userLog ? (
-              <li></li>
+              <>
+                <li className="user-img">
+                  <Link href="/users">
+                    <img
+                      src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
+                      alt=""
+                    />
+                  </Link>
+                  <span>1</span>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="20" height="18" viewBox="0 0 20 18">
+                      <path d="M4.63 1h10.56a2 2 0 0 1 1.94 1.35L20 10.79V15a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-4.21l2.78-8.44c.25-.8 1-1.36 1.85-1.35Zm8.28 12 2-2h2.95l-2.44-7.32a1 1 0 0 0-.95-.68H5.35a1 1 0 0 0-.95.68L1.96 11h2.95l2 2h6Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M15 2V1H3v1H0v4c0 1.6 1.4 3 3 3v1c.4 1.5 3 2.6 5 3v2H5s-1 1.5-1 2h10c0-.4-1-2-1-2h-3v-2c2-.4 4.6-1.5 5-3V9c1.6-.2 3-1.4 3-3V2h-3ZM3 7c-.5 0-1-.5-1-1V4h1v3Zm8.4 2.5L9 8 6.6 9.4l1-2.7L5 5h3l1-2.7L10 5h2.8l-2.3 1.8 1 2.7h-.1ZM16 6c0 .5-.5 1-1 1V4h1v2Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8Zm.81 12.13c-.02.71-.55 1.15-1.24 1.13-.66-.02-1.17-.49-1.15-1.2.02-.72.56-1.18 1.22-1.16.7.03 1.2.51 1.17 1.23ZM11.77 8c-.59.66-1.78 1.09-2.05 1.97a4 4 0 0 0-.09.75c0 .05-.03.16-.18.16H7.88c-.16 0-.18-.1-.18-.15.06-1.35.66-2.2 1.83-2.88.39-.29.7-.75.7-1.24.01-1.24-1.64-1.82-2.35-.72-.21.33-.18.73-.18 1.1H5.75c0-1.97 1.03-3.26 3.03-3.26 1.75 0 3.47.87 3.47 2.83 0 .57-.2 1.05-.48 1.44Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li
+                  className="right-icons"
+                  ref={rightNavRef}
+                  onClick={onRightNav}
+                >
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M15 1H3a2 2 0 0 0-2 2v2h16V3a2 2 0 0 0-2-2ZM1 13c0 1.1.9 2 2 2h8v3l3-3h1a2 2 0 0 0 2-2v-2H1v2Zm16-7H1v4h16V6Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-nav">
+                  <div></div>
+                </li>
+              </>
             ) : (
               <>
                 <li>
@@ -324,7 +374,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     svg {
       font-size: 1.3rem;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 740px) {
       display: flex;
     }
     > span {
@@ -425,7 +475,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       margin-top: -4px;
       background-position: 0 -500px;
       background-image: url('https://cdn.sstatic.net/Img/unified/sprites.svg?v=fcc0ea44ba27');
-      @media (max-width: 640px) {
+      @media (max-width: 740px) {
         width: 25px;
       }
     }
@@ -458,7 +508,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       font-size: 100%;
       vertical-align: baseline;
       white-space: nowrap;
-      @media (max-width: 640px) {
+      @media (max-width: 740px) {
         margin-top: -6px;
       }
       a {
@@ -475,7 +525,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           color: black;
           background-color: #ececec;
         }
-        @media (max-width: 640px) {
+        @media (max-width: 740px) {
           font-size: 0.7rem;
         }
       }
@@ -496,7 +546,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     @media (max-width: 980px) {
       transform: translate(98px, 154px);
     }
-    @media (max-width: 640px) {
+    @media (max-width: 740px) {
       transform: translate(37px, 154px);
       width: 178px;
     }
@@ -510,7 +560,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       border-top: 1px solid var(--thin-white-border-color);
       border-left: 1px solid var(--thin-white-border-color);
       transform: rotate(45deg);
-      @media (max-width: 640px) {
+      @media (max-width: 740px) {
         left: 85px;
       }
     }
@@ -549,7 +599,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: 57.5%;
+    width: ${(props) => (props.userLog ? '50.5%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;
@@ -583,7 +633,6 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         position: absolute;
         width: 97.5%;
         top: 54px;
-        height: 180px;
         z-index: 101;
         > div:first-child {
           position: absolute;
@@ -638,16 +687,18 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 740px) {
       display: none;
     }
   }
 
   nav {
     .right-ol {
+      position: relative;
       @media (max-width: 350px) {
         overflow-x: scroll;
-        width: calc((100vw - 100%));
+        width: ${(props) =>
+          props.userLog ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
         ::-webkit-scrollbar {
           width: 1px;
           height: 10px;
@@ -658,7 +709,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
       @media (max-width: 220px) {
-        width: 50px;
+        width: ${(props) => (props.userLog ? '60px' : '50px')};
       }
       display: flex;
       li {
@@ -667,7 +718,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         justify-content: center;
         white-space: nowrap; //부모 요소 내에서 텍스트가 줄 바꿈 유지
         @media (max-width: 350px) {
-          margin-bottom: -1px;
+          margin-bottom: ${(props) => (props.userLog ? '-10px' : '-1px')};
         }
       }
       .nav-search {
@@ -681,14 +732,14 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           background-color: #ececec;
         }
         @media (max-width: 350px) {
-          height: 38px;
+          height: ${(props) => (props.userLog ? '' : '38px')};
         }
-        @media (max-width: 640px) {
+        @media (max-width: 740px) {
           display: flex;
         }
       }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 740px) {
       margin-left: auto;
     }
 
@@ -723,6 +774,50 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         font-size: 0.7rem;
         opacity: 0.7;
       }
+    }
+
+    .user-img {
+      padding-left: 12px;
+      padding-right: 18px;
+      height: 48px;
+      cursor: pointer;
+      :hover {
+        background-color: var(--bg-gray);
+      }
+      a {
+        width: 24px;
+        height: 24px;
+        img {
+          width: 100%;
+        }
+      }
+      span {
+        font-size: 0.8rem;
+        font-weight: 900;
+        padding-left: 4px;
+      }
+    }
+
+    .right-icons {
+      cursor: pointer;
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      opacity: 0.65;
+      :hover {
+        background-color: var(--bg-gray);
+        opacity: 1;
+      }
+    }
+
+    .right-nav {
+      display: ${(props) => (props.rightNav ? '' : 'none !important')};
+      position: absolute;
+      box-shadow: var(--box-shadow);
+      left: 18px;
+      top: 48px;
+      width: 200px;
+      height: 200px;
     }
   }
 `;
