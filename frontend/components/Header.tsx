@@ -5,7 +5,7 @@ import { IoEarthSharp } from 'react-icons/io5';
 import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
-import { leftNavState, productsNavState } from '@/recoil/atom';
+import { leftNavState, productsNavState, searchNavState } from '@/recoil/atom';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -212,19 +212,20 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
 
   .products-menu {
     width: 210px;
-    height: 280px;
+    height: 260px;
     position: absolute;
     border-radius: 4px;
     margin: 0px;
-    transform: translate(158px, 164px);
+    z-index: 1000;
+    transform: translate(158px, 154px);
     box-shadow: var(--box-shadow);
     background-color: white;
     display: ${(props) => (props.productsNav ? 'flex' : 'none')};
     @media (max-width: 980px) {
-      transform: translate(98px, 174px);
+      transform: translate(98px, 154px);
     }
     @media (max-width: 640px) {
-      transform: translate(37px, 174px);
+      transform: translate(37px, 154px);
       width: 178px;
     }
     > div {
@@ -243,8 +244,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     }
     li {
       width: 100%;
-      padding: 6px;
-      margin: 4px 12px;
+      padding: 6px 12px;
+      z-index: 1000;
       font-size: 0.8rem;
       a {
         display: flex;
@@ -254,15 +255,23 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           opacity: 0.6;
         }
       }
+      :hover {
+        background-color: #d6d6d6;
+      }
     }
     li:last-child {
       border-top: 1px solid var(--border-color-left-nav);
-      margin: 0px;
       > a {
+        margin-top: 3px;
         span {
-          margin: 4px 12px 0px;
           font-size: 0.8rem;
+          :hover {
+            opacity: 1;
+          }
         }
+      }
+      :hover {
+        background-color: white;
       }
     }
   }
@@ -328,27 +337,26 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           margin-bottom: -1px;
         }
       }
+      .nav-search {
+        display: none;
+        cursor: pointer;
+        height: 47px;
+        padding: 0px 10px;
+        font-size: 1.15rem;
+        opacity: 0.7;
+        :hover {
+          background-color: #ececec;
+        }
+        @media (max-width: 350px) {
+          height: 38px;
+        }
+        @media (max-width: 640px) {
+          display: flex;
+        }
+      }
     }
     @media (max-width: 640px) {
       margin-left: auto;
-    }
-
-    .nav-search {
-      display: none;
-      cursor: pointer;
-      height: 47px;
-      padding: 0px 10px;
-      font-size: 1.15rem;
-      opacity: 0.7;
-      :hover {
-        background-color: #ececec;
-      }
-      @media (max-width: 350px) {
-        height: 38px;
-      }
-      @media (max-width: 640px) {
-        display: flex;
-      }
     }
 
     .teams-message {
@@ -406,7 +414,7 @@ const Header = () => {
     window.addEventListener('resize', offLeftNav);
   }, []);
 
-  //products 버튼을 위한 상태 및 함수
+  //products 네비를 위한 상태 및 함수
   const [productsNav, setProductNav] = useRecoilState(productsNavState);
   useEffect(() => {
     const offProducts = (e: MouseEvent) => {
@@ -418,9 +426,11 @@ const Header = () => {
     document.addEventListener('click', offProducts);
   }, [productsNav, setProductNav]);
   const prodeutsNavHandler = () => {
-    setLeftNav(false);
     setProductNav(!productsNav);
   };
+
+  //search 네비를 위한 상태 및 함수
+  const [searchNav, setSearchNav] = useRecoilState(searchNavState);
 
   return (
     <HeaderContainer leftNav={leftNav} productsNav={productsNav}>
@@ -550,10 +560,10 @@ const Header = () => {
             <GoSearch />
             <div>
               <div></div>
-              <div></div>
-              <span></span>
-              <div></div>
-              <div></div>
+              <div>
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
         </form>
