@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 import type { DocumentContext, DocumentInitialProps } from 'next/document';
+import Header from '@/components/Header';
 
 type Props = {
   styles: React.ReactElement[];
@@ -11,6 +12,7 @@ const MyDocument = ({ styles }: Props) => {
     <Html lang="ko">
       <Head>{styles}</Head>
       <body>
+        <Header />
         <Main />
         <NextScript />
       </body>

@@ -7,7 +7,6 @@ const Home = () => {
       <Head>
         <title>Stack Overflow</title>
       </Head>
-      <Header />
     </>
   );
 };
