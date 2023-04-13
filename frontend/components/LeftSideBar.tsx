@@ -12,6 +12,7 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
+  console.log(currentPath);
   const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
   return (
     <SideBar width={width}>
@@ -101,12 +102,14 @@ const SideBar = styled.div<LeftSideBarProps>`
       width: 100%;
     }
   }
+
   .nav-main {
     padding: 8px 10px;
     font-size: 0.73rem;
     opacity: 0.6;
     margin: 2px 0px;
   }
+
   .nav-serve {
     padding: 8px 28px;
     font-size: 0.8rem;
@@ -125,6 +128,13 @@ const SideBar = styled.div<LeftSideBarProps>`
       font-size: 1.2rem;
     }
   }
+
+  .focus-link {
+    background-color: var(--bg-gray);
+    font-weight: 900;
+    opacity: 1;
+  }
+
   .collect-link {
     > svg {
       color: #ff7300;
