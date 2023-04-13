@@ -5,12 +5,12 @@ export const leftNavState = atom({
   default: false,
 });
 
-export const productsNavState = atom({
-  key: 'productsNavState',
-  default: false,
-});
+// export const productsNavState = atom({
+//   key: 'productsNavState',
+//   default: false,
+// });
 
-export const searchNavState = atom({
-  key: 'searchNavState',
-  default: false,
-});
+// export const searchNavState = atom({
+//   key: 'searchNavState',
+//   default: false,
+// });

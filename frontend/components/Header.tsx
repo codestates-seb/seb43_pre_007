@@ -5,14 +5,16 @@ import { IoEarthSharp } from 'react-icons/io5';
 import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
-import { leftNavState, productsNavState, searchNavState } from '@/recoil/atom';
-import { useEffect } from 'react';
+import { leftNavState } from '@/recoil/atom';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useOffClick } from '@/hooks/useOffClick';
 
 type HeaderContainerProps = {
   leftNav: boolean;
   productsNav: boolean;
+  searchNav: boolean;
 };
 
 const HeaderContainer = styled.header<HeaderContainerProps>`
@@ -280,6 +282,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     width: 57.5%;
     height: 100%;
     padding: 0px calc(8px * 1);
+    position: relative;
     > div {
       width: 100%;
       height: 100%;
@@ -303,6 +306,29 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         margin: 8px;
         font-size: 1.1rem;
         opacity: 0.5;
+      }
+      > .search-nav {
+        display: ${(props) => (props.searchNav ? '' : 'none')};
+        box-shadow: var(--box-shadow);
+        position: absolute;
+        width: 97.5%;
+        top: 54px;
+        height: 500px;
+        z-index: 101;
+        > div:first-child {
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          z-index: 100;
+          background-color: white;
+          top: -10px;
+          left: 50%;
+          border-top: 1px solid var(--border-color-left-nav);
+          border-left: 1px solid var(--border-color-left-nav);
+          transform: rotate(45deg);
+        }
+        > div:last-child {
+        }
       }
     }
     @media (max-width: 640px) {
@@ -403,6 +429,7 @@ const Header = () => {
   const [leftNav, setLeftNav] = useRecoilState(leftNavState);
   const leftNavHandler = () => {
     setProductNav(false);
+    setSearchNav(false);
     setLeftNav(!leftNav);
   };
   const offLeftNav = () => {
@@ -415,25 +442,25 @@ const Header = () => {
   }, []);
 
   //products 네비를 위한 상태 및 함수
-  const [productsNav, setProductNav] = useRecoilState(productsNavState);
-  useEffect(() => {
-    const offProducts = (e: MouseEvent) => {
-      const target = e.target as HTMLElement; // e.target이 null인 경우를 대비한 처리
-      if (productsNav && !target.closest('.products')) {
-        setProductNav(false);
-      }
-    };
-    document.addEventListener('click', offProducts);
-  }, [productsNav, setProductNav]);
+  const [productsNav, setProductNav, productsNavRef] =
+    useOffClick<HTMLLIElement>(false);
   const prodeutsNavHandler = () => {
     setProductNav(!productsNav);
   };
 
   //search 네비를 위한 상태 및 함수
-  const [searchNav, setSearchNav] = useRecoilState(searchNavState);
+  const [searchNav, setSearchNav, searchNavRef] =
+    useOffClick<HTMLInputElement>(false);
+  const onSearchNav = () => {
+    setSearchNav(true);
+  };
 
   return (
-    <HeaderContainer leftNav={leftNav} productsNav={productsNav}>
+    <HeaderContainer
+      leftNav={leftNav}
+      productsNav={productsNav}
+      searchNav={searchNav}
+    >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
           {/* 왼쪽 네비 버튼 */}
@@ -509,7 +536,11 @@ const Header = () => {
           <li className="about">
             <a>About</a>
           </li>
-          <li className="products" onClick={prodeutsNavHandler}>
+          <li
+            ref={productsNavRef}
+            className="products"
+            onClick={prodeutsNavHandler}
+          >
             <a>Products</a>
           </li>
           <li className="for-teams">
@@ -556,9 +587,14 @@ const Header = () => {
         </div>
         <form action="#">
           <div>
-            <input type="text" placeholder="Search..." />
+            <input
+              type="text"
+              placeholder="Search..."
+              ref={searchNavRef}
+              onClick={onSearchNav}
+            />
             <GoSearch />
-            <div>
+            <div className="search-nav">
               <div></div>
               <div>
                 <div></div>
