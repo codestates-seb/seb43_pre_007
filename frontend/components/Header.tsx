@@ -51,15 +51,18 @@ const Header = () => {
   //right 네비를 위한 상태 및 함수
   const [rightNav, setRightNav, rightNavRef] =
     useOffClick<HTMLLIElement>(false);
-  const onRightNav = () => {
-    setRightNav(true);
+  const rightNavHandler = () => {
+    setRightNav(!rightNav);
   };
 
   //search input val
   const [form, onChange] = useInput({ searchContent: '' });
 
-  //유저 로그인 상태
+  //유저 로그인 상태 및 함수
   const [userLog, setUserLog] = useRecoilState(userLogState);
+  const logOut = () => {
+    setUserLog(false);
+  };
 
   //resize로 인해 off
   useOffResize(740, 'up', setLeftNav);
@@ -303,7 +306,7 @@ const Header = () => {
                 <li
                   className="right-icons"
                   ref={rightNavRef}
-                  onClick={onRightNav}
+                  onClick={rightNavHandler}
                 >
                   <a>
                     <svg width="18" height="18" viewBox="0 0 18 18">
@@ -312,7 +315,24 @@ const Header = () => {
                   </a>
                 </li>
                 <li className="right-nav">
-                  <div></div>
+                  <div>
+                    <div>
+                      <div>
+                        <span>CURRENT COMMUNITY</span>
+                      </div>
+                      <div>
+                        <div>
+                          <span></span>
+                          <span>Stack Overflow</span>
+                        </div>
+                        <div>
+                          <span>help</span>
+                          <span>chat</span>
+                          <span onClick={logOut}>log out</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </li>
               </>
             ) : (
@@ -574,6 +594,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         flex-direction: column;
         span:last-child {
           font-size: 0.7rem;
+          margin: 4px 0px;
           opacity: 0.6;
         }
       }
@@ -814,10 +835,61 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       display: ${(props) => (props.rightNav ? '' : 'none !important')};
       position: absolute;
       box-shadow: var(--box-shadow);
-      left: 18px;
+      left: -86px;
       top: 48px;
-      width: 200px;
-      height: 200px;
+      width: 305px;
+      background-color: white;
+      z-index: 1000;
+      font-size: 0.7rem;
+      div {
+        width: 100%;
+      }
+      span {
+        :hover {
+          color: #024fdd;
+          cursor: pointer;
+        }
+      }
+      > div {
+        height: 100%;
+        > div {
+          div {
+            color: var(--text-blue);
+          }
+          > div:first-child {
+            padding: 12px 8px;
+            font-weight: 900;
+            background-color: var(--bg-gray);
+          }
+          > div:last-child {
+            padding: 14px 8px;
+            display: flex;
+            > div:first-child {
+              position: relative;
+              > span:first-child {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                top: -2px;
+                position: absolute;
+                background-image: url('https://cdn.sstatic.net/Img/favicons-sprite16.png?v=8b2bfd648b55');
+                background-size: 16px;
+                background-position: 0 -6138px;
+              }
+              > span:last-child {
+                padding-left: 24px;
+              }
+            }
+            > div:last-child {
+              display: flex;
+              justify-content: end;
+              span {
+                margin: 0px 4px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
