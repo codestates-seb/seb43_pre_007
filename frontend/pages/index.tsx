@@ -1,3 +1,4 @@
+import Header from '@/components/Header';
 import Head from 'next/head';
 //경로 https://stackoverflow.com/
 const Home = () => {
@@ -6,7 +7,7 @@ const Home = () => {
       <Head>
         <title>Stack Overflow</title>
       </Head>
-      <div>ㅇㅇㅇ</div>
+      <Header />
     </>
   );
 };
