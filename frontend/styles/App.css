@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-* {
+:root {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+  --text-aqua: #4d7c97;
+  --text-white: #ffffff;
+  --bg-gray: #e7e7e7;
+  --bg-blue: #0a95ff;
+  --btn-boxshadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
+  --btn-border: 1px solid hsl(205, 41%, 63%);
 }
 
 ul,
 ol {
   list-style: none;
+  padding: 0px;
 }
 
 a {
