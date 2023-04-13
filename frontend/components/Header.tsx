@@ -212,10 +212,11 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
 
   .products-menu {
     width: 210px;
-    height: 300px;
+    height: 280px;
     position: absolute;
+    border-radius: 4px;
     margin: 0px;
-    transform: translate(158px, 174px);
+    transform: translate(158px, 164px);
     box-shadow: var(--box-shadow);
     background-color: white;
     display: ${(props) => (props.productsNav ? 'flex' : 'none')};
@@ -233,11 +234,35 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       height: 12px;
       background-color: white;
       top: -7px;
-      border-top: 1px solid #eeeeed;
-      border-left: 1px solid #eeeeed;
+      border-top: 1px solid var(--border-color-left-nav);
+      border-left: 1px solid var(--border-color-left-nav);
       transform: rotate(45deg);
       @media (max-width: 640px) {
         left: 85px;
+      }
+    }
+    li {
+      width: 100%;
+      padding: 6px;
+      margin: 4px 12px;
+      font-size: 0.8rem;
+      a {
+        display: flex;
+        flex-direction: column;
+        span:last-child {
+          font-size: 0.7rem;
+          opacity: 0.6;
+        }
+      }
+    }
+    li:last-child {
+      border-top: 1px solid var(--border-color-left-nav);
+      margin: 0px;
+      > a {
+        span {
+          margin: 4px 12px 0px;
+          font-size: 0.8rem;
+        }
       }
     }
   }
@@ -369,6 +394,7 @@ const Header = () => {
   const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
   const [leftNav, setLeftNav] = useRecoilState(leftNavState);
   const leftNavHandler = () => {
+    setProductNav(false);
     setLeftNav(!leftNav);
   };
   const offLeftNav = () => {
@@ -392,6 +418,7 @@ const Header = () => {
     document.addEventListener('click', offProducts);
   }, [productsNav, setProductNav]);
   const prodeutsNavHandler = () => {
+    setLeftNav(false);
     setProductNav(!productsNav);
   };
 
@@ -483,11 +510,38 @@ const Header = () => {
           {/* products 버튼 누르면 나오는 div*/}
           <div></div>
           <ol>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>
+              <Link href="/questions">
+                <span>Stack Overflow</span>
+                <span>Public questions & answers</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/questions">
+                <span>Stack Overflow for Teams</span>
+                <span>
+                  Where developers & technologists share private knowledge with
+                  coworkers
+                </span>
+              </Link>
+            </li>
+            <li>
+              <a href="#">
+                <span>Talent</span>
+                <span>Build your employer brand</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span>Advertising</span>
+                <span>Reach developers & technologists worldwide</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span>About the company</span>
+              </a>
+            </li>
           </ol>
         </div>
         <form action="#">
