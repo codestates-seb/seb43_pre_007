@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 
 type HeaderContainerProps = {
   leftNav: boolean;
+  productsNav: boolean;
 };
 
 const HeaderContainer = styled.header<HeaderContainerProps>`
@@ -135,10 +136,21 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     display: flex;
     list-style: none;
     margin: 0;
-    > .about,
+    .about,
     .for-teams {
       @media (max-width: 980px) {
         display: none;
+      }
+    }
+    .products {
+      > a {
+        color: ${(props) => (props.productsNav ? 'white' : '')};
+        background-color: ${(props) =>
+          props.productsNav ? 'var(--bg-orange)' : ''};
+        :hover {
+          color: ${(props) => (props.productsNav ? 'white' : '')};
+          background-color: ${(props) => (props.productsNav ? '#db7826' : '')};
+        }
       }
     }
     li {
@@ -172,6 +184,20 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   .products-menu {
+    width: 210px;
+    height: 300px;
+    position: absolute;
+    margin: 0px;
+    transform: translate(158px, 174px);
+    box-shadow: var(--box-shadow);
+    display: ${(props) => (props.productsNav ? 'flex' : 'none')};
+    @media (max-width: 980px) {
+      transform: translate(98px, 174px);
+    }
+    @media (max-width: 640px) {
+      transform: translate(37px, 174px);
+      width: 178px;
+    }
   }
 
   form {
@@ -273,8 +299,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         margin: 8px 50px;
       }
       button {
-        background-color: #f78b34;
-        border: 1px solid #f78b34;
+        background-color: var(--bg-orange);
+        border: 1px solid var(--bg-orange);
         padding: 5.5px;
         > a {
           font-size: 0.68rem;
@@ -314,9 +340,12 @@ const Header = () => {
 
   //products 버튼을 위한 상태 및 함수
   const [productsNav, setProductNav] = useRecoilState(productsNavState);
+  const prodeutsNavHandler = () => {
+    setProductNav(!productsNav);
+  };
 
   return (
-    <HeaderContainer leftNav={leftNav}>
+    <HeaderContainer leftNav={leftNav} productsNav={productsNav}>
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
           <RxHamburgerMenu />
@@ -391,7 +420,7 @@ const Header = () => {
           <li className="about">
             <a>About</a>
           </li>
-          <li>
+          <li className="products" onClick={prodeutsNavHandler}>
             <a>Products</a>
           </li>
           <li className="for-teams">
