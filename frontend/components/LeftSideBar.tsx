@@ -6,16 +6,15 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 type LeftSideBarProps = {
-  leftNav: boolean;
   width: number;
 };
 
-const LeftSideBar = ({ leftNav, width }: LeftSideBarProps) => {
+const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
   const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
   return (
-    <SideBar leftNav={leftNav} width={width}>
+    <SideBar width={width}>
       <div>
         <nav>
           <ol className="nav-links">
@@ -84,7 +83,7 @@ export default LeftSideBar;
 
 const SideBar = styled.div<LeftSideBarProps>`
   width: ${(props) => `${props.width}px`};
-  display: ${(props) => (props.leftNav ? 'block' : 'none')};
+  display: block;
   top: 47px;
   z-index: 999;
   position: absolute;

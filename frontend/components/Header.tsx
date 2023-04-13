@@ -79,7 +79,7 @@ const Header = () => {
           {/* 왼쪽 네비 버튼 */}
           <span></span>
         </a>
-        <LeftSideBar leftNav={leftNav} width={220} />
+        {leftNav && <LeftSideBar width={220} />}
         <Link className="logo" href="/">
           <span>Stack Overflow</span>
         </Link>
