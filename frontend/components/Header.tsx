@@ -360,8 +360,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
             display: flex;
             justify-content: space-between;
             > div:last-child {
-              font-size: 0.8rem;
-              padding: 6px;
+              font-size: 0.7rem;
+              padding: 8px;
               color: var(--bg-blue);
             }
           }
