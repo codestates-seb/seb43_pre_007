@@ -6,7 +6,7 @@ type UseInputsType<T> = [
   reset: () => void
 ];
 
-const useInputs = <T extends { [key: string]: string }>(
+const useInput = <T extends { [key: string]: string }>(
   initialForm: T
 ): UseInputsType<T> => {
   const [form, setForm] = useState<T>(initialForm);
@@ -20,4 +20,4 @@ const useInputs = <T extends { [key: string]: string }>(
   return [form, onChange, reset];
 };
 
-export default useInputs;
+export default useInput;

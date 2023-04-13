@@ -10,6 +10,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useOffClick } from '@/hooks/useOffClick';
+import useInput from '@/hooks/useInput';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -495,6 +496,9 @@ const Header = () => {
     setSearchNav(true);
   };
 
+  //search input val
+  const [form, onChange] = useInput({ searchContent: '' });
+
   return (
     <HeaderContainer
       leftNav={leftNav}
@@ -631,6 +635,9 @@ const Header = () => {
               type="text"
               placeholder="Search..."
               ref={searchNavRef}
+              name="searchContent"
+              value={form.searchContent}
+              onChange={onChange}
               onClick={onSearchNav}
             />
             <GoSearch />
