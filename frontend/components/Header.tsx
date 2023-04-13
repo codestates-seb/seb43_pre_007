@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
-import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoEarthSharp } from 'react-icons/io5';
 import { MdOutlineStars } from 'react-icons/md';
 import Button from './Button';
@@ -69,9 +68,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         height: 2px;
         left: 10;
         top: ${(props) => (props.leftNav ? '24px' : '18px')};
-        transition: top, transform;
         transition-duration: 0.1s;
-        transition-timing-function: ease-in-out;
         transform: ${(props) => (props.leftNav ? 'rotate(45deg)' : '')};
       }
       ::after {
@@ -82,9 +79,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         height: 2px;
         left: 10;
         top: ${(props) => (props.leftNav ? '24px' : '28px')};
-        transition: top, transform;
         transition-duration: 0.1s;
-        transition-timing-function: ease-in-out;
         transform: ${(props) => (props.leftNav ? 'rotate(-45deg)' : '')};
       }
     }
@@ -404,8 +399,8 @@ const Header = () => {
     <HeaderContainer leftNav={leftNav} productsNav={productsNav}>
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
+          {/* 왼쪽 네비 버튼 */}
           <span></span>
-          {/* <RxHamburgerMenu /> */}
         </a>
         <div className="s-menu">
           <div>
