@@ -13,6 +13,9 @@ export const useOffClick = <T extends HTMLElement>(initialState: boolean) => {
       }
     };
     document.addEventListener('click', offClick);
+    return () => {
+      document.removeEventListener('click', offClick);
+    };
   }, [ref, state]);
 
   return [state, setState, ref] as const;

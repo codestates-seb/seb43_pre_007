@@ -237,8 +237,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       height: 12px;
       background-color: white;
       top: -7px;
-      border-top: 1px solid var(--border-color-left-nav);
-      border-left: 1px solid var(--border-color-left-nav);
+      border-top: 1px solid var(--thin-white-border-color);
+      border-left: 1px solid var(--thin-white-border-color);
       transform: rotate(45deg);
       @media (max-width: 640px) {
         left: 85px;
@@ -262,7 +262,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       }
     }
     li:last-child {
-      border-top: 1px solid var(--border-color-left-nav);
+      border-top: 1px solid var(--thin-white-border-color);
       > a {
         margin-top: 3px;
         span {
@@ -313,7 +313,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         position: absolute;
         width: 97.5%;
         top: 54px;
-        height: 500px;
+        height: 180px;
         z-index: 101;
         > div:first-child {
           position: absolute;
@@ -323,11 +323,48 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           background-color: white;
           top: -10px;
           left: 50%;
-          border-top: 1px solid var(--border-color-left-nav);
-          border-left: 1px solid var(--border-color-left-nav);
+          border-top: 1px solid var(--thin-white-border-color);
+          border-left: 1px solid var(--thin-white-border-color);
           transform: rotate(45deg);
         }
         > div:last-child {
+          > div:first-child {
+            width: 100%;
+            display: flex;
+            font-size: 0.85rem;
+            padding: 12px;
+            margin-right: 4px;
+            border-bottom: 1px solid var(--thin-white-border-color);
+            > div {
+              width: 50%;
+              > div {
+                opacity: 0.8;
+                span:first-child {
+                  font-weight: 900;
+                  margin-right: 4px;
+                }
+                margin-bottom: 12px;
+                display: flex;
+                @media (max-width: 880px) {
+                  flex-direction: column;
+                }
+              }
+              > div:last-child {
+                margin-bottom: 0px;
+              }
+            }
+          }
+          > div:last-child {
+            height: 100%;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            > div:last-child {
+              font-size: 0.8rem;
+              padding: 6px;
+              color: var(--bg-blue);
+            }
+          }
         }
       }
     }
@@ -432,13 +469,16 @@ const Header = () => {
     setSearchNav(false);
     setLeftNav(!leftNav);
   };
-  const offLeftNav = () => {
+
+  //화면 크기에 따라 nav들 off
+  const offNav = () => {
     if (window.innerWidth > 640) {
       setLeftNav(false);
+      setSearchNav(false);
     }
   };
   useEffect(() => {
-    window.addEventListener('resize', offLeftNav);
+    window.addEventListener('resize', offNav);
   }, []);
 
   //products 네비를 위한 상태 및 함수
@@ -597,8 +637,52 @@ const Header = () => {
             <div className="search-nav">
               <div></div>
               <div>
-                <div></div>
-                <div></div>
+                <div>
+                  <div>
+                    <div>
+                      <span>[tag]</span>
+                      <span>search within a tag</span>
+                    </div>
+                    <div>
+                      <span>user:1234</span>
+                      <span>search by author</span>
+                    </div>
+                    <div>
+                      <span>&quot;words here&quot;</span>
+                      <span>exact phrase</span>
+                    </div>
+                    <div>
+                      <span>collective:&quot;Name&quot;</span>
+                      <span>collective content</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>answers:0</span>
+                      <span>unanswered questions</span>
+                    </div>
+                    <div>
+                      <span>score:3</span>
+                      <span>posts with a 3+ score</span>
+                    </div>
+                    <div>
+                      <span>is:question</span>
+                      <span>type of post</span>
+                    </div>
+                    <div>
+                      <span>isaccepted:yes</span>
+                      <span>search within status</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <Button color={'var(--text-aqua)'}>
+                      <Link href="/questions/ask">Ask a question</Link>
+                    </Button>
+                  </div>
+                  <div>Search help</div>
+                </div>
               </div>
             </div>
           </div>
