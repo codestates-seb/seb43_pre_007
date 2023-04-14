@@ -38,7 +38,9 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                         : 'nav-serve'
                     }
                   >
-                    <Link href={`/${li.toLowerCase()}`}>
+                    <Link
+                      href={li === 'Companies' ? '' : `/${li.toLowerCase()}`}
+                    >
                       {li === 'Questions' && <IoEarthSharp />}
                       {li}
                     </Link>
@@ -52,10 +54,10 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                       : 'nav-serve'
                   }
                 >
-                  <Link href="/collectives" className="collect-link">
+                  <a>
                     <MdOutlineStars />
                     Explore Collectives
-                  </Link>
+                  </a>
                 </li>
               </ol>
             </li>
@@ -90,6 +92,7 @@ const SideBar = styled.div<LeftSideBarProps>`
   position: absolute;
   text-align: left;
   padding-top: 24px;
+  background-color: white;
   box-shadow: var(--box-shadow);
   ol {
     display: flex;
