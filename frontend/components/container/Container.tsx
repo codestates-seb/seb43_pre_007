@@ -25,15 +25,21 @@ const PagesContainer = styled.div`
   align-items: center;
   padding: 50px calc((100% - 1270px) / 2);
   > div:first-child {
-    width: 13%;
+    min-width: 164px;
     > .left-side-bar {
-      margin-top: 5px;
+      margin-top: 5.5px;
       position: fixed;
       box-shadow: none;
+    }
+    @media (max-width: 740px) {
+      display: none;
     }
   }
   > div:last-child {
     width: 87%;
     border-left: 1px solid #cfd8df;
+    @media (max-width: 740px) {
+      width: 100%;
+    }
   }
 `;
