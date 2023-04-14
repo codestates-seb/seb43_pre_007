@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
-import Button from './Button';
+import Button from '../button/Button';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useOffClick } from '@/hooks/useOffClick';
-import useInput from '@/hooks/useInput';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
-import useOffResize from '@/hooks/useOffResize';
-import LeftSideBar from './LeftSideBar';
+import LeftSideBar from '../side_bar/LeftSideBar';
+import Input from '../input/Input';
+import { useInput } from '@/hooks/useInput';
+import { useOffResize } from '@/hooks/useOffResize';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -115,19 +116,19 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>Talent</span>
                 <span>Build your employer brand</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>Advertising</span>
                 <span>Reach developers & technologists worldwide</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>About the company</span>
               </a>
             </li>
@@ -135,14 +136,15 @@ const Header = () => {
         </div>
         <form action="#">
           <div>
-            <input
+            <Input
+              inputRef={searchNavRef}
               type="text"
               placeholder="Search..."
-              ref={searchNavRef}
               name="searchContent"
               value={form.searchContent}
               onChange={onChange}
               onClick={onSearchNav}
+              paddingLeft="32px"
             />
             <GoSearch />
             <div className="search-nav">
@@ -510,19 +512,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       height: 100%;
       display: flex;
       align-items: center;
-      input {
-        border: 1px solid #d1cdcd;
-        border-radius: 3px;
-        width: 100%;
-        font-size: 0.8rem;
-        padding: 8px 6px 8px 32px;
-        line-height: 14px;
-        color: #3d3c3b;
-        :focus {
-          outline: 1px solid rgba(0, 195, 255, 0.5);
-          box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
-        }
-      }
+
       svg {
         position: absolute;
         margin: 8px;

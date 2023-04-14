@@ -1,4 +1,4 @@
-import Header from '@/components/Header';
+import Header from '@/components/header/Header';
 import Head from 'next/head';
 //경로 https://stackoverflow.com/
 const Home = () => {
