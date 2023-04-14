@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
-import Button from './Button';
+import Button from '../button/Button';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useOffClick } from '@/hooks/useOffClick';
-import useInput from '@/hooks/useInput';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
-import useOffResize from '@/hooks/useOffResize';
-import LeftSideBar from './LeftSideBar';
-import Input from './Input';
+import LeftSideBar from '../side_bar/LeftSideBar';
+import Input from '../input/Input';
+import { useInput } from '@/hooks/useInput';
+import { useOffResize } from '@/hooks/useOffResize';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -116,19 +116,19 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>Talent</span>
                 <span>Build your employer brand</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>Advertising</span>
                 <span>Reach developers & technologists worldwide</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <span>About the company</span>
               </a>
             </li>

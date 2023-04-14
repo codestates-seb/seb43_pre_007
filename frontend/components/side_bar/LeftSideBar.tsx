@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { MdOutlineStars } from 'react-icons/md';
-import Button from './Button';
+import Button from '../button/Button';
 import { IoEarthSharp } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import Link from 'next/link';
+import { publicLi } from '@/constant/constant';
 
 type LeftSideBarProps = {
   width: number;
@@ -12,8 +14,6 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
-  console.log(currentPath);
-  const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
   return (
     <SideBar width={width}>
       <div>
@@ -24,7 +24,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                 currentPath === '/' ? 'nav-main focus-link' : 'nav-main'
               }
             >
-              <a href="/">Home</a>
+              <Link href="/">Home</Link>
             </li>
             <li>
               <ol>
@@ -38,10 +38,10 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                         : 'nav-serve'
                     }
                   >
-                    <a href={`/${li.toLowerCase()}`}>
+                    <Link href={`/${li.toLowerCase()}`}>
                       {li === 'Questions' && <IoEarthSharp />}
                       {li}
-                    </a>
+                    </Link>
                   </li>
                 ))}
                 <li className="nav-main">COLLECTIVES</li>
@@ -52,10 +52,10 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                       : 'nav-serve'
                   }
                 >
-                  <a href="/collectives" className="collect-link">
+                  <Link href="/collectives" className="collect-link">
                     <MdOutlineStars />
                     Explore Collectives
-                  </a>
+                  </Link>
                 </li>
               </ol>
             </li>
@@ -69,9 +69,9 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                   alt="for-teams"
                 />
                 <Button>
-                  <a href="#">Create a free Team</a>
+                  <a>Create a free Team</a>
                 </Button>
-                <a href="#">Why Teams?</a>
+                <a>Why Teams?</a>
               </div>
             </li>
           </ol>
