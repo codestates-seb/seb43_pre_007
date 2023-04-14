@@ -136,6 +136,7 @@ const SideBar = styled.div<LeftSideBarProps>`
     background-color: var(--bg-gray);
     font-weight: 900;
     opacity: 1;
+    border-right: 3px solid #ff7300;
   }
 
   .collect-link {
