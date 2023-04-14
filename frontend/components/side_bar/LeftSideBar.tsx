@@ -54,7 +54,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                       : 'nav-serve'
                   }
                 >
-                  <a>
+                  <a className="collect-link">
                     <MdOutlineStars />
                     Explore Collectives
                   </a>

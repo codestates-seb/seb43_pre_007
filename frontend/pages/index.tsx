@@ -7,13 +7,9 @@ const Home = () => {
       <Head>
         <title>Stack Overflow</title>
       </Head>
-      <HomeContainer>홈입니다.</HomeContainer>
+      <div>홈입니다.</div>
     </>
   );
 };
 
 export default Home;
-
-const HomeContainer = styled.div`
-  padding-top: 50px;
-`;
