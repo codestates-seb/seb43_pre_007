@@ -29,6 +29,7 @@ const PagesContainer = styled.div`
     > .left-side-bar {
       margin-top: 5.5px;
       position: fixed;
+      z-index: 0;
       box-shadow: none;
     }
     @media (max-width: 740px) {
