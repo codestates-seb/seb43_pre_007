@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -44,4 +45,8 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answer;
+
+    @OneToMany(mappedBy = "question")
+    private List<QuestionTag> questionTagList = new ArrayList<>();
+
 }

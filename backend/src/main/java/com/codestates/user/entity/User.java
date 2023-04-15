@@ -2,12 +2,14 @@ package com.codestates.user.entity;
 
 import com.codestates.answer.entity.Answer;
 import com.codestates.question.entity.Question;
+import com.codestates.question.entity.QuestionTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -33,9 +35,6 @@ public class User {
     private String aboutMe;
 
     @Column(nullable = false)
-    private UserType userType;
-
-    @Column(nullable = false)
     private LocalDateTime creationDate;
 
     @Column(nullable = false)
@@ -52,6 +51,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Answer> answer;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserTag> userTagList = new ArrayList<>();
+
 
 
 
