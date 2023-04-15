@@ -82,9 +82,11 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          <li className="about">
-            <a>About</a>
-          </li>
+          {!userLog && (
+            <li className="about">
+              <a>About</a>
+            </li>
+          )}
           <li
             ref={productsNavRef}
             className="products"
@@ -92,9 +94,11 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          <li className="for-teams">
-            <a>For Teams</a>
-          </li>
+          {!userLog && (
+            <li className="for-teams">
+              <a>For Teams</a>
+            </li>
+          )}
         </ol>
         <div className="products-menu">
           {/* products 버튼 누르면 나오는 div*/}
@@ -504,7 +508,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: ${(props) => (props.userLog ? '50.5%' : '57.5%')};
+    width: ${(props) => (props.userLog ? '61.7%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;

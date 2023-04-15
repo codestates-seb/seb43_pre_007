@@ -288,7 +288,7 @@ const UsersDetailContainer = styled.div`
       width: 23%;
       @media (max-width: 980px) {
         width: 100%;
-    }
+      }
       > div {
         margin: 20px 0px;
       }
@@ -297,7 +297,7 @@ const UsersDetailContainer = styled.div`
       width: 77%;
       @media (max-width: 980px) {
         width: 100%;
-    }
+      }
       > div {
         margin: 20px 0px;
       }
@@ -360,15 +360,15 @@ const UsersDetailContainer = styled.div`
     .right-content {
       margin: 0px 20px;
       @media (max-width: 980px) {
-        margin : 0px;
-    }
+        margin: 0px;
+      }
       > div {
         > .right-category {
           font-size: 1.3rem;
           margin-bottom: 12px;
         }
         > .card {
-          padding: 35px;                                                                                                                                                                                                      px 0px;
+          padding: 35px;
           background-color: #faf9f9;
           > div {
             line-height: 18px;
