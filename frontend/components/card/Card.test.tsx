@@ -1,29 +1,27 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Card from './Card';
 
 describe('Card 컴포넌트', () => {
-  it('children이 정상적으로 렌더링되는지 확인한다', () => {
-    const text = '카드 내용입니다.';
-    const { getByText } = render(
+  beforeEach(() => {
+    const text = '카드';
+    render(
       <Card>
         <>{text}</>
       </Card>
     );
-    const cardText = getByText(text);
-    expect(cardText).toBeInTheDocument();
   });
 
-  it('CardContainer 스타일링이 제대로 되어 있는지 확인한다', () => {
-    const { container } = render(
-      <Card>
-        <>카드 내용입니다.</>
-      </Card>
-    );
-    const cardContainer = container.firstChild;
-    expect(cardContainer).toHaveStyle(`
-      padding: 24px;
-      border: 1px solid var(--border-gray);
+  test('렌더링', () => {
+    const { getByText } = screen;
+    expect(getByText(/카드/)).toBeInTheDocument();
+  });
+
+  test('카드 스타일 체크', () => {
+    const { getByText } = screen;
+    expect(getByText(/카드/)).toHaveStyle(`
+      border: 1px solid #cfd8df;
       border-radius: 6px;
+      padding: 24px;
     `);
   });
 });
