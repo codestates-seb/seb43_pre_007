@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 type CardProps = {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 };
 
 const Card = ({ children }: CardProps) => {
