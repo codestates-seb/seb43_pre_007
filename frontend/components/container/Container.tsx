@@ -38,7 +38,7 @@ const PagesContainer = styled.div`
   }
   > div:last-child {
     width: 87%;
-    border-left: 1px solid #cfd8df;
+    border-left: 1px solid var(--border-gray);
     @media (max-width: 740px) {
       width: 100%;
     }
