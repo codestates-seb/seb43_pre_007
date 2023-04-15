@@ -34,3 +34,11 @@ a {
   text-decoration: none;
   color: rgb(0, 0, 0);
 }
+
+.flow_icon {
+  position: absolute;
+  background-image: url('https://cdn.sstatic.net/Img/favicons-sprite16.png?v=8e1d0590b7cb');
+  width: 16px;
+  height: 16px;
+  background-position: 0 -6138px;
+}

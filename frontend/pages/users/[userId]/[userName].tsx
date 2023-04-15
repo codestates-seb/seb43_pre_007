@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Button from '@/components/button/Button';
+import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
 import { detailNav } from '@/constant/constant';
 import { useState } from 'react';
@@ -96,7 +97,33 @@ const UserDetail = () => {
         </ul>
       </div>
       <div className="profile_content">
-        <div>왼쪽</div>
+        <div>
+          <div className="stats">
+            <div>Stats</div>
+            <Card>
+              <>
+                <div>1</div>
+                <div>0</div>
+                <div>0</div>
+                <div>0</div>
+              </>
+            </Card>
+          </div>
+          <div className="communities">
+            <div>
+              <div>Communities</div>
+              <div>Edit</div>
+            </div>
+            <Card>
+              <>
+                <div>
+                  <div className="flow_icon"></div>Stack Overflow
+                </div>
+                <div>1</div>
+              </>
+            </Card>
+          </div>
+        </div>
         <div>오른쪽</div>
       </div>
     </UsersDetailContainer>
@@ -208,12 +235,51 @@ const UsersDetailContainer = styled.div`
   > .profile_content {
     display: flex;
     width: 100%;
-    margin-top: 24px;
     > div:first-child {
       width: 23%;
+      > div {
+        margin: 20px 0px;
+      }
     }
     > div:last-child {
       width: 77%;
+      > div {
+        margin: 20px 0px;
+      }
+    }
+
+    .stats {
+      > div:first-child {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+      }
+    }
+
+    .communities {
+      > div:first-child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+        > div:last-child {
+          font-size: 0.8rem;
+          opacity: 0.7;
+        }
+      }
+      > div:last-child {
+        display: flex;
+        font-size: 0.8rem;
+        justify-content: space-between;
+        > div:first-child {
+          position: relative;
+          padding: 0px 5px;
+        }
+        .flow_icon {
+          left: -12px;
+          top: -2px;
+        }
+      }
     }
   }
 `;
