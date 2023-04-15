@@ -95,6 +95,10 @@ const UserDetail = () => {
           ))}
         </ul>
       </div>
+      <div className="profile_content">
+        <div>왼쪽</div>
+        <div>오른쪽</div>
+      </div>
     </UsersDetailContainer>
   );
 };
@@ -194,6 +198,18 @@ const UsersDetailContainer = styled.div`
           }
         }
       }
+    }
+  }
+
+  > .profile_content {
+    display: flex;
+    width: 100%;
+    margin-top: 24px;
+    > div:first-child {
+      width: 23%;
+    }
+    > div:last-child {
+      width: 77%;
     }
   }
 `;

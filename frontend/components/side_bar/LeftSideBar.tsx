@@ -155,6 +155,7 @@ const SideBar = styled.div<LeftSideBarProps>`
     font-size: 0.8rem;
     white-space: pre-wrap;
     word-wrap: break-word;
+    line-height: 16px;
     overflow-wrap: break-word;
     border-top: 1px solid #dfdfdf;
     span {
