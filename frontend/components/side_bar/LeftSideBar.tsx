@@ -15,7 +15,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
   return (
-    <SideBar width={width}>
+    <SideBar width={width} className="left-side-bar">
       <div>
         <nav>
           <ol className="nav-links">
@@ -54,7 +54,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                       : 'nav-serve'
                   }
                 >
-                  <a>
+                  <a className="collect-link">
                     <MdOutlineStars />
                     Explore Collectives
                   </a>
