@@ -10,4 +10,3 @@ export default Users;
 const UsersContainer = styled.div`
   padding: 24px;
 `;
-

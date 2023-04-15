@@ -208,7 +208,8 @@ const Header = () => {
             {userLog ? (
               <>
                 <li className="user-img">
-                  <Link href="/users">
+                  <Link href="/users/21615528/신동민">
+                    {/* users데이터를 가져오면 동적으로 바꿔줘야함 */}
                     <img
                       src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
                       alt=""
