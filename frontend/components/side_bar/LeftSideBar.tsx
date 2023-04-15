@@ -158,6 +158,8 @@ const SideBar = styled.div<LeftSideBarProps>`
     line-height: 16px;
     overflow-wrap: break-word;
     border-top: 1px solid #dfdfdf;
+    border-left: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
     span {
       opacity: 0.7;
     }
