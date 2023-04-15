@@ -8,11 +8,8 @@ import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
-  const [pick, setPick] = useState<undefined | number>(undefined);
+  const [pick, setPick] = useState(0);
   const pickHandler = (idx: number) => {
-    if (idx === pick) {
-      return setPick(undefined);
-    }
     setPick(idx);
   };
   return (
