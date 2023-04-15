@@ -186,6 +186,14 @@ const UsersDetailContainer = styled.div`
     > ul {
       margin-top: 10px;
       display: flex;
+      flex-wrap: wrap;
+      li {
+        a {
+          @media (max-width: 400px) {
+            width: 50%;
+          }
+        }
+      }
     }
   }
 `;
