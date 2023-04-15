@@ -12,6 +12,7 @@ const MenuItem = ({ idx, pick, ...props }: MenuItemProps) => {
 export default MenuItem;
 
 const MenuItemContainer = styled.a<MenuItemProps>`
+  width: 100%;
   color: ${(props) => (props.idx === props.pick ? 'white' : '')};
   background-color: ${(props) =>
     props.idx === props.pick ? 'var(--bg-orange)' : ''};
