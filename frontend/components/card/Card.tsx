@@ -5,7 +5,7 @@ type CardProps = {
 };
 
 const Card = ({ children }: CardProps) => {
-  return <CardContainer>{children}</CardContainer>;
+  return <CardContainer className='card'>{children}</CardContainer>;
 };
 
 export default Card;
