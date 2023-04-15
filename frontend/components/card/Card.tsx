@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 
-const Card = () => {
-  return <CardContainer>카드에요 카드</CardContainer>;
+type CardProps = {
+  children: JSX.Element;
+};
+
+const Card = ({ children }: CardProps) => {
+  return <CardContainer>{children}</CardContainer>;
 };
 
 export default Card;
