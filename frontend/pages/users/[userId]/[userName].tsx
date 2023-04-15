@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Button from '@/components/button/Button';
 import MenuItem from '@/components/menu_item/MenuItem';
+import { detailNav } from '@/constant/constant';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
+  const [pick, setPick] = useState(undefined);
   return (
     <UsersDetailContainer>
       <div className="profile">
@@ -75,12 +78,15 @@ const UserDetail = () => {
           </div>
         </div>
       </div>
-      <div className='detail_nav'>
+      <div className="detail_nav">
         <ul>
-          <li><MenuItem>Profile</MenuItem></li>
-          <li><MenuItem>Profile</MenuItem></li>
-          <li><MenuItem>Profile</MenuItem></li>
-          <li><MenuItem>Profile</MenuItem></li>
+          {detailNav.map((x, i) => (
+            <li key={x}>
+              <MenuItem idx={i} pick={pick}>
+                {x}
+              </MenuItem>
+            </li>
+          ))}
         </ul>
       </div>
     </UsersDetailContainer>

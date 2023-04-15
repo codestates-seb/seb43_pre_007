@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface MenuItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   idx: number;
-  pick: number;
+  pick: number | undefined;
 }
 
 const MenuItem = ({ idx, pick, ...props }: MenuItemProps) => {
