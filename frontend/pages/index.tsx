@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styled from 'styled-components';
 //경로 https://stackoverflow.com/
 const Home = () => {
   return (
