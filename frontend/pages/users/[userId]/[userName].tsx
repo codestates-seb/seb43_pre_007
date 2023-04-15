@@ -101,12 +101,22 @@ const UserDetail = () => {
           <div className="stats">
             <div>Stats</div>
             <Card>
-              <>
+              <div>
                 <div>1</div>
+                <div>reputation</div>
+              </div>
+              <div>
                 <div>0</div>
+                <div>reached</div>
+              </div>
+              <div>
                 <div>0</div>
+                <div>answers</div>
+              </div>
+              <div>
                 <div>0</div>
-              </>
+                <div>questions</div>
+              </div>
             </Card>
           </div>
           <div className="communities">
@@ -115,12 +125,10 @@ const UserDetail = () => {
               <div>Edit</div>
             </div>
             <Card>
-              <>
-                <div>
-                  <div className="flow_icon"></div>Stack Overflow
-                </div>
-                <div>1</div>
-              </>
+              <div>
+                <div className="flow_icon"></div>Stack Overflow
+              </div>
+              <div>1</div>
             </Card>
           </div>
         </div>
@@ -252,6 +260,22 @@ const UsersDetailContainer = styled.div`
       > div:first-child {
         font-size: 1.3rem;
         margin-bottom: 12px;
+      }
+      > div:last-child {
+        display: flex;
+        flex-wrap: wrap;
+        > div:nth-child(3),
+        div:nth-child(4) {
+          margin-top: 20px;
+        }
+        > div {
+          width: 50%;
+          > div:last-child {
+            margin-top: 4px;
+            opacity: 0.7;
+            font-size: 0.8rem;
+          }
+        }
       }
     }
 
