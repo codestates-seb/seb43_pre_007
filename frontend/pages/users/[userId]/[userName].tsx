@@ -7,7 +7,13 @@ import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
-  const [pick, setPick] = useState(undefined);
+  const [pick, setPick] = useState<undefined | number>(undefined);
+  const pickHandler = (idx: number) => {
+    if (idx === pick) {
+      return setPick(undefined);
+    }
+    setPick(idx);
+  };
   return (
     <UsersDetailContainer>
       <div className="profile">
@@ -80,10 +86,10 @@ const UserDetail = () => {
       </div>
       <div className="detail_nav">
         <ul>
-          {detailNav.map((x, i) => (
-            <li key={x}>
-              <MenuItem idx={i} pick={pick}>
-                {x}
+          {detailNav.map((category, i) => (
+            <li key={category}>
+              <MenuItem onClick={() => pickHandler(i)} idx={i} pick={pick}>
+                {category}
               </MenuItem>
             </li>
           ))}
@@ -173,6 +179,13 @@ const UsersDetailContainer = styled.div`
           }
         }
       }
+    }
+  }
+
+  > .detail_nav {
+    > ul {
+      margin-top: 10px;
+      display: flex;
     }
   }
 `;
