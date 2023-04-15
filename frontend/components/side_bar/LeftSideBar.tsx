@@ -64,8 +64,10 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
             <li>
               <div className="nav-main">TEAMS</div>
               <div className="teams-message">
-                <strong>Stack Overflow for Teams – Start</strong>
-                collaborating and sharing organizational knowledge.
+                <strong>
+                  Stack Overflow for Teams <span>– Start</span>
+                </strong>{' '}
+                <span>collaborating and sharing organizational knowledge.</span>
                 <img
                   src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
                   alt="for-teams"
@@ -150,11 +152,20 @@ const SideBar = styled.div<LeftSideBarProps>`
     display: flex;
     flex-direction: column;
     padding: 10px 10px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
     border-top: 1px solid #dfdfdf;
+    span {
+      opacity: 0.7;
+    }
+    > strong {
+      font-weight: 900;
+      span {
+        font-weight: normal;
+      }
+    }
     > img {
       margin: 0px calc((100% - 130px) / 2);
       width: 130px;
