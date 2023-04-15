@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Button from '@/components/button/Button';
+import MenuItem from '@/components/menu_item/MenuItem';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
@@ -73,6 +74,14 @@ const UserDetail = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div className='detail_nav'>
+        <ul>
+          <li><MenuItem>Profile</MenuItem></li>
+          <li><MenuItem>Profile</MenuItem></li>
+          <li><MenuItem>Profile</MenuItem></li>
+          <li><MenuItem>Profile</MenuItem></li>
+        </ul>
       </div>
     </UsersDetailContainer>
   );
