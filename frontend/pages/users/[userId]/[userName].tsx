@@ -275,27 +275,29 @@ const UsersDetailContainer = styled.div`
       margin-top: 10px;
       display: flex;
       flex-wrap: wrap;
-      li {
-        a {
-          @media (max-width: 400px) {
-            width: 50%;
-          }
-        }
-      }
     }
   }
 
   > .profile_content {
     display: flex;
     width: 100%;
+    @media (max-width: 980px) {
+      flex-direction: column;
+    }
     > div:first-child {
       width: 23%;
+      @media (max-width: 980px) {
+        width: 100%;
+    }
       > div {
         margin: 20px 0px;
       }
     }
     > div:last-child {
       width: 77%;
+      @media (max-width: 980px) {
+        width: 100%;
+    }
       > div {
         margin: 20px 0px;
       }
@@ -357,13 +359,16 @@ const UsersDetailContainer = styled.div`
 
     .right-content {
       margin: 0px 20px;
+      @media (max-width: 980px) {
+        margin : 0px;
+    }
       > div {
         > .right-category {
           font-size: 1.3rem;
           margin-bottom: 12px;
         }
         > .card {
-          padding: 35px 0px;
+          padding: 35px;                                                                                                                                                                                                      px 0px;
           background-color: #faf9f9;
           > div {
             line-height: 18px;
