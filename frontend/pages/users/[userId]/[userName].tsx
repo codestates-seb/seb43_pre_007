@@ -169,7 +169,11 @@ const UsersDetailContainer = styled.div`
       display: flex;
       position: absolute;
       right: 0;
+      @media (max-width: 320px) {
+        flex-direction: column;
+      }
       > div {
+        margin: 4px 0px;
         margin-left: 6px;
         button {
           display: flex;
