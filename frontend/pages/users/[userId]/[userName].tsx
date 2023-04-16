@@ -224,6 +224,8 @@ const UsersDetailContainer = styled.div`
   }
 `;
 
+//========================Profile 컨텐츠========================
+
 const ProfileContent = () => {
   return (
     <ProfileContentContainer>
@@ -426,6 +428,8 @@ const ProfileContentContainer = styled.div`
     }
   }
 `;
+
+//========================Active 컨텐츠========================
 
 type ActiveProps = {
   pickCategoryHandler: (i: number) => void;
@@ -720,6 +724,8 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
   }
 `;
 
+//========================Saves 컨텐츠========================
+
 type SavesContentProps = {
   pickCategory: number;
   pickCategoryHandler: (i: number) => void;
@@ -865,6 +871,8 @@ const SavesContentContainer = styled.div`
     }
   }
 `;
+
+//========================Settings 컨텐츠========================
 
 const SettingsContent = () => {
   return <SettingsContentContainer>세팅</SettingsContentContainer>;
