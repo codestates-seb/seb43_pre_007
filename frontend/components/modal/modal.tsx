@@ -43,8 +43,6 @@ const Modal = () => {
   const [myList, setMyList] = useRecoilState(myListState);
   const addMyList = () => {
     setMyList([...myList, modalVal]);
-    console.log(myList);
-    console.log(modalVal);
     setModal(false);
     setModalVal('');
   };

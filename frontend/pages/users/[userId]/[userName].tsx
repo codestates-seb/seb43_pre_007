@@ -760,7 +760,6 @@ const SavesContent = ({
     setModal(true);
     setModalName('Edit list');
   };
-
   return (
     <SavesContentContainer>
       <div>
@@ -799,7 +798,7 @@ const SavesContent = ({
       <SelectContent
         selectPickCategory={selectPickCategory}
         pickCategory={pickCategory}
-        categories={detailSaves}
+        categories={[...detailSaves, ...myList]}
         sub={detailNav[pick]}
       />
       <div>
