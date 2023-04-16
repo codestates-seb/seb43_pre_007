@@ -125,7 +125,6 @@ const UserDetail = () => {
           selectPickCategory={selectPickCategory}
         />
       )}
-      {pick === 3 && <SettingsContent />}
     </UsersDetailContainer>
   );
 };
@@ -871,11 +870,3 @@ const SavesContentContainer = styled.div`
     }
   }
 `;
-
-//========================Settings 컨텐츠========================
-
-const SettingsContent = () => {
-  return <SettingsContentContainer>세팅</SettingsContentContainer>;
-};
-
-const SettingsContentContainer = styled.div``;

@@ -6,7 +6,7 @@ export const nonContainerRoutes = [
   '/questions/ask',
 ];
 
-export const detailNav = ['Profile', 'Activity', 'Saves', 'Settings'];
+export const detailNav = ['Profile', 'Activity', 'Saves'];
 
 export const detailActivity = [
   'Summary',
