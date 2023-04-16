@@ -9,3 +9,8 @@ export const myListState = atom({
   key: 'myListState',
   default: [],
 });
+
+export const modalState = atom({
+  key: 'modalState',
+  default: false,
+});

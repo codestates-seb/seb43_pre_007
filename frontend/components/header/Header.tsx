@@ -644,7 +644,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     .user-img {
       padding-left: 12px;
       padding-right: 18px;
-      height: 48px;
+      height: 47px;
       cursor: pointer;
       :hover {
         background-color: var(--bg-gray);

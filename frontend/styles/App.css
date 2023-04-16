@@ -22,7 +22,9 @@
   --btn-boxshadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
   --btn-border: 1px solid hsl(205, 41%, 63%);
   --thin-white-border-color: #eeeeed;
+  --su8: calc(8px * 1);
   --su16: calc(16px * 1);
+  --te-smooth: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 ul,
@@ -48,7 +50,7 @@ a {
   margin-bottom: 1rem;
 }
 
-.focus_blue:focus{
-    outline: 1px solid rgba(0, 195, 255, 0.5);
-    box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
+.focus_blue:focus {
+  outline: 1px solid rgba(0, 195, 255, 0.5);
+  box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
 }

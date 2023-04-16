@@ -12,6 +12,9 @@ import {
 } from '@/constant/constant';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { modalState, myListState } from '@/recoil/atom';
+import Modal from '@/components/modal/modal';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -738,6 +741,11 @@ const SavesContent = ({
   pick,
   selectPickCategory,
 }: SavesContentProps) => {
+  const [myList, setMyList] = useRecoilState(myListState);
+  const [modal, setModal] = useRecoilState(modalState);
+  const onModal = () => {
+    setModal(true);
+  };
   return (
     <SavesContentContainer>
       <div>
@@ -758,7 +766,7 @@ const SavesContent = ({
         </div>
         <div>
           <div>MY LISTS</div>
-          <div>+</div>
+          <div onClick={onModal}>+</div>
         </div>
       </div>
       <SelectContent
@@ -771,7 +779,7 @@ const SavesContent = ({
         <div>
           <div>{detailSaves[pickCategory]}</div>
           <div>
-            <Button color="var(--text-white)">
+            <Button color="var(--text-white)" onClick={onModal}>
               <a>Create new list</a>
             </Button>
           </div>
