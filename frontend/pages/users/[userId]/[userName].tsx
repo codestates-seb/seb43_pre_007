@@ -14,7 +14,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { modalState, myListState } from '@/recoil/atom';
-import Modal from '@/components/modal/modal';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -747,8 +746,6 @@ const SavesContent = ({
     setModal(true);
   };
 
-  const [pickList, setPickList] = useState(100);
-
   return (
     <SavesContentContainer>
       <div>
@@ -771,13 +768,18 @@ const SavesContent = ({
           <div>MY LISTS</div>
           <div onClick={onModal}>+</div>
         </div>
-        <div>
+        <ul>
           {myList.map((list, i) => (
-            <MenuItem idx={i} pick={pickList} key={`${list}+${i}`}>
+            <MenuItem
+              idx={i + 2}
+              pick={pickCategory}
+              onClick={() => pickCategoryHandler(i + 2)}
+              key={`${list}+${i}`}
+            >
               {list}
             </MenuItem>
           ))}
-        </div>
+        </ul>
       </div>
       <SelectContent
         selectPickCategory={selectPickCategory}
@@ -787,7 +789,10 @@ const SavesContent = ({
       />
       <div>
         <div>
-          <div>{detailSaves[pickCategory]}</div>
+          <div>
+            {detailSaves[pickCategory]}
+            {myList[pickCategory - 2]}
+          </div>
           <div>
             <Button color="var(--text-white)" onClick={onModal}>
               <a>Create new list</a>
@@ -849,8 +854,8 @@ const SavesContentContainer = styled.div`
         cursor: pointer;
       }
     }
-    > div:last-child {
-      > a {
+    > ul {
+      a {
         padding: 10px;
         font-size: 0.8rem;
         margin-top: 4px;
