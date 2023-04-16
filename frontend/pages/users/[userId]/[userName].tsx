@@ -433,7 +433,26 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
           ))}
         </ul>
       </div>
-      <div>우</div>
+      <div>
+        <div className="summary">
+          <div>{detailActivity[0]}</div>
+          <div>
+            <Card>
+              Reputation is how the community thanks you When users upvote your
+              helpful posts, you&apos;ll earn reputation and unlock new
+              privileges. Learn more about reputation and privileges
+            </Card>
+            <Card>
+              Earn badges for helpful actions Badges are bits of digital flair
+              that you get when you participate in especially helpful ways.
+            </Card>
+            <Card>
+              Measure your impact Your posts and helpful actions here help
+              hundreds or thousands of people searching for help.
+            </Card>
+          </div>
+        </div>
+      </div>
     </ActiveContentContainer>
   );
 };
@@ -443,10 +462,22 @@ const ActiveContentContainer = styled.div`
   margin-top: 20px;
   > div:first-child {
     width: 12%;
-    border: 1px solid black;
+    margin-right: 16px;
+    > ul {
+      li {
+        margin-bottom: 2px;
+        a {
+          font-size: 0.82rem;
+        }
+      }
+    }
   }
   > div:last-child {
     width: 88%;
-    border: 1px solid black;
+    .summary {
+      div:last-child {
+        display: flex;
+      }
+    }
   }
 `;

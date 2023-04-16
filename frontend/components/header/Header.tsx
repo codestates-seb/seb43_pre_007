@@ -531,6 +531,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         width: 97.5%;
         top: 54px;
         z-index: 101;
+        background-color: white;
         > div:first-child {
           position: absolute;
           width: 16px;
