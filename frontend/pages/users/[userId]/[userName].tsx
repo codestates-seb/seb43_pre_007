@@ -789,14 +789,26 @@ const SavesContent = ({
       />
       <div>
         <div>
+          <div>{[...detailSaves, ...myList][pickCategory]}</div>
           <div>
-            {detailSaves[pickCategory]}
-            {myList[pickCategory - 2]}
-          </div>
-          <div>
-            <Button color="var(--text-white)" onClick={onModal}>
-              <a>Create new list</a>
-            </Button>
+            {pickCategory < 2 ? (
+              <Button color="var(--text-white)" onClick={onModal}>
+                <a>Create new list</a>
+              </Button>
+            ) : (
+              <Button
+                color="var(--text-aqua)"
+                className="edit_btn"
+                onClick={onModal}
+              >
+                <a>
+                  <svg width="18" height="18" viewBox="0 0 18 18">
+                    <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
+                  </svg>
+                  Edit list
+                </a>
+              </Button>
+            )}
           </div>
         </div>
         <div>0 saved items</div>
@@ -882,6 +894,18 @@ const SavesContentContainer = styled.div`
       > div:last-child {
         button {
           padding: 10px 9px;
+          svg {
+            margin-top: -0.3em;
+            margin-bottom: -0.3em;
+            margin-right: 3px;
+          }
+        }
+        .edit_btn {
+          background-color: white;
+          opacity: 0.8;
+          :hover {
+            background-color: #eeeded;
+          }
         }
       }
     }

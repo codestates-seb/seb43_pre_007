@@ -15,6 +15,11 @@ export const modalState = atom({
   default: false,
 });
 
+export const modalNameState = atom({
+  key: 'modalNameState',
+  default: '',
+});
+
 export const modalValState = atom({
   key: 'modalValState',
   default: '',
