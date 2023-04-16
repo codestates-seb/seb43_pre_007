@@ -24,3 +24,8 @@ export const modalValState = atom({
   key: 'modalValState',
   default: '',
 });
+
+export const pickCategoryState = atom({
+  key: 'pickCategoryState',
+  default: 0,
+});

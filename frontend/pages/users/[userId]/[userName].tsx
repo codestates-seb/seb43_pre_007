@@ -13,7 +13,13 @@ import {
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { modalState, myListState } from '@/recoil/atom';
+import {
+  modalNameState,
+  modalState,
+  modalValState,
+  myListState,
+  pickCategoryState,
+} from '@/recoil/atom';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -22,7 +28,7 @@ const UserDetail = () => {
     setPick(idx);
     setPickCategory(0);
   };
-  const [pickCategory, setPickCategory] = useState(0);
+  const [pickCategory, setPickCategory] = useRecoilState(pickCategoryState);
   const pickCategoryHandler = (idx: number) => {
     setPickCategory(idx);
   };
@@ -742,8 +748,16 @@ const SavesContent = ({
 }: SavesContentProps) => {
   const [myList] = useRecoilState(myListState);
   const [, setModal] = useRecoilState(modalState);
-  const onModal = () => {
+  const [, setModalName] = useRecoilState(modalNameState);
+  const [, setModalVal] = useRecoilState(modalValState);
+  const newList = () => {
+    setModalVal('');
     setModal(true);
+    setModalName('New list');
+  };
+  const editList = () => {
+    setModal(true);
+    setModalName('Edit list');
   };
 
   return (
@@ -766,7 +780,7 @@ const SavesContent = ({
         </div>
         <div>
           <div>MY LISTS</div>
-          <div onClick={onModal}>+</div>
+          <div onClick={newList}>+</div>
         </div>
         <ul>
           {myList.map((list, i) => (
@@ -792,14 +806,14 @@ const SavesContent = ({
           <div>{[...detailSaves, ...myList][pickCategory]}</div>
           <div>
             {pickCategory < 2 ? (
-              <Button color="var(--text-white)" onClick={onModal}>
+              <Button color="var(--text-white)" onClick={newList}>
                 <a>Create new list</a>
               </Button>
             ) : (
               <Button
                 color="var(--text-aqua)"
                 className="edit_btn"
-                onClick={onModal}
+                onClick={editList}
               >
                 <a>
                   <svg width="18" height="18" viewBox="0 0 18 18">

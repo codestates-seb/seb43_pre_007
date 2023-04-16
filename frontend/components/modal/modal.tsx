@@ -1,12 +1,19 @@
-import { modalState, modalValState, myListState } from '@/recoil/atom';
+import {
+  modalNameState,
+  modalState,
+  modalValState,
+  myListState,
+  pickCategoryState,
+} from '@/recoil/atom';
 import { useRecoilState } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import Input from '../input/Input';
 import Button from '../button/Button';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const Modal = () => {
   //모달 상태 및 함수
+  const [modalName] = useRecoilState(modalNameState);
   const [modal, setModal] = useRecoilState(modalState);
   const modalRef = useRef<HTMLDivElement>(null);
   const offModal = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -35,15 +42,21 @@ const Modal = () => {
   //리스트
   const [myList, setMyList] = useRecoilState(myListState);
   const addMyList = (list: string) => {
+    setModalVal('');
     setMyList([...myList, list]);
     setModal(false);
     setModalVal('');
   };
+  //선택된 카테고리 관련
+  const [pickCategory] = useRecoilState(pickCategoryState);
+  useEffect(() => {
+    pickCategory > 1 && setModalVal(myList[pickCategory - 2]);
+  }, [myList, setModalVal, pickCategory, modal]);
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>
       <div className="modal-content">
         <form action="#">
-          <h1>New list</h1>
+          <h1>{modalName}</h1>
           <div>
             <Input
               onChange={changeModalVal}
@@ -54,13 +67,16 @@ const Modal = () => {
             />
           </div>
           <div>
-            <Button
-              color="var(--text-white)"
-              onClick={() => addMyList(modalVal)}
-            >
-              <a>Save</a>
-            </Button>
-            <button onClick={cancleModal}>Cancel</button>
+            <div>
+              <Button
+                color="var(--text-white)"
+                onClick={() => addMyList(modalVal)}
+              >
+                <a>Save</a>
+              </Button>
+              <button onClick={cancleModal}>Cancel</button>
+            </div>
+            <div>{pickCategory > 1 && <button>Delete list</button>}</div>
           </div>
           <button onClick={cancleModal}>
             <svg width="14" height="14" viewBox="0 0 14 14">
@@ -124,21 +140,34 @@ const ModalContainer = styled.div<ModalContainerProps>`
       > div:nth-child(3) {
         margin-top: 20px;
         display: flex;
-        > button {
-          padding: 8px;
+        justify-content: space-between;
+        > div:first-child {
+          > button {
+            padding: 8px;
+          }
+          > button:first-child {
+            margin: 0;
+            margin-right: 4px;
+            width: auto;
+          }
+          > button:last-child {
+            border: none;
+            background-color: white;
+            color: var(--text-blue);
+            cursor: pointer;
+            :hover {
+              background-color: rgb(234, 249, 255);
+            }
+          }
         }
-        > button:first-child {
-          margin: 0;
-          margin-right: 4px;
-          width: auto;
-        }
-        > button:last-child {
-          border: none;
-          background-color: white;
-          color: var(--text-blue);
-          cursor: pointer;
-          :hover {
-            background-color: rgb(234, 249, 255);
+        > div:last-child {
+          button {
+            padding: 8px;
+            cursor: pointer;
+            border: 1px solid var(--text-red);
+            border-radius: 6px;
+            color: var(--text-red);
+            background-color: white;
           }
         }
       }
