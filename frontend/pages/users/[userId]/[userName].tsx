@@ -122,6 +122,7 @@ const UserDetail = () => {
           pickCategory={pickCategory}
           pickCategoryHandler={pickCategoryHandler}
           pick={pick}
+          selectPickCategory={selectPickCategory}
         />
       )}
       {pick === 3 && <SettingsContent />}
@@ -723,12 +724,14 @@ type SavesContentProps = {
   pickCategory: number;
   pickCategoryHandler: (i: number) => void;
   pick: number;
+  selectPickCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const SavesContent = ({
   pickCategory,
   pickCategoryHandler,
   pick,
+  selectPickCategory,
 }: SavesContentProps) => {
   return (
     <SavesContentContainer>
@@ -753,6 +756,12 @@ const SavesContent = ({
           <div>+</div>
         </div>
       </div>
+      <SelectContent
+        selectPickCategory={selectPickCategory}
+        pickCategory={pickCategory}
+        categories={detailSaves}
+        sub={detailNav[pick]}
+      />
       <div>
         <div>
           <div>{detailSaves[pickCategory]}</div>
@@ -785,9 +794,15 @@ const SavesContent = ({
 const SavesContentContainer = styled.div`
   display: flex;
   margin-top: 20px;
+  @media (max-width: 980px) {
+    flex-direction: column;
+  }
   > div:first-child {
     width: 19%;
     margin-right: 28px;
+    @media (max-width: 980px) {
+      display: none;
+    }
     > div:first-child {
       > ul {
         li {
@@ -811,8 +826,16 @@ const SavesContentContainer = styled.div`
       }
     }
   }
+  > div:nth-child(2) {
+    @media (min-width: 980px) {
+      display: none;
+    }
+  }
   > div:last-child {
     width: 81%;
+    @media (max-width: 980px) {
+      width: 100%;
+    }
     > div:first-child {
       display: flex;
       justify-content: space-between;
