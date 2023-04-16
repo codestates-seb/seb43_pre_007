@@ -836,6 +836,7 @@ const SavesContentContainer = styled.div`
         font-weight: 900;
         font-size: 1.05rem;
         color: var(--text-blue);
+        cursor: pointer;
       }
     }
   }

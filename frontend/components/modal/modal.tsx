@@ -20,7 +20,7 @@ const Modal = () => {
     e.preventDefault();
     setModal(false);
   };
-  
+
   const cancleModal = () => {
     setModal(false);
   };
@@ -74,7 +74,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
   background-color: rgba(0, 0, 0, 0.5);
   > div {
     position: relative;
-    width: 268px;
+    width: 328px;
     height: 20%;
     border-radius: 8px;
     z-index: 2;
@@ -86,6 +86,9 @@ const ModalContainer = styled.div<ModalContainerProps>`
       css`
         animation: ${zoomIn} 0.2s ease-in-out;
       `};
+    @media (max-width: 740px) {
+      width: 268px;
+    }
     form {
       h1 {
         font-size: 1.5rem;
