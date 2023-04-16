@@ -750,12 +750,13 @@ const SavesContent = ({
   const [, setModal] = useRecoilState(modalState);
   const [, setModalName] = useRecoilState(modalNameState);
   const [, setModalVal] = useRecoilState(modalValState);
-  const newList = () => {
-    setModalVal('');
+  const onAdd = () => {
     setModal(true);
+    setModalVal('');
     setModalName('New list');
   };
-  const editList = () => {
+  const onEdit = () => {
+    setModalVal(myList[pickCategory - 2]);
     setModal(true);
     setModalName('Edit list');
   };
@@ -780,7 +781,7 @@ const SavesContent = ({
         </div>
         <div>
           <div>MY LISTS</div>
-          <div onClick={newList}>+</div>
+          <div onClick={onAdd}>+</div>
         </div>
         <ul>
           {myList.map((list, i) => (
@@ -806,14 +807,14 @@ const SavesContent = ({
           <div>{[...detailSaves, ...myList][pickCategory]}</div>
           <div>
             {pickCategory < 2 ? (
-              <Button color="var(--text-white)" onClick={newList}>
+              <Button color="var(--text-white)" onClick={onAdd}>
                 <a>Create new list</a>
               </Button>
             ) : (
               <Button
                 color="var(--text-aqua)"
                 className="edit_btn"
-                onClick={editList}
+                onClick={onEdit}
               >
                 <a>
                   <svg width="18" height="18" viewBox="0 0 18 18">

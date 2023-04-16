@@ -41,9 +41,10 @@ const Modal = () => {
   };
   //리스트
   const [myList, setMyList] = useRecoilState(myListState);
-  const addMyList = (list: string) => {
-    setModalVal('');
-    setMyList([...myList, list]);
+  const addMyList = () => {
+    setMyList([...myList, modalVal]);
+    console.log(myList);
+    console.log(modalVal);
     setModal(false);
     setModalVal('');
   };
@@ -51,7 +52,24 @@ const Modal = () => {
   const [pickCategory] = useRecoilState(pickCategoryState);
   useEffect(() => {
     pickCategory > 1 && setModalVal(myList[pickCategory - 2]);
-  }, [myList, setModalVal, pickCategory, modal]);
+  }, [myList, setModalVal, pickCategory]);
+  //수정하기
+  const editList = () => {
+    const newList = [...myList];
+    const selectedIndex = pickCategory - 2;
+    newList[selectedIndex] = modalVal;
+    setMyList(newList);
+    setModal(false);
+  };
+  //삭제하기
+  const deleteList = () => {
+    const selectedIndex = pickCategory - 2;
+    setMyList([
+      ...myList.slice(0, selectedIndex),
+      ...myList.slice(selectedIndex + 1),
+    ]);
+    setModal(false);
+  };
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>
       <div className="modal-content">
@@ -70,13 +88,17 @@ const Modal = () => {
             <div>
               <Button
                 color="var(--text-white)"
-                onClick={() => addMyList(modalVal)}
+                onClick={modalName === 'Edit list' ? editList : addMyList}
               >
                 <a>Save</a>
               </Button>
               <button onClick={cancleModal}>Cancel</button>
             </div>
-            <div>{pickCategory > 1 && <button>Delete list</button>}</div>
+            <div>
+              {modalName === 'Edit list' && (
+                <button onClick={deleteList}>Delete list</button>
+              )}
+            </div>
           </div>
           <button onClick={cancleModal}>
             <svg width="14" height="14" viewBox="0 0 14 14">
