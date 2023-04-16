@@ -741,11 +741,14 @@ const SavesContent = ({
   pick,
   selectPickCategory,
 }: SavesContentProps) => {
-  const [myList, setMyList] = useRecoilState(myListState);
-  const [modal, setModal] = useRecoilState(modalState);
+  const [myList] = useRecoilState(myListState);
+  const [, setModal] = useRecoilState(modalState);
   const onModal = () => {
     setModal(true);
   };
+
+  const [pickList, setPickList] = useState(100);
+
   return (
     <SavesContentContainer>
       <div>
@@ -767,6 +770,13 @@ const SavesContent = ({
         <div>
           <div>MY LISTS</div>
           <div onClick={onModal}>+</div>
+        </div>
+        <div>
+          {myList.map((list, i) => (
+            <MenuItem idx={i} pick={pickList} key={`${list}+${i}`}>
+              {list}
+            </MenuItem>
+          ))}
         </div>
       </div>
       <SelectContent
@@ -823,7 +833,7 @@ const SavesContentContainer = styled.div`
         }
       }
     }
-    > div:last-child {
+    > div:nth-child(2) {
       margin-top: 30px;
       display: flex;
       align-items: center;
@@ -837,6 +847,14 @@ const SavesContentContainer = styled.div`
         font-size: 1.05rem;
         color: var(--text-blue);
         cursor: pointer;
+      }
+    }
+    > div:last-child {
+      > a {
+        padding: 10px;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        opacity: 0.9;
       }
     }
   }

@@ -1,4 +1,4 @@
-import { modalState } from '@/recoil/atom';
+import { modalState, modalValState, myListState } from '@/recoil/atom';
 import { useRecoilState } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import Input from '../input/Input';
@@ -6,9 +6,9 @@ import Button from '../button/Button';
 import { useRef } from 'react';
 
 const Modal = () => {
+  //모달 상태 및 함수
   const [modal, setModal] = useRecoilState(modalState);
   const modalRef = useRef<HTMLDivElement>(null);
-
   const offModal = (e: React.MouseEvent<HTMLDivElement>) => {
     const targetElement = e.target as Element;
     if (
@@ -18,11 +18,26 @@ const Modal = () => {
       return;
     }
     e.preventDefault();
+    setModalVal('');
     setModal(false);
   };
-
   const cancleModal = () => {
+    setModalVal('');
     setModal(false);
+  };
+  //모달 값
+  const [modalVal, setModalVal] = useRecoilState(modalValState);
+  const changeModalVal = (e: {
+    target: { value: string | ((currVal: string) => string) };
+  }) => {
+    setModalVal(e.target.value);
+  };
+  //리스트
+  const [myList, setMyList] = useRecoilState(myListState);
+  const addMyList = (list: string) => {
+    setMyList([...myList, list]);
+    setModal(false);
+    setModalVal('');
   };
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>
@@ -30,10 +45,19 @@ const Modal = () => {
         <form action="#">
           <h1>New list</h1>
           <div>
-            <Input paddingLeft={'6px'} placeholder="Enter list name" />
+            <Input
+              onChange={changeModalVal}
+              value={modalVal}
+              paddingLeft={'6px'}
+              placeholder="Enter list name"
+              maxLength={30}
+            />
           </div>
           <div>
-            <Button color="var(--text-white)">
+            <Button
+              color="var(--text-white)"
+              onClick={() => addMyList(modalVal)}
+            >
               <a>Save</a>
             </Button>
             <button onClick={cancleModal}>Cancel</button>
