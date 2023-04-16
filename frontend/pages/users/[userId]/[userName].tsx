@@ -435,6 +435,17 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
         </ul>
       </div>
       <div>
+        <div>Navigation</div>
+        <div>View all activity pages</div>
+        <select className="focus_blue">
+          {detailActivity.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
         <div className="summary">
           <div>{detailActivity[0]}</div>
           <div>
@@ -522,7 +533,14 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
           <div className="sub_content sub_bottom" key={category}>
             <div>
               <div>{category}</div>
-              <div></div>
+              <div>
+                {(category === 'Following' || category === 'Bounties') && (
+                  <FilterButton
+                    filters={['Score', 'Activity', 'Newest']}
+                    onChange={() => {}}
+                  />
+                )}
+              </div>
             </div>
             <Card>
               <div>{detailActivityContent[category]}</div>
@@ -537,10 +555,16 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
 const ActiveContentContainer = styled.div`
   display: flex;
   margin-top: 20px;
+  @media (max-width: 980px) {
+    flex-direction: column;
+  }
   > div:first-child {
-    width: 12%;
+    min-width: 117px;
     margin-right: 16px;
     padding-right: 10px;
+    @media (max-width: 980px) {
+      display: none;
+    }
     > ul {
       li {
         margin-bottom: 2px;
@@ -550,10 +574,46 @@ const ActiveContentContainer = styled.div`
       }
     }
   }
+
+  > div:nth-child(2) {
+    width: 100%;
+    margin: 20px 0px;
+    > div {
+      margin-bottom: 8px;
+    }
+
+    > div:first-child {
+      font-weight: 900;
+      font-size: 0.8rem;
+    }
+    > div:nth-child(2) {
+      font-size: 0.7rem;
+    }
+
+    @media (min-width: 980px) {
+      display: none;
+    }
+    > select {
+      width: 100%;
+      padding: 7.8px 32px 7.8px 9.1px;
+      border: 1px solid var(--border-gray);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHAW4SlLS2rKFXiStNT36W_CCwgcgKiKXXOGHZViUtLg6gz9gKSNAtZeHaC8LoBRc-xFk&usqp=CAU');
+      background-size: 12px;
+      background-repeat: no-repeat;
+      background-position: 97% 50%;
+    }
+  }
+
   > div:last-child {
     width: 88%;
     display: flex;
     flex-wrap: wrap;
+    @media (max-width: 980px) {
+      width: 100%;
+    }
     > div:not(:first-child) {
       margin-top: 24px;
     }
@@ -565,6 +625,17 @@ const ActiveContentContainer = styled.div`
       > div:last-child {
         display: flex;
         margin-top: 12px;
+        @media (max-width: 980px) {
+          display: flex;
+          flex-direction: column;
+        }
+        > div {
+          @media (max-width: 980px) {
+            flex-basis: 0;
+            width: 100%;
+            margin: 8px 0px;
+          }
+        }
         > div:first-child {
           flex-basis: calc(25% - var(--su16));
         }
@@ -619,6 +690,9 @@ const ActiveContentContainer = styled.div`
       margin: 10px 0px;
       flex-direction: column;
       margin-right: 18.31px;
+      @media (max-width: 1286px) {
+        width: 100%;
+      }
       > div:first-child {
         font-size: 1.3rem;
         display: flex;

@@ -48,3 +48,7 @@ a {
   margin-bottom: 1rem;
 }
 
+.focus_blue:focus{
+    outline: 1px solid rgba(0, 195, 255, 0.5);
+    box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
+}
