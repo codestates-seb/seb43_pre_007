@@ -33,7 +33,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                   <li
                     key={li}
                     className={
-                      currentPath === `/${li.toLowerCase()}`
+                      currentPath.includes(`/${li.toLowerCase()}`)
                         ? 'nav-serve focus-link'
                         : 'nav-serve'
                     }
@@ -49,7 +49,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                 <li className="nav-main">COLLECTIVES</li>
                 <li
                   className={
-                    currentPath === '/collectives'
+                    currentPath.includes('/collectives')
                       ? 'nav-serve focus-link'
                       : 'nav-serve'
                   }
