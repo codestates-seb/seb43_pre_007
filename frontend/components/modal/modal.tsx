@@ -28,7 +28,8 @@ const Modal = () => {
     setModalVal('');
     setModal(false);
   };
-  const cancleModal = () => {
+  const cancleModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setModalVal('');
     setModal(false);
   };
@@ -41,7 +42,8 @@ const Modal = () => {
   };
   //리스트
   const [myList, setMyList] = useRecoilState(myListState);
-  const addMyList = () => {
+  const addMyList = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     setMyList([...myList, modalVal]);
     setModal(false);
     setModalVal('');
@@ -52,7 +54,8 @@ const Modal = () => {
     pickCategory > 1 && setModalVal(myList[pickCategory - 2]);
   }, [myList, setModalVal, pickCategory]);
   //수정하기
-  const editList = () => {
+  const editList = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     const newList = [...myList];
     const selectedIndex = pickCategory - 2;
     newList[selectedIndex] = modalVal;
@@ -60,7 +63,8 @@ const Modal = () => {
     setModal(false);
   };
   //삭제하기
-  const deleteList = () => {
+  const deleteList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const selectedIndex = pickCategory - 2;
     setMyList([
       ...myList.slice(0, selectedIndex),
@@ -71,7 +75,7 @@ const Modal = () => {
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>
       <div className="modal-content">
-        <form action="#">
+        <form onSubmit={modalName === 'Edit list' ? editList : addMyList}>
           <h1>{modalName}</h1>
           <div>
             <Input
@@ -84,10 +88,7 @@ const Modal = () => {
           </div>
           <div>
             <div>
-              <Button
-                color="var(--text-white)"
-                onClick={modalName === 'Edit list' ? editList : addMyList}
-              >
+              <Button color="var(--text-white)">
                 <a>Save</a>
               </Button>
               <button onClick={cancleModal}>Cancel</button>
