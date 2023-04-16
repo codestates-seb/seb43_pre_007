@@ -403,10 +403,6 @@ const ProfileContentContainer = styled.div`
       margin-top: 12px;
       margin-bottom: 20px;
     }
-
-    .double_p {
-      margin-bottom: 1rem;
-    }
   }
 `;
 
@@ -438,17 +434,32 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
           <div>{detailActivity[0]}</div>
           <div>
             <Card>
-              Reputation is how the community thanks you When users upvote your
-              helpful posts, you&apos;ll earn reputation and unlock new
-              privileges. Learn more about reputation and privileges
+              <div>
+                <h2>Reputation is how the community thanks you</h2>
+                <p>
+                  When users upvote your helpful posts, you&apos;ll earn
+                  reputation and unlock new privileges.
+                </p>
+                <p>Learn more about reputation and privileges</p>
+              </div>
             </Card>
             <Card>
-              Earn badges for helpful actions Badges are bits of digital flair
-              that you get when you participate in especially helpful ways.
+              <div>
+                <h2>Earn badges for helpful actions</h2>
+                <p>
+                  Badges are bits of digital flair that you get when you
+                  participate in especially helpful ways.
+                </p>
+              </div>
             </Card>
             <Card>
-              Measure your impact Your posts and helpful actions here help
-              hundreds or thousands of people searching for help.
+              <div>
+                <h2>Measure your impact</h2>
+                <p>
+                  Your posts and helpful actions here help hundreds or thousands
+                  of people searching for help.
+                </p>
+              </div>
             </Card>
           </div>
         </div>
@@ -463,6 +474,7 @@ const ActiveContentContainer = styled.div`
   > div:first-child {
     width: 12%;
     margin-right: 16px;
+    padding-right: 10px;
     > ul {
       li {
         margin-bottom: 2px;
@@ -475,8 +487,31 @@ const ActiveContentContainer = styled.div`
   > div:last-child {
     width: 88%;
     .summary {
-      div:last-child {
+      > div:first-child {
+        font-size: 1.3rem;
+      }
+      > div:last-child {
         display: flex;
+        margin-top: 12px;
+        > div:first-child {
+          flex-basis: calc(25% - var(--su16));
+        }
+        > div:nth-child(2) {
+          flex-basis: calc(16.6% - var(--su16));
+        }
+        > div:nth-child(3) {
+          flex-basis: calc(8.3% - var(--su16));
+        }
+      }
+      .card {
+        margin-right: 16px;
+        flex-grow: 1;
+        > div {
+          display: flex;
+          flex-direction: column;
+          span:first-child {
+          }
+        }
       }
     }
   }

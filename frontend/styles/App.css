@@ -22,6 +22,7 @@
   --btn-boxshadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
   --btn-border: 1px solid hsl(205, 41%, 63%);
   --thin-white-border-color: #eeeeed;
+  --su16: calc(16px * 1);
 }
 
 ul,
@@ -41,4 +42,8 @@ a {
   width: 16px;
   height: 16px;
   background-position: 0 -6138px;
+}
+
+.double_p {
+  margin-bottom: 1rem;
 }
