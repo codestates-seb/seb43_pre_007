@@ -8,7 +8,7 @@ import {
   detailActivityContent,
   detailNav,
 } from '@/constant/constant';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
@@ -21,6 +21,9 @@ const UserDetail = () => {
   const [pickActivity, setPickActivity] = useState(0);
   const pickActivityHandler = (idx: number) => {
     setPickActivity(idx);
+  };
+  const selectPickActivity = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPickActivity(Number(e.target.value));
   };
   return (
     <UsersDetailContainer>
@@ -108,6 +111,7 @@ const UserDetail = () => {
         <ActiveContent
           pickActivity={pickActivity}
           pickActivityHandler={pickActivityHandler}
+          selectPickActivity={selectPickActivity}
         />
       )}
     </UsersDetailContainer>
@@ -414,9 +418,14 @@ const ProfileContentContainer = styled.div`
 type ActiveProps = {
   pickActivityHandler: (i: number) => void;
   pickActivity: number;
+  selectPickActivity: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
+const ActiveContent = ({
+  pickActivityHandler,
+  pickActivity,
+  selectPickActivity,
+}: ActiveProps) => {
   return (
     <ActiveContentContainer pickActivity={pickActivity}>
       <div>
@@ -437,9 +446,13 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
       <div>
         <div>Navigation</div>
         <div>View all activity pages</div>
-        <select className="focus_blue">
-          {detailActivity.map((category) => (
-            <option key={category} value={category}>
+        <select
+          className="focus_blue"
+          onChange={selectPickActivity}
+          value={pickActivity}
+        >
+          {detailActivity.map((category, i) => (
+            <option key={category} value={i}>
               {category}
             </option>
           ))}
