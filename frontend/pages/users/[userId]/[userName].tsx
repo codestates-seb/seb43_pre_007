@@ -3,6 +3,7 @@ import Button from '@/components/button/Button';
 import { FilterButton } from '@/components/button/FilterButton';
 import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
+import SelectContent from '@/components/select_content/SelectContent';
 import {
   detailActivity,
   detailActivityContent,
@@ -113,12 +114,14 @@ const UserDetail = () => {
           pickCategory={pickCategory}
           pickCategoryHandler={pickCategoryHandler}
           selectPickCategory={selectPickCategory}
+          pick={pick}
         />
       )}
       {pick === 2 && (
         <SavesContent
           pickCategory={pickCategory}
           pickCategoryHandler={pickCategoryHandler}
+          pick={pick}
         />
       )}
       {pick === 3 && <SettingsContent />}
@@ -427,12 +430,14 @@ type ActiveProps = {
   pickCategoryHandler: (i: number) => void;
   pickCategory: number;
   selectPickCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  pick: number;
 };
 
 const ActiveContent = ({
   pickCategoryHandler,
   pickCategory,
   selectPickCategory,
+  pick,
 }: ActiveProps) => {
   return (
     <ActiveContentContainer pickCategory={pickCategory}>
@@ -451,21 +456,12 @@ const ActiveContent = ({
           ))}
         </ul>
       </div>
-      <div>
-        <div>Navigation</div>
-        <div>View all activity pages</div>
-        <select
-          className="focus_blue"
-          onChange={selectPickCategory}
-          value={pickCategory}
-        >
-          {detailActivity.map((category, i) => (
-            <option key={category} value={i}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectContent
+        selectPickCategory={selectPickCategory}
+        pickCategory={pickCategory}
+        categories={detailActivity}
+        sub={detailNav[pick]}
+      />
       <div>
         {pickCategory === 0 && (
           <div className="summary">
@@ -608,38 +604,6 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
     }
   }
 
-  > div:nth-child(2) {
-    width: 100%;
-    margin: 20px 0px;
-    > div {
-      margin-bottom: 8px;
-    }
-
-    > div:first-child {
-      font-weight: 900;
-      font-size: 0.8rem;
-    }
-    > div:nth-child(2) {
-      font-size: 0.7rem;
-    }
-
-    @media (min-width: 980px) {
-      display: none;
-    }
-    > select {
-      width: 100%;
-      padding: 7.8px 32px 7.8px 9.1px;
-      border: 1px solid var(--border-gray);
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHAW4SlLS2rKFXiStNT36W_CCwgcgKiKXXOGHZViUtLg6gz9gKSNAtZeHaC8LoBRc-xFk&usqp=CAU');
-      background-size: 12px;
-      background-repeat: no-repeat;
-      background-position: 97% 50%;
-    }
-  }
-
   > div:last-child {
     width: 88%;
     display: flex;
@@ -758,11 +722,13 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
 type SavesContentProps = {
   pickCategory: number;
   pickCategoryHandler: (i: number) => void;
+  pick: number;
 };
 
 const SavesContent = ({
   pickCategory,
   pickCategoryHandler,
+  pick,
 }: SavesContentProps) => {
   return (
     <SavesContentContainer>
