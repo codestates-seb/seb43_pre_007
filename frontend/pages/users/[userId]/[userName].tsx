@@ -9,7 +9,7 @@ import {
   detailNav,
   detailSaves,
 } from '@/constant/constant';
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
@@ -17,15 +17,14 @@ const UserDetail = () => {
   const [pick, setPick] = useState(0);
   const pickHandler = (idx: number) => {
     setPick(idx);
-    setPickActivity(0);
+    setPickCategory(0);
   };
-
-  const [pickActivity, setPickActivity] = useState(0);
-  const pickActivityHandler = (idx: number) => {
-    setPickActivity(idx);
+  const [pickCategory, setPickCategory] = useState(0);
+  const pickCategoryHandler = (idx: number) => {
+    setPickCategory(idx);
   };
-  const selectPickActivity = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPickActivity(Number(e.target.value));
+  const selectPickCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPickCategory(Number(e.target.value));
   };
   return (
     <UsersDetailContainer>
@@ -111,15 +110,15 @@ const UserDetail = () => {
       {pick === 0 && <ProfileContent />}
       {pick === 1 && (
         <ActiveContent
-          pickActivity={pickActivity}
-          pickActivityHandler={pickActivityHandler}
-          selectPickActivity={selectPickActivity}
+          pickCategory={pickCategory}
+          pickCategoryHandler={pickCategoryHandler}
+          selectPickCategory={selectPickCategory}
         />
       )}
       {pick === 2 && (
         <SavesContent
-          pickActivity={pickActivity}
-          pickActivityHandler={pickActivityHandler}
+          pickCategory={pickCategory}
+          pickCategoryHandler={pickCategoryHandler}
         />
       )}
       {pick === 3 && <SettingsContent />}
@@ -425,25 +424,25 @@ const ProfileContentContainer = styled.div`
 `;
 
 type ActiveProps = {
-  pickActivityHandler: (i: number) => void;
-  pickActivity: number;
-  selectPickActivity: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  pickCategoryHandler: (i: number) => void;
+  pickCategory: number;
+  selectPickCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const ActiveContent = ({
-  pickActivityHandler,
-  pickActivity,
-  selectPickActivity,
+  pickCategoryHandler,
+  pickCategory,
+  selectPickCategory,
 }: ActiveProps) => {
   return (
-    <ActiveContentContainer pickActivity={pickActivity}>
+    <ActiveContentContainer pickCategory={pickCategory}>
       <div>
         <ul>
           {detailActivity.map((category, i) => (
             <li key={category}>
               <MenuItem
-                onClick={() => pickActivityHandler(i)}
-                pick={pickActivity}
+                onClick={() => pickCategoryHandler(i)}
+                pick={pickCategory}
                 idx={i}
               >
                 {category}
@@ -457,8 +456,8 @@ const ActiveContent = ({
         <div>View all activity pages</div>
         <select
           className="focus_blue"
-          onChange={selectPickActivity}
-          value={pickActivity}
+          onChange={selectPickCategory}
+          value={pickCategory}
         >
           {detailActivity.map((category, i) => (
             <option key={category} value={i}>
@@ -468,7 +467,7 @@ const ActiveContent = ({
         </select>
       </div>
       <div>
-        {pickActivity === 0 && (
+        {pickCategory === 0 && (
           <div className="summary">
             <div>{detailActivity[0]}</div>
             <div>
@@ -537,7 +536,7 @@ const ActiveContent = ({
         )}
         {detailActivity.slice(1, 5).map(
           (category, i) =>
-            (pickActivity === i + 1 || pickActivity === 0) && (
+            (pickCategory === i + 1 || pickCategory === 0) && (
               <div className="sub_content" key={category}>
                 <div>
                   <div>{category}</div>
@@ -558,7 +557,7 @@ const ActiveContent = ({
         )}
         {detailActivity.slice(5).map(
           (category, i) =>
-            (pickActivity === 0 || pickActivity === i + 5) && (
+            (pickCategory === 0 || pickCategory === i + 5) && (
               <div className="sub_content sub_bottom" key={category}>
                 <div>
                   <div>{category}</div>
@@ -583,7 +582,7 @@ const ActiveContent = ({
 };
 
 type ActiveContentContainerProps = {
-  pickActivity: number;
+  pickCategory: number;
 };
 
 const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
@@ -720,7 +719,7 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
     .sub_content {
       display: flex;
       margin-top: 28px;
-      width: ${(props) => (props.pickActivity === 0 ? '48%' : '100%')};
+      width: ${(props) => (props.pickCategory === 0 ? '48%' : '100%')};
       margin: 10px 0px;
       flex-direction: column;
       margin-right: 18.31px;
@@ -757,13 +756,13 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
 `;
 
 type SavesContentProps = {
-  pickActivity: number;
-  pickActivityHandler: (i: number) => void;
+  pickCategory: number;
+  pickCategoryHandler: (i: number) => void;
 };
 
 const SavesContent = ({
-  pickActivity,
-  pickActivityHandler,
+  pickCategory,
+  pickCategoryHandler,
 }: SavesContentProps) => {
   return (
     <SavesContentContainer>
@@ -774,8 +773,8 @@ const SavesContent = ({
               <li key={category}>
                 <MenuItem
                   idx={i}
-                  pick={pickActivity}
-                  onClick={() => pickActivityHandler(i)}
+                  pick={pickCategory}
+                  onClick={() => pickCategoryHandler(i)}
                 >
                   {category}
                 </MenuItem>
@@ -790,7 +789,7 @@ const SavesContent = ({
       </div>
       <div>
         <div>
-          <div>All saves</div>
+          <div>{detailSaves[pickCategory]}</div>
           <div>
             <Button color="var(--text-white)">
               <a>Create new list</a>
@@ -849,11 +848,16 @@ const SavesContentContainer = styled.div`
   > div:last-child {
     width: 81%;
     > div:first-child {
+      display: flex;
+      justify-content: space-between;
       > div:first-child {
         font-size: 1.3rem;
       }
-      display: flex;
-      justify-content: space-between;
+      > div:last-child {
+        button {
+          padding: 10px 9px;
+        }
+      }
     }
     > div:nth-child(2) {
       margin-top: 20px;
