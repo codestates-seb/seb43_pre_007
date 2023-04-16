@@ -7,6 +7,7 @@ import {
   detailActivity,
   detailActivityContent,
   detailNav,
+  detailSaves,
 } from '@/constant/constant';
 import { SetStateAction, useState } from 'react';
 import styled from 'styled-components';
@@ -16,6 +17,7 @@ const UserDetail = () => {
   const [pick, setPick] = useState(0);
   const pickHandler = (idx: number) => {
     setPick(idx);
+    setPickActivity(0);
   };
 
   const [pickActivity, setPickActivity] = useState(0);
@@ -114,6 +116,13 @@ const UserDetail = () => {
           selectPickActivity={selectPickActivity}
         />
       )}
+      {pick === 2 && (
+        <SavesContent
+          pickActivity={pickActivity}
+          pickActivityHandler={pickActivityHandler}
+        />
+      )}
+      {pick === 3 && <SettingsContent />}
     </UsersDetailContainer>
   );
 };
@@ -746,3 +755,126 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
     }
   }
 `;
+
+type SavesContentProps = {
+  pickActivity: number;
+  pickActivityHandler: (i: number) => void;
+};
+
+const SavesContent = ({
+  pickActivity,
+  pickActivityHandler,
+}: SavesContentProps) => {
+  return (
+    <SavesContentContainer>
+      <div>
+        <div>
+          <ul>
+            {detailSaves.map((category, i) => (
+              <li key={category}>
+                <MenuItem
+                  idx={i}
+                  pick={pickActivity}
+                  onClick={() => pickActivityHandler(i)}
+                >
+                  {category}
+                </MenuItem>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <div>MY LISTS</div>
+          <div>+</div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div>All saves</div>
+          <div>
+            <Button color="var(--text-white)">
+              <a>Create new list</a>
+            </Button>
+          </div>
+        </div>
+        <div>0 saved items</div>
+        <div>
+          <svg width="196" height="196" viewBox="0 0 196 196">
+            <path
+              d="M35 177.5c-19.5-9-29.35-26.54-26-82 3.35-55.46 14.8-66.9 32.5-73 17.7-6.1 86.22-21.95 120 5.5s37.46 52.67 23 96.5c-14.46 43.84-22.26 63.24-60 61-11.4-.68-22.3-.85-32.5-1.02-23.56-.38-43.4-.7-57-6.98ZM33 42v26a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V42a7 7 0 0 0-7-7H40a7 7 0 0 0-7 7Zm7 39a7 7 0 0 0-7 7v27a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V88a7 7 0 0 0-7-7H40Z"
+              opacity=".07"
+            ></path>
+            <path
+              d="M42 48a4 4 0 0 1 4-4h112a7 7 0 0 1 7 7v23a7 7 0 0 1-7 7H49a7 7 0 0 1-7-7V48Zm0 47a4 4 0 0 1 4-4h112a7 7 0 0 1 7 7v22a7 7 0 0 1-7 7H49a7 7 0 0 1-7-7V95Zm-1 36h3.19a2 2 0 1 1 0 4H40a3 3 0 0 0-3 3v4.44a2 2 0 1 1-4 0V138a7 7 0 0 1 7-7h1Zm11.65 2c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.38a2 2 0 1 1 0 4H92.3a2 2 0 0 1-2-2Zm18.84 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2H153a7 7 0 0 1 7 7v4.44a2 2 0 1 1-4 0v-4.58a3 3 0 0 0-3-2.86h-4.19a2 2 0 0 1-2-2ZM35 151.56a2 2 0 0 1 2 2v4.51a3 3 0 0 0 3 2.93h4.19a2 2 0 1 1 0 4h-4.35a7 7 0 0 1-6.84-7v-4.44c0-1.1.9-2 2-2Zm123 0a2 2 0 0 1 2 2v4.74a7 7 0 0 1-7 6.69h-4.19a2 2 0 1 1 0-4h4.33a3 3 0 0 0 2.86-3v-4.43c0-1.1.9-2 2-2ZM52.65 163c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.38a2 2 0 1 1 0 4H92.3a2 2 0 0 1-2-2Zm18.84 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Z"
+              opacity=".2"
+            ></path>
+            <path d="M124.48 14.24 120.25 10 116 14.24l4.24 4.25 4.25-4.25ZM52 58a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm12-4c0-1.1.9-2 2-2h80a2 2 0 1 1 0 4H66a2 2 0 0 1-2-2ZM33 42a7 7 0 0 1 7-7h113a7 7 0 0 1 7 7v26a7 7 0 0 1-7 7H40a7 7 0 0 1-7-7V42Zm7-3a3 3 0 0 0-3 3v26a3 3 0 0 0 3 3h113a3 3 0 0 0 3-3V42a3 3 0 0 0-3-3H40Zm16 62a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm10-2a2 2 0 1 0 0 4h80a2 2 0 1 0 0-4H66ZM40 81a7 7 0 0 0-7 7v27a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V88a7 7 0 0 0-7-7H40Zm-3 7a3 3 0 0 1 3-3h113a3 3 0 0 1 3 3v27a3 3 0 0 1-3 3H40a3 3 0 0 1-3-3V88Zm150.97 54.49L179.5 134l-8.49 8.49 8.49 8.48 8.48-8.48Zm-8.48 2.82-2.83-2.82 2.83-2.83 2.82 2.83-2.82 2.82ZM8 97a2 2 0 0 1 2 2v4h4a2 2 0 1 1 0 4h-4v4a2 2 0 1 1-4 0v-4H2a2 2 0 1 1 0-4h4v-4c0-1.1.9-2 2-2Z"></path>
+          </svg>
+          <p>You have no saved items</p>
+        </div>
+      </div>
+    </SavesContentContainer>
+  );
+};
+
+const SavesContentContainer = styled.div`
+  display: flex;
+  margin-top: 20px;
+  > div:first-child {
+    width: 19%;
+    margin-right: 28px;
+    > div:first-child {
+      > ul {
+        li {
+          margin-bottom: 2px;
+        }
+      }
+    }
+    > div:last-child {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > div:first-child {
+        font-size: 0.7rem;
+        font-weight: 900;
+      }
+      > div:last-child {
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: var(--text-blue);
+      }
+    }
+  }
+  > div:last-child {
+    width: 81%;
+    > div:first-child {
+      > div:first-child {
+        font-size: 1.3rem;
+      }
+      display: flex;
+      justify-content: space-between;
+    }
+    > div:nth-child(2) {
+      margin-top: 20px;
+      font-size: 1.16rem;
+    }
+    > div:last-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px;
+      opacity: 0.6;
+      > p {
+        margin-top: 30px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+`;
+
+const SettingsContent = () => {
+  return <SettingsContentContainer>세팅</SettingsContentContainer>;
+};
+
+const SettingsContentContainer = styled.div``;

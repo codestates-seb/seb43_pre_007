@@ -32,3 +32,5 @@ export const detailActivityContent: { [key: string]: string } = {
   Reputation: 'You have no recent reputation changes.',
   Votes: 'You have not cast any votes',
 };
+
+export const detailSaves = ['All saves', 'For later'];
