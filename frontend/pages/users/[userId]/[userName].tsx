@@ -1,8 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Button from '@/components/button/Button';
+import { FilterButton } from '@/components/button/FilterButton';
 import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
-import { detailActivity, detailNav } from '@/constant/constant';
+import {
+  detailActivity,
+  detailActivityContent,
+  detailNav,
+} from '@/constant/constant';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -495,6 +500,35 @@ const ActiveContent = ({ pickActivityHandler, pickActivity }: ActiveProps) => {
             </Card>
           </div>
         </div>
+        {detailActivity.slice(1, 5).map((category) => (
+          <div className="sub_content" key={category}>
+            <div>
+              <div>{category}</div>
+              <div>
+                {(category === 'Answers' || category === 'Questions') && (
+                  <FilterButton
+                    filters={['Score', 'Activity', 'Newest']}
+                    onChange={() => {}}
+                  />
+                )}
+              </div>
+            </div>
+            <Card>
+              <div>{detailActivityContent[category]}</div>
+            </Card>
+          </div>
+        ))}
+        {detailActivity.slice(5).map((category) => (
+          <div className="sub_content sub_bottom" key={category}>
+            <div>
+              <div>{category}</div>
+              <div></div>
+            </div>
+            <Card>
+              <div>{detailActivityContent[category]}</div>
+            </Card>
+          </div>
+        ))}
       </div>
     </ActiveContentContainer>
   );
@@ -518,7 +552,13 @@ const ActiveContentContainer = styled.div`
   }
   > div:last-child {
     width: 88%;
+    display: flex;
+    flex-wrap: wrap;
+    > div:not(:first-child) {
+      margin-top: 24px;
+    }
     .summary {
+      width: 100%;
       > div:first-child {
         font-size: 1.3rem;
       }
@@ -542,7 +582,7 @@ const ActiveContentContainer = styled.div`
       .card {
         margin-right: 16px;
         flex-grow: 1;
-        padding: 20px;
+        padding: 23px;
         > div {
           display: flex;
           flex-direction: column;
@@ -571,6 +611,36 @@ const ActiveContentContainer = styled.div`
           }
         }
       }
+    }
+    .sub_content {
+      display: flex;
+      margin-top: 28px;
+      width: 48%;
+      margin: 10px 0px;
+      flex-direction: column;
+      margin-right: 18.31px;
+      > div:first-child {
+        font-size: 1.3rem;
+        display: flex;
+        justify-content: space-between;
+        > div:last-child {
+          li {
+            padding: 8px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+          }
+        }
+      }
+      > .card {
+        text-align: center;
+        margin-top: 12px;
+        opacity: 0.7;
+        width: 100%;
+        font-size: 0.8rem;
+      }
+    }
+    .sub_bottom {
+      width: 100%;
     }
   }
 `;
