@@ -22,19 +22,29 @@ const SelectContent = ({
         onChange={selectPickCategory}
         value={pickCategory}
       >
-        {categories.slice(0, 2).map((category, i) => (
-          <option key={`${category}+${i}`} value={i}>
-            {category}
-          </option>
-        ))}
-        {categories.length > 2 && (
-          <optgroup label="My lists">
-            {categories.slice(2).map((category, i) => (
-              <option key={`${category}+${i}`} value={i + 2}>
+        {categories[0] === 'Summary' ? (
+          categories.map((category, i) => (
+            <option key={`${category}+${i}`} value={i}>
+              {category}
+            </option>
+          ))
+        ) : (
+          <>
+            {categories.slice(0, 2).map((category, i) => (
+              <option key={`${category}+${i}`} value={i}>
                 {category}
               </option>
             ))}
-          </optgroup>
+            {categories.length > 2 && (
+              <optgroup label="My lists">
+                {categories.slice(2).map((category, i) => (
+                  <option key={`${category}+${i}`} value={i + 2}>
+                    {category}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+          </>
         )}
       </select>
     </SelectContainer>
