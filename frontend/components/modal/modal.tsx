@@ -13,6 +13,8 @@ import { useEffect, useRef } from 'react';
 import { updateLocalStorage } from '@/function/local_storage/updateLocalStorage';
 import { getLocalStorage } from '@/function/local_storage/getLocalStorage';
 import { setLocalStorage } from '@/function/local_storage/setLocalStorage';
+import { editLocalStorage } from '@/function/local_storage/editLocalStorage';
+import { deleteLocalStorage } from '@/function/local_storage/deleteLocalStorage';
 
 const Modal = () => {
   //모달 상태 및 함수
@@ -70,6 +72,7 @@ const Modal = () => {
     newList[selectedIndex] = modalVal;
     setMyList(newList);
     setModal(false);
+    editLocalStorage('myList', selectedIndex, modalVal);
   };
   //삭제하기
   const deleteList = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -81,6 +84,7 @@ const Modal = () => {
     ]);
     setModal(false);
     setPickCategory(0);
+    deleteLocalStorage('myList', selectedIndex);
   };
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>
