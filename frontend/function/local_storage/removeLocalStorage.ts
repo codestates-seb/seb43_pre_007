@@ -3,5 +3,7 @@
  * @param key 로컬 스토리지 키 값
  */
 export const removeLocalStorage = (key: string) => {
-  localStorage.removeItem(key);
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(key);
+  }
 };

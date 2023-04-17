@@ -4,8 +4,10 @@
  * @param data 저장할 값
  */
 export const setLocalStorage = (key: string, data: any) => {
-  localStorage.setItem(
-    key,
-    JSON.stringify({ date: new Date(), [`${key}`]: data })
-  );
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(
+      key,
+      JSON.stringify({ date: new Date(), [`${key}`]: data })
+    );
+  }
 };

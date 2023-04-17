@@ -3,9 +3,11 @@
  * @returns 키에 해당하는 로컬스토리지 데이터
  */
 export const getLocalStorage = (key: string) => {
-  const data = localStorage.getItem(key);
-  if (data) {
-    return JSON.parse(data);
+  if (typeof window !== 'undefined') {
+    const data = localStorage.getItem(key);
+    if (data) {
+      return JSON.parse(data);
+    }
+    return null;
   }
-  return null;
 };

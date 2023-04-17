@@ -695,7 +695,6 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
     }
     .sub_content {
       display: flex;
-      margin-top: 28px;
       width: ${(props) => (props.pickCategory === 0 ? '48%' : '100%')};
       margin: 10px 0px;
       flex-direction: column;

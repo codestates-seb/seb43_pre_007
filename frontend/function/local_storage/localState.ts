@@ -1,4 +1,4 @@
-import { getLocalStorage } from '@/function/local_storage/getLocalStorage';
+import { getLocalStorage } from './getLocalStorage';
 
 /**
  * atom 초기 셋팅을 위한 함수
@@ -7,10 +7,12 @@ import { getLocalStorage } from '@/function/local_storage/getLocalStorage';
  * @returns 조회에 성공한 값 or 기본 값
  */
 export const localState = (key: string, base: {} | [] | string) => {
-  const data = getLocalStorage(key);
-  if (data) {
-    return data[key];
-  } else {
-    return base;
+  if (typeof window !== 'undefined') {
+    const data = getLocalStorage(key);
+    if (data) {
+      return data[key];
+    } else {
+      return base;
+    }
   }
 };

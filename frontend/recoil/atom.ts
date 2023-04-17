@@ -1,3 +1,4 @@
+import { localState } from '@/function/local_storage/localState';
 import { atom } from 'recoil';
 
 export const userLogState = atom({
@@ -7,7 +8,7 @@ export const userLogState = atom({
 
 export const myListState = atom<string[]>({
   key: 'myListState',
-  default: [],
+  default: localState('myList', []),
 });
 
 export const modalState = atom({
