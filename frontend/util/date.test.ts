@@ -6,9 +6,9 @@ beforeEach(() => {
   const DateReal = global.Date;
   const mockDate = new Date('2023-04-11T17:19:50');
 
-  sypMock = jest.spyOn(global, 'Date').mockImplementation((args: any) => {
-    if (!args) return mockDate;
-    else return new DateReal(args);
+  sypMock = jest.spyOn(global, 'Date').mockImplementation((date) => {
+    if (!date) return mockDate;
+    else return new DateReal(date);
   });
 });
 
@@ -53,7 +53,17 @@ describe('parseDate', () => {
     expect(parseDate('2023-04-10T17:19:50')).toEqual('yesterday');
   });
 
+  test('simple format, 1년이상 차이날 경우', () => {
+    expect(parseDate('2022-03-11T17:19:50.26007', true)).toEqual(
+      'Mar 11, 2022 at 17:19'
+    );
+  });
+
+  test('simple format, 1일 차이날 경우', () => {
+    expect(parseDate('2023-04-10T17:19:50', true)).toEqual('yesterday');
+  });
+
   test('simple format, 1일 이하 차이날 경우', () => {
-    expect(parseDate('2023-04-11T10:19:50')).toEqual('today');
+    expect(parseDate('2023-04-11T10:19:50', true)).toEqual('today');
   });
 });

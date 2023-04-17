@@ -23,3 +23,40 @@ export const dateFull = (inputDate: string) => {
 
   return res.join(' ');
 };
+
+export const parseDate = (inputDate: string, toDetail: boolean = false) => {
+  const perDay = 3600 * 24;
+
+  const date: number =
+    (new Date().valueOf() - new Date(inputDate).valueOf()) / 1000;
+
+  if (!toDetail) {
+    const filters: Array<{ [filter: string]: number }> = [
+      { year: perDay * 365 },
+      { month: perDay * 30 },
+      { day: perDay },
+    ];
+
+    for (const filter of filters) {
+      const [key, value] = Object.entries(filter)[0];
+
+      if (date / value >= 1) {
+        return key === 'day' && date / value < 2
+          ? 'yesterday'
+          : `${Math.floor(date / value)} ${key}${
+              date / value >= 2 ? 's' : ''
+            } ago`;
+      }
+    }
+
+    return 'today';
+  } else {
+    const filters: Array<number> = [3600 * 24, 3600 * 24 * 2];
+
+    for (const i in filters) {
+      if (date / filters[i] < 1) return i === '0' ? 'today' : 'yesterday';
+    }
+
+    return dateFull(inputDate);
+  }
+};
