@@ -10,6 +10,9 @@ import styled, { css, keyframes } from 'styled-components';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { useEffect, useRef } from 'react';
+import { updateLocalStorage } from '@/function/local_storage/updateLocalStorage';
+import { getLocalStorage } from '@/function/local_storage/getLocalStorage';
+import { setLocalStorage } from '@/function/local_storage/setLocalStorage';
 
 const Modal = () => {
   //모달 상태 및 함수
@@ -42,11 +45,17 @@ const Modal = () => {
   };
   //리스트
   const [myList, setMyList] = useRecoilState(myListState);
+  //추가하기
   const addMyList = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setMyList([...myList, modalVal]);
     setModal(false);
     setModalVal('');
+    if (getLocalStorage('myList')) {
+      updateLocalStorage('myList', modalVal);
+    } else {
+      setLocalStorage('myList', modalVal);
+    }
   };
   //선택된 카테고리 관련
   const [pickCategory, setPickCategory] = useRecoilState(pickCategoryState);
