@@ -1,29 +1,39 @@
-import { useState } from 'react';
+import { AnchorHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
-type MenuItemProps = {
-  active: boolean;
-  onClick: () => void;
-};
+interface MenuItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  idx: number;
+  pick: number;
+}
 
-const MenuItem = ({ children }: { children: JSX.Element }) => {
-  const [active, setActive] = useState(false);
-  const activeHandler = () => {
-    setActive(!active);
-  };
-  return (
-    <MenuItemContainer active={active} onClick={activeHandler}>
-      {children}
-    </MenuItemContainer>
-  );
+const MenuItem = ({ idx, pick, ...props }: MenuItemProps) => {
+  return <MenuItemContainer idx={idx} pick={pick} {...props} />;
 };
 export default MenuItem;
 
 const MenuItemContainer = styled.a<MenuItemProps>`
-  color: ${(props) => (props.active ? 'white' : '')};
-  background-color: ${(props) => (props.active ? 'var(--bg-orange)' : '')};
+  width: 100%;
+  font-size: 0.8rem;
+  color: #867f78;
+  padding: calc(6px * 1) calc(12px * 1);
+  align-items: center;
+  border-radius: 1000px;
+  display: flex;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
   :hover {
-    color: ${(props) => (props.active ? 'white' : '')};
-    background-color: ${(props) => (props.active ? '#db7826' : '')};
+    color: black;
+    background-color: #ececec;
+  }
+  @media (max-width: 740px) {
+    font-size: 0.7rem;
+  }
+  color: ${(props) => (props.idx === props.pick ? 'white' : '')};
+  background-color: ${(props) =>
+    props.idx === props.pick ? 'var(--bg-orange)' : ''};
+  :hover {
+    color: ${(props) => (props.idx === props.pick ? 'white' : '')};
+    background-color: ${(props) => (props.idx === props.pick ? '#db7826' : '')};
   }
 `;
