@@ -49,7 +49,7 @@ const Modal = () => {
     setModalVal('');
   };
   //선택된 카테고리 관련
-  const [pickCategory] = useRecoilState(pickCategoryState);
+  const [pickCategory, setPickCategory] = useRecoilState(pickCategoryState);
   useEffect(() => {
     pickCategory > 1 && setModalVal(myList[pickCategory - 2]);
   }, [myList, setModalVal, pickCategory]);
@@ -71,6 +71,7 @@ const Modal = () => {
       ...myList.slice(selectedIndex + 1),
     ]);
     setModal(false);
+    setPickCategory(0);
   };
   return (
     <ModalContainer modal={modal} onClick={offModal} ref={modalRef}>

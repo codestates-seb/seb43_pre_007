@@ -28,6 +28,7 @@ const PagesContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 50px calc((100% - 1270px) / 2);
+  padding-bottom: 0px;
   > div:first-child {
     min-width: 164px;
     > .left-side-bar {
