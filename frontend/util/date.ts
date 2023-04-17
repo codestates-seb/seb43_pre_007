@@ -9,7 +9,7 @@ export const dateFull = (inputDate: string) => {
     { month: 'short' },
     { day: 'numeric' },
     { year: 'numeric' },
-    { hour: '2-digit', minute: '2-digit' },
+    { hour: '2-digit', minute: '2-digit', hour12: false },
   ];
 
   for (const filter of options) {
@@ -17,7 +17,7 @@ export const dateFull = (inputDate: string) => {
     const parse = new Intl.DateTimeFormat('en', filter).format(date);
 
     if (key === 'day') res.push(parse + ',');
-    else if (key === 'hour') res.push(...['at', parse.split(' ')[0]]);
+    else if (key === 'hour') res.push(...['at', parse]);
     else res.push(parse);
   }
 
