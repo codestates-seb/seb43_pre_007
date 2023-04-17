@@ -3,13 +3,14 @@ import LeftSideBar from '../side_bar/LeftSideBar';
 import Modal from '../modal/modal';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { pickState } from '@/recoil/atom';
+import { pickCategoryState, pickState } from '@/recoil/atom';
 
 type ContainerProps = {
   children: JSX.Element;
 };
 
 const Container = ({ children }: ContainerProps) => {
+  const pickCategory = useRecoilValue(pickCategoryState);
   //body 높이
   const pick = useRecoilValue(pickState);
   const [bodyHeight, setBodyHeight] = useState(0);
@@ -28,7 +29,11 @@ const Container = ({ children }: ContainerProps) => {
   return (
     <>
       <Modal />
-      <PagesContainer scrollY={scrollY} scroll={bodyHeight - scrollY}>
+      <PagesContainer
+        scrollY={scrollY}
+        scroll={bodyHeight - scrollY}
+        pickCategory={pickCategory}
+      >
         <div>
           <LeftSideBar width={164} />
         </div>
@@ -43,6 +48,7 @@ export default Container;
 type PagesContainerProps = {
   scroll: number;
   scrollY: number;
+  pickCategory: number;
 };
 
 const PagesContainer = styled.div<PagesContainerProps>`
@@ -57,7 +63,8 @@ const PagesContainer = styled.div<PagesContainerProps>`
     min-width: 164px;
     > .left-side-bar {
       margin-top: 5.5px;
-      position: ${(props) => (props.scroll < 1000 ? '' : 'fixed')};
+      position: ${(props) =>
+        props.scroll < 1000 || props.pickCategory !== 0 ? '' : 'fixed'};
       top: ${(props) => (props.scroll < 1000 ? `${props.scrollY}px` : '')};
       z-index: 0;
       box-shadow: none;

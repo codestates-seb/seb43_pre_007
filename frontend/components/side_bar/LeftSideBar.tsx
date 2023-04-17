@@ -14,6 +14,7 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
+  
 
   return (
     <SideBarContainer

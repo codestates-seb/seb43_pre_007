@@ -10,7 +10,6 @@ import {
   detailNav,
   detailSaves,
 } from '@/constant/constant';
-import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import {
@@ -619,6 +618,7 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
 
   > div:last-child {
     width: 88%;
+    height: ${(props) => props.pickCategory !== 0 && '40vh'};
     display: flex;
     flex-wrap: wrap;
     @media (max-width: 980px) {
