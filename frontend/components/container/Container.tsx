@@ -35,6 +35,7 @@ const PagesContainer = styled.div`
       position: sticky;
       z-index: 0;
       box-shadow: none;
+      margin-bottom: 20px;
     }
     @media (max-width: 740px) {
       display: none;

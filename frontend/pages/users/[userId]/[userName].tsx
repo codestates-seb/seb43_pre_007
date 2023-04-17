@@ -18,10 +18,7 @@ import {
   myListState,
   pickCategoryState,
   pickState,
-  userState,
 } from '@/recoil/atom';
-import { useEffect } from 'react';
-import axios from 'axios';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -754,11 +751,7 @@ const SavesContent = ({
   pick,
   selectPickCategory,
 }: SavesContentProps) => {
-  const [user] = useRecoilState(userState);
-  useEffect(() => {
-    axios.post('/users/my_list', user).then((res) => setMyList(res.data));
-  }, []);
-  const [myList, setMyList] = useRecoilState(myListState);
+  const [myList] = useRecoilState(myListState);
   const [, setModal] = useRecoilState(modalState);
   const [, setModalName] = useRecoilState(modalNameState);
   const [, setModalVal] = useRecoilState(modalValState);
