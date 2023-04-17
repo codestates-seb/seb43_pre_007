@@ -5,6 +5,11 @@ export const userLogState = atom({
   default: true, //true로하고 작업
 });
 
+export const userState = atom({
+  key: 'userState',
+  default: 1,
+});
+
 export const myListState = atom<string[]>({
   key: 'myListState',
   default: [],

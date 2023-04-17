@@ -16,7 +16,7 @@ const Container = ({ children }: ContainerProps) => {
   const [bodyHeight, setBodyHeight] = useState(0);
   useEffect(() => {
     setBodyHeight(document.body.clientHeight);
-  }, [pick]);
+  }, [pick, pickCategory]);
   //Y스크롤
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
@@ -56,7 +56,6 @@ const PagesContainer = styled.div<PagesContainerProps>`
   display: flex;
   justify-content: center;
   align-items: stretch;
-
   padding: 50px calc((100% - 1270px) / 2);
   padding-bottom: 0px;
   > div:first-child {

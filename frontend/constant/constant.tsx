@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
 
 export const nonContainerRoutes = [
@@ -8,29 +10,52 @@ export const nonContainerRoutes = [
 
 export const detailNav = ['Profile', 'Activity', 'Saves'];
 
-export const detailActivity = [
-  'Summary',
-  'Answers',
-  'Questions',
-  'Tags',
-  'Articles',
-  'Badges',
-  'Following',
-  'Bounties',
-  'Reputation',
-  'Votes',
-];
-
-export const detailActivityContent: { [key: string]: string } = {
-  Answers: 'You have not answered any questions',
-  Questions: 'You have not asked any questions',
-  Tags: 'You have not participated in any tags',
-  Articles: 'You have not created any articles.',
-  Badges: 'You have not earned any badges',
-  Following: 'You are not following any posts.',
-  Bounties: 'You have no active bounties',
-  Reputation: 'You have no recent reputation changes.',
-  Votes: 'You have not cast any votes',
+export const detailActivityContent: { [key: string]: JSX.Element } = {
+  Answers: (
+    <span>
+      You have not <a>answered</a> any questions
+    </span>
+  ),
+  Questions: (
+    <span>
+      You have not <a>asked</a> any questions
+    </span>
+  ),
+  Tags: (
+    <span>
+      You have not participated in any <Link href="/tags">tags</Link>
+    </span>
+  ),
+  Articles: (
+    <span>
+      You have not created any <a>articles</a>
+    </span>
+  ),
+  Badges: (
+    <span>
+      You have not earned any <a>badges</a>
+    </span>
+  ),
+  Following: (
+    <span>
+      You are not <a>following any posts</a>
+    </span>
+  ),
+  Bounties: (
+    <span>
+      You have no active <a>bounties</a>
+    </span>
+  ),
+  Reputation: (
+    <span>
+      You have no recent <a>reputation changes</a>
+    </span>
+  ),
+  Votes: (
+    <span>
+      You have not cast any <a>votes</a>
+    </span>
+  ),
 };
 
 export const detailSaves = ['All saves', 'For later'];

@@ -5,7 +5,6 @@ import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
 import SelectContent from '@/components/select_content/SelectContent';
 import {
-  detailActivity,
   detailActivityContent,
   detailNav,
   detailSaves,
@@ -19,7 +18,10 @@ import {
   myListState,
   pickCategoryState,
   pickState,
+  userState,
 } from '@/recoil/atom';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -451,6 +453,7 @@ const ActiveContent = ({
   selectPickCategory,
   pick,
 }: ActiveProps) => {
+  const detailActivity=Object.keys(detailActivityContent)
   return (
     <ActiveContentContainer pickCategory={pickCategory}>
       <div>
@@ -618,7 +621,7 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
 
   > div:last-child {
     width: 88%;
-    height: ${(props) => props.pickCategory !== 0 && '40vh'};
+    min-height: 40vh;
     display: flex;
     flex-wrap: wrap;
     @media (max-width: 980px) {
@@ -747,7 +750,11 @@ const SavesContent = ({
   pick,
   selectPickCategory,
 }: SavesContentProps) => {
-  const [myList] = useRecoilState(myListState);
+  const [user] = useRecoilState(userState);
+  useEffect(() => {
+    axios.post('/users/my_list', user).then((res) => setMyList(res.data));
+  }, []);
+  const [myList, setMyList] = useRecoilState(myListState);
   const [, setModal] = useRecoilState(modalState);
   const [, setModalName] = useRecoilState(modalNameState);
   const [, setModalVal] = useRecoilState(modalValState);
