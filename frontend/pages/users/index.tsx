@@ -1,5 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
+import { daysFilter } from '@/constant/constant';
+import Link from 'next/link';
 import { GoSearch } from 'react-icons/go';
 import styled from 'styled-components';
 
@@ -27,8 +30,28 @@ const Users = () => {
             onChange={() => {}}
           />
         </div>
-        <div>
-          
+      </div>
+      <div>
+        {daysFilter.map((category) => (
+          <span key={category}>{category}</span>
+        ))}
+      </div>
+      <div>
+        <div className="grid-item">
+          <div>
+            <img
+              src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
+              alt=""
+            />
+          </div>
+          <div>
+            <Link href={'/users/21615528/신동민'}>Guru Stron</Link>
+            <span>St. Petersburg</span>
+            <span>3,808</span>
+          </div>
+          <div>
+            <a>git</a>, <a>github</a>, <a>go</a>
+          </div>
         </div>
       </div>
     </UsersContainer>
@@ -57,6 +80,66 @@ const UsersContainer = styled.div`
     input {
       padding-top: 10px;
       padding-bottom: 10px;
+    }
+  }
+  > div:nth-child(3) {
+    display: flex;
+    justify-content: end;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    font-size: 0.7rem;
+    > span {
+      padding: 0px 10px;
+      padding-bottom: 16px;
+      cursor: pointer;
+      :hover {
+        border-bottom: 1px solid var(--bg-orange);
+      }
+    }
+  }
+  > div:nth-child(4) {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    .grid-item {
+      div:first-child {
+        float: left;
+        width: 48px;
+        height: 48px;
+        img {
+          border-radius: 4px;
+        }
+      }
+      div:nth-child(2) {
+        margin-left: 55px;
+        width: calc(100% - 64px);
+        line-height: 1.3;
+        a {
+          display: block;
+          color: var(--text-blue);
+        }
+        span {
+          font-size: 0.75rem;
+          display: block;
+        }
+        span:nth-child(2) {
+          opacity: 0.8;
+        }
+        span:last-child {
+          font-weight: 900;
+        }
+      }
+      div:last-child {
+        line-height: 1;
+        margin-bottom: 4px;
+        margin-left: 55px;
+        a {
+          cursor: pointer;
+          color: var(--text-blue);
+          font-size: 0.7rem;
+        }
+      }
     }
   }
 `;
