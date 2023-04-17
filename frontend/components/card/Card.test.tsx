@@ -16,7 +16,6 @@ describe('Card 컴포넌트', () => {
     border-radius: 6px;
     padding: 24px;
   `);
-  });
 });
 
 // test('카드 스타일 체크', () => {
