@@ -10,7 +10,7 @@ export const localState = (key: string, base: {} | [] | string) => {
   if (typeof window !== 'undefined') {
     const data = getLocalStorage(key);
     if (data) {
-      return data[key];
+      return data;
     } else {
       return base;
     }

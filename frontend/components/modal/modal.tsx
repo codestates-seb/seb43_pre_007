@@ -52,12 +52,12 @@ const Modal = () => {
     e.preventDefault();
     setMyList([...myList, modalVal]);
     setModal(false);
-    setModalVal('');
     if (getLocalStorage('myList')) {
       updateLocalStorage('myList', modalVal);
     } else {
       setLocalStorage('myList', modalVal);
     }
+    setModalVal('');
   };
   //선택된 카테고리 관련
   const [pickCategory, setPickCategory] = useRecoilState(pickCategoryState);
@@ -77,6 +77,7 @@ const Modal = () => {
   //삭제하기
   const deleteList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     const selectedIndex = pickCategory - 2;
     setMyList([
       ...myList.slice(0, selectedIndex),
