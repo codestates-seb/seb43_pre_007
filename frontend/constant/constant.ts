@@ -34,3 +34,41 @@ export const detailActivityContent: { [key: string]: string } = {
 };
 
 export const detailSaves = ['All saves', 'For later'];
+
+export const footerNav: {
+  [key: string]: string[];
+}[] = [
+  { ['STACK OVERFLOW']: ['Questions', 'Help'] },
+  { ['PRODUCTS']: ['Teams', 'Advertising', 'Collectives', 'Talent'] },
+  {
+    ['COMPANY']: [
+      'About',
+      'Press',
+      'Work Here',
+      'Legal',
+      'Privacy Policy',
+      'Terms of Service',
+      'Contact Us',
+      'Cookie Setting',
+      'Cookie Policy',
+    ],
+  },
+  {
+    ['STACK EXCHANGE NETWORK']: [
+      'Technology',
+      'Culture & recreation',
+      'Life & arts',
+      'Science',
+      'Professional',
+      'Business',
+    ],
+  },
+];
+
+export const footerSocial = [
+  'Blog',
+  'Facebook',
+  'Twitter',
+  'LinkdIn',
+  'Instagram',
+];

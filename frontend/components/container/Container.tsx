@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import LeftSideBar from '../side_bar/LeftSideBar';
-import { useRecoilValue } from 'recoil';
-import { modalState } from '@/recoil/atom';
 import Modal from '../modal/modal';
 
 type ContainerProps = {

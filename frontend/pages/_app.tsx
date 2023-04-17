@@ -1,12 +1,11 @@
 import type { AppProps } from 'next/app';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import '../styles/App.css';
 import Header from '@/components/header/Header';
 import Container from '@/components/container/Container';
 import { useRouter } from 'next/router';
 import { nonContainerRoutes } from '@/constant/constant';
-import Modal from '@/components/modal/modal';
-import { modalState } from '@/recoil/atom';
+import Footer from '@/components/footer/Footer';
 
 if (process.env.NODE_ENV === 'development') {
   require('../__mocks__');
@@ -25,6 +24,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       ) : (
         <Component {...pageProps} />
       )}
+      <Footer />
     </RecoilRoot>
   );
 };
