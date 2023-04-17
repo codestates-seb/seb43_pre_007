@@ -36,8 +36,8 @@ const Footer = () => {
       </nav>
       <div>
         <ul>
-          {footerSocial.map((list) => (
-            <li key={list}>{list}</li>
+          {footerSocial.map((list, i) => (
+            <li key={i}>{list}</li>
           ))}
         </ul>
         <p>
@@ -104,6 +104,7 @@ const FooterContainer = styled.footer`
           font-size: 0.8rem;
           line-height: 22px;
           padding: var(--su4) 0;
+          cursor: pointer;
           @media (max-width: 740px) {
             margin-right: 8px;
           }
@@ -118,15 +119,19 @@ const FooterContainer = styled.footer`
     flex: 1 1 150px;
     display: flex;
     flex-direction: column;
-    color: #919191;
     ul {
       display: flex;
       li {
         font-size: 0.7rem;
         margin-right: 12px;
+        a {
+          color: #919191;
+          cursor: pointer;
+        }
       }
     }
     p {
+      color: #919191;
       margin-top: auto;
       margin-bottom: var(--su24);
       font-size: 0.7rem;

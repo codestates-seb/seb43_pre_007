@@ -91,9 +91,17 @@ export const footerNav: {
 ];
 
 export const footerSocial = [
-  'Blog',
-  'Facebook',
-  'Twitter',
-  'LinkdIn',
-  'Instagram',
+  <a key={0}>Blog</a>,
+  <a key={1} href={'https://ko-kr.facebook.com/'} target="_blank">
+    Facebook
+  </a>,
+  <a key={2} href={'https://twitter.com/?lang=ko'} target="_blank">
+    Twitter
+  </a>,
+  <a key={3} href={'https://kr.linkedin.com/'} target="_blank">
+    LinkdIn
+  </a>,
+  <a key={4} href={'https://www.instagram.com/'} target="_blank">
+    Instagram
+  </a>,
 ];
