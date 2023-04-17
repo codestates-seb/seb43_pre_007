@@ -1,16 +1,34 @@
 import styled from 'styled-components';
 import LeftSideBar from '../side_bar/LeftSideBar';
 import Modal from '../modal/modal';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { pickState } from '@/recoil/atom';
 
 type ContainerProps = {
   children: JSX.Element;
 };
 
 const Container = ({ children }: ContainerProps) => {
+  //body 높이
+  const pick = useRecoilValue(pickState);
+  const [bodyHeight, setBodyHeight] = useState(0);
+  useEffect(() => {
+    setBodyHeight(document.body.clientHeight);
+  }, [pick]);
+  //Y스크롤
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <>
       <Modal />
-      <PagesContainer>
+      <PagesContainer scrollY={scrollY} scroll={bodyHeight - scrollY}>
         <div>
           <LeftSideBar width={164} />
         </div>
@@ -22,18 +40,25 @@ const Container = ({ children }: ContainerProps) => {
 
 export default Container;
 
-const PagesContainer = styled.div`
+type PagesContainerProps = {
+  scroll: number;
+  scrollY: number;
+};
+
+const PagesContainer = styled.div<PagesContainerProps>`
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+
   padding: 50px calc((100% - 1270px) / 2);
   padding-bottom: 0px;
   > div:first-child {
     min-width: 164px;
     > .left-side-bar {
       margin-top: 5.5px;
-      position: fixed;
+      position: ${(props) => (props.scroll < 1000 ? '' : 'fixed')};
+      top: ${(props) => (props.scroll < 1000 ? `${props.scrollY}px` : '')};
       z-index: 0;
       box-shadow: none;
     }

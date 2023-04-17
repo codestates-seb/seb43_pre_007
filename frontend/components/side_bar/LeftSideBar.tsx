@@ -14,8 +14,12 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
+
   return (
-    <SideBar width={width} className="left-side-bar">
+    <SideBarContainer
+      width={width}
+      className="left-side-bar"
+    >
       <div>
         <nav>
           <ol className="nav-links">
@@ -81,12 +85,13 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
           </ol>
         </nav>
       </div>
-    </SideBar>
+      <div>Looking for your Teams?</div>
+    </SideBarContainer>
   );
 };
 export default LeftSideBar;
 
-const SideBar = styled.div<LeftSideBarProps>`
+const SideBarContainer = styled.div<LeftSideBarProps>`
   width: ${(props) => `${props.width}px`};
   display: block;
   top: 47px;
@@ -190,5 +195,14 @@ const SideBar = styled.div<LeftSideBarProps>`
       font-size: 0.7rem;
       opacity: 0.7;
     }
+  }
+  > div:last-child {
+    background-color: #f0f8ff;
+    width: 99%;
+    margin: 2px 0px;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 0.7rem;
+    color: var(--text-blue);
   }
 `;

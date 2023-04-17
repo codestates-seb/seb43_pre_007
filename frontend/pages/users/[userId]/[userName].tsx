@@ -19,11 +19,12 @@ import {
   modalValState,
   myListState,
   pickCategoryState,
+  pickState,
 } from '@/recoil/atom';
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
-  const [pick, setPick] = useState(0);
+  const [pick, setPick] = useRecoilState(pickState);
   const pickHandler = (idx: number) => {
     setPick(idx);
     setPickCategory(0);
