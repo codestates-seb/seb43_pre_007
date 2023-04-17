@@ -32,9 +32,11 @@ const Users = () => {
         </div>
       </div>
       <div>
-        {daysFilter.map((category) => (
-          <span key={category}>{category}</span>
-        ))}
+        <div>
+          {daysFilter.map((category) => (
+            <span key={category}>{category}</span>
+          ))}
+        </div>
       </div>
       <div>
         <div className="grid-item">
@@ -70,39 +72,79 @@ const UsersContainer = styled.div`
     margin-top: 30px;
     display: flex;
     justify-content: space-between;
+    @media (max-width: 980px) {
+      flex-direction: column;
+    }
     i {
-      position: absolute;
-      top: 25%;
-      left: 0.5%;
+      position: relative;
       font-size: 1.1rem;
       opacity: 0.6;
+      @media (max-width: 980px) {
+      }
+      > svg {
+        position: absolute;
+        top: 25%;
+        left: 8px;
+      }
     }
     input {
       padding-top: 10px;
       padding-bottom: 10px;
+      @media (max-width: 980px) {
+        width: 47%;
+        min-width: 250px;
+        margin-bottom: 12px;
+      }
+      @media (max-width: 320px) {
+        min-width: 100%;
+      }
+    }
+    > div:nth-child(2) {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+      }
     }
   }
   > div:nth-child(3) {
-    display: flex;
-    justify-content: end;
-    margin-top: 40px;
+    margin-top: 30px;
     margin-bottom: 10px;
     margin-right: 10px;
-    font-size: 0.7rem;
-    > span {
-      padding: 0px 10px;
-      padding-bottom: 16px;
-      cursor: pointer;
-      :hover {
-        border-bottom: 1px solid var(--bg-orange);
+    > div {
+      display: flex;
+      justify-content: end;
+      flex-wrap: wrap;
+      font-size: 0.7rem;
+      @media (max-width: 980px) {
+        justify-content: start;
+      }
+      > span {
+        height: 30px;
+        padding: 0px 10px;
+        padding-bottom: 16px;
+        cursor: pointer;
+        :hover {
+          border-bottom: 1px solid var(--bg-orange);
+        }
       }
     }
   }
   > div:nth-child(4) {
-    margin-top: 10px;
+    padding-top: 10px;
     display: grid;
+    grid-row-gap: 30px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    @media (max-width: 1264px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    @media (max-width: 980px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
     .grid-item {
+      padding: 5px 6px 7px 7px;
       div:first-child {
         float: left;
         width: 48px;
