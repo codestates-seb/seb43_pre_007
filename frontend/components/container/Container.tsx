@@ -1,39 +1,16 @@
 import styled from 'styled-components';
 import LeftSideBar from '../side_bar/LeftSideBar';
 import Modal from '../modal/modal';
-import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { pickCategoryState, pickState } from '@/recoil/atom';
 
 type ContainerProps = {
   children: JSX.Element;
 };
 
 const Container = ({ children }: ContainerProps) => {
-  const pickCategory = useRecoilValue(pickCategoryState);
-  //body 높이
-  const pick = useRecoilValue(pickState);
-  const [bodyHeight, setBodyHeight] = useState(0);
-  useEffect(() => {
-    setBodyHeight(document.body.clientHeight);
-  }, [pick, pickCategory]);
-  //Y스크롤
-  const [scrollY, setScrollY] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
   return (
     <>
       <Modal />
-      <PagesContainer
-        scrollY={scrollY}
-        scroll={bodyHeight - scrollY}
-        pickCategory={pickCategory}
-      >
+      <PagesContainer>
         <div>
           <LeftSideBar width={164} />
         </div>
@@ -42,16 +19,9 @@ const Container = ({ children }: ContainerProps) => {
     </>
   );
 };
-
 export default Container;
 
-type PagesContainerProps = {
-  scroll: number;
-  scrollY: number;
-  pickCategory: number;
-};
-
-const PagesContainer = styled.div<PagesContainerProps>`
+const PagesContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -62,9 +32,7 @@ const PagesContainer = styled.div<PagesContainerProps>`
     min-width: 164px;
     > .left-side-bar {
       margin-top: 5.5px;
-      position: ${(props) =>
-        props.scroll < 1000 || props.pickCategory !== 0 ? '' : 'fixed'};
-      top: ${(props) => (props.scroll < 1000 ? `${props.scrollY}px` : '')};
+      position: sticky;
       z-index: 0;
       box-shadow: none;
     }

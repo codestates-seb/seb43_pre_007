@@ -453,7 +453,7 @@ const ActiveContent = ({
   selectPickCategory,
   pick,
 }: ActiveProps) => {
-  const detailActivity=Object.keys(detailActivityContent)
+  const detailActivity = Object.keys(detailActivityContent);
   return (
     <ActiveContentContainer pickCategory={pickCategory}>
       <div>
@@ -727,6 +727,10 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
         opacity: 0.7;
         width: 100%;
         font-size: 0.8rem;
+        a {
+          cursor: pointer;
+          color: var(--text-blue);
+        }
       }
     }
     .sub_bottom {
