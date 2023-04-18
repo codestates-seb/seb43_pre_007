@@ -15,5 +15,6 @@ public class UsersQuestionResponseDto {
     private LocalDateTime creationDate;
     private boolean isAnswered;
     private boolean isAccepted;
-    private int score;
+
+//    private int score; 후순위 구현기능
 }

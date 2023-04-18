@@ -1,10 +1,6 @@
 package com.codestates.user.dto;
 
-import com.codestates.user.entity.UserTag;
 import lombok.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UsersTagDto {
     @Builder
@@ -14,9 +10,9 @@ public class UsersTagDto {
         private String name;
     }
 
-    @Builder
     @Getter
-    @AllArgsConstructor
+    @Setter
+    @NoArgsConstructor
     public static class UserTagsResponseDtos {
         private String name;
         private int postsCount;
