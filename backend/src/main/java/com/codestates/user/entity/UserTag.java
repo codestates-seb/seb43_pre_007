@@ -1,6 +1,6 @@
 package com.codestates.user.entity;
 
-import com.codestates.tag.Tag;
+import com.codestates.tag.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +16,8 @@ public class UserTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userTagId;
 
-    @Column
-    private int count;
+    @Column(nullable = false)
+    private int postsCount;
 
     @ManyToOne
     @JoinColumn(name = "TAG_ID")
