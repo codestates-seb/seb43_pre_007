@@ -14,14 +14,22 @@
   --text-aqua: #4d7c97;
   --text-white: #ffffff;
   --text-blue: #0a95ff;
+  --text-red: #dd1515;
   --bg-left-nav: #4b4848;
   --bg-gray: #e7e7e7;
   --bg-blue: #0a95ff;
   --bg-orange: #f78b34;
+  --bg-black: rgb(49, 49, 49);
   --border-gray: #cfd8df;
   --btn-boxshadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
   --btn-border: 1px solid hsl(205, 41%, 63%);
   --thin-white-border-color: #eeeeed;
+  --su4: calc(4px * 1);
+  --su8: calc(8px * 1);
+  --su12: calc(12px * 1);
+  --su16: calc(16px * 1);
+  --su24: calc(24px * 1);
+  --te-smooth: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 ul,
@@ -33,4 +41,21 @@ ol {
 a {
   text-decoration: none;
   color: rgb(0, 0, 0);
+}
+
+.flow_icon {
+  position: absolute;
+  background-image: url('https://cdn.sstatic.net/Img/favicons-sprite16.png?v=8e1d0590b7cb');
+  width: 16px;
+  height: 16px;
+  background-position: 0 -6138px;
+}
+
+.double_p {
+  margin-bottom: 1rem;
+}
+
+.focus_blue:focus {
+  outline: 1px solid rgba(0, 195, 255, 0.5);
+  box-shadow: 0 0 8px 2px rgba(4, 137, 247, 0.555);
 }

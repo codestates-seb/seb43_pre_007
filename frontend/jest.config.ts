@@ -9,6 +9,7 @@ const customJestConfig = {
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
+    '\\.(css|less)$': 'jest-transform-css',
   },
 };
 

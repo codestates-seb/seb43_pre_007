@@ -82,9 +82,11 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          <li className="about">
-            <a>About</a>
-          </li>
+          {!userLog && (
+            <li className="about">
+              <a>About</a>
+            </li>
+          )}
           <li
             ref={productsNavRef}
             className="products"
@@ -92,9 +94,11 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          <li className="for-teams">
-            <a>For Teams</a>
-          </li>
+          {!userLog && (
+            <li className="for-teams">
+              <a>For Teams</a>
+            </li>
+          )}
         </ol>
         <div className="products-menu">
           {/* products 버튼 누르면 나오는 div*/}
@@ -208,7 +212,8 @@ const Header = () => {
             {userLog ? (
               <>
                 <li className="user-img">
-                  <Link href="/users">
+                  <Link href="/users/21615528/신동민">
+                    {/* users데이터를 가져오면 동적으로 바꿔줘야함 */}
                     <img
                       src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
                       alt=""
@@ -503,7 +508,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: ${(props) => (props.userLog ? '50.5%' : '57.5%')};
+    width: ${(props) => (props.userLog ? '61.7%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;
@@ -526,6 +531,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         width: 97.5%;
         top: 54px;
         z-index: 101;
+        background-color: white;
         > div:first-child {
           position: absolute;
           width: 16px;
@@ -638,7 +644,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
     .user-img {
       padding-left: 12px;
       padding-right: 18px;
-      height: 48px;
+      height: 47px;
       cursor: pointer;
       :hover {
         background-color: var(--bg-gray);

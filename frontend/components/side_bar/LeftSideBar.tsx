@@ -14,8 +14,12 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
+
   return (
-    <SideBar width={width} className="left-side-bar">
+    <SideBarContainer
+      width={width}
+      className="left-side-bar"
+    >
       <div>
         <nav>
           <ol className="nav-links">
@@ -33,7 +37,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                   <li
                     key={li}
                     className={
-                      currentPath === `/${li.toLowerCase()}`
+                      currentPath.includes(`/${li.toLowerCase()}`)
                         ? 'nav-serve focus-link'
                         : 'nav-serve'
                     }
@@ -49,7 +53,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
                 <li className="nav-main">COLLECTIVES</li>
                 <li
                   className={
-                    currentPath === '/collectives'
+                    currentPath.includes('/collectives')
                       ? 'nav-serve focus-link'
                       : 'nav-serve'
                   }
@@ -64,8 +68,10 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
             <li>
               <div className="nav-main">TEAMS</div>
               <div className="teams-message">
-                <strong>Stack Overflow for Teams – Start</strong>
-                collaborating and sharing organizational knowledge.
+                <strong>
+                  Stack Overflow for Teams <span>– Start</span>
+                </strong>{' '}
+                <span>collaborating and sharing organizational knowledge.</span>
                 <img
                   src="https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e"
                   alt="for-teams"
@@ -79,12 +85,13 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
           </ol>
         </nav>
       </div>
-    </SideBar>
+      <div>Looking for your Teams?</div>
+    </SideBarContainer>
   );
 };
 export default LeftSideBar;
 
-const SideBar = styled.div<LeftSideBarProps>`
+const SideBarContainer = styled.div<LeftSideBarProps>`
   width: ${(props) => `${props.width}px`};
   display: block;
   top: 47px;
@@ -136,6 +143,7 @@ const SideBar = styled.div<LeftSideBarProps>`
     background-color: var(--bg-gray);
     font-weight: 900;
     opacity: 1;
+    border-right: 3px solid #ff7300;
   }
 
   .collect-link {
@@ -149,11 +157,23 @@ const SideBar = styled.div<LeftSideBarProps>`
     display: flex;
     flex-direction: column;
     padding: 10px 10px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     white-space: pre-wrap;
     word-wrap: break-word;
+    line-height: 16px;
     overflow-wrap: break-word;
     border-top: 1px solid #dfdfdf;
+    border-left: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    span {
+      opacity: 0.7;
+    }
+    > strong {
+      font-weight: 900;
+      span {
+        font-weight: normal;
+      }
+    }
     > img {
       margin: 0px calc((100% - 130px) / 2);
       width: 130px;
@@ -175,5 +195,14 @@ const SideBar = styled.div<LeftSideBarProps>`
       font-size: 0.7rem;
       opacity: 0.7;
     }
+  }
+  > div:last-child {
+    background-color: #f0f8ff;
+    width: 99%;
+    margin: 2px 0px;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 0.7rem;
+    color: var(--text-blue);
   }
 `;

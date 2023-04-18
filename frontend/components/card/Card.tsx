@@ -1,11 +1,12 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-type CardProps = {
-  children: JSX.Element;
+type CardProps = React.HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode;
 };
 
-const Card = ({ children }: CardProps) => {
-  return <CardContainer>{children}</CardContainer>;
+const Card = (props: CardProps) => {
+  return <CardContainer className="card" {...props} />;
 };
 
 export default Card;

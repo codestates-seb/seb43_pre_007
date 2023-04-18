@@ -5,6 +5,7 @@ import Header from '@/components/header/Header';
 import Container from '@/components/container/Container';
 import { useRouter } from 'next/router';
 import { nonContainerRoutes } from '@/constant/constant';
+import Footer from '@/components/footer/Footer';
 
 if (process.env.NODE_ENV === 'development') {
   require('../__mocks__');
@@ -23,6 +24,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       ) : (
         <Component {...pageProps} />
       )}
+      <Footer />
     </RecoilRoot>
   );
 };
