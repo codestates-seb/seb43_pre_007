@@ -2,12 +2,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { Chip } from './Chip';
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    push: jest.fn(),
-  })),
-}));
-
 describe('<Chip/>', () => {
   test('chip을 클릭하면 라우터가 이동된다.', () => {
     const handleClick = jest.fn();
