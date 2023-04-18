@@ -1,4 +1,4 @@
-package com.codestates.tag;
+package com.codestates.tag.entity;
 
 import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
@@ -27,10 +27,14 @@ public class Tag {
     @Column(nullable = false)
     private String info;
 
-    @OneToMany
+    //추가
+    @Column(nullable = false)
+    private int count;
+
+    @OneToMany(mappedBy = "tag")
     private List<QuestionTag> questionTagList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "tag")
     private List<UserTag> userTagList = new ArrayList<>();
 
 
