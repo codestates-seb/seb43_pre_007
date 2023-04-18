@@ -2,54 +2,81 @@
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
 import { daysFilter } from '@/constant/constant';
+import axios from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
 import { GoSearch } from 'react-icons/go';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users
 const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
-  return (
-    <>
-      <UsersContainer>
-        <div>Users</div>
-        <div>
+  const [page, setPage] = useState(1);
+
+  const { isLoading, error, data } = useQuery<User[], Error>('users', () =>
+    axios(`/users/${36}/${page}`).then((res) => res.data)
+  );
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  else
+    return (
+      <>
+        <UsersContainer>
+          <div>Users</div>
           <div>
-            <i>
-              <GoSearch />
-            </i>
-            <Input paddingLeft="28px" placeholder="Filter by user" />
+            <div>
+              <i>
+                <GoSearch />
+              </i>
+              <Input paddingLeft="28px" placeholder="Filter by user" />
+            </div>
+            <div>
+              <FilterButton
+                filters={[
+                  'Reputation',
+                  'New users',
+                  'Voters',
+                  'Editors',
+                  'Moderators',
+                ]}
+                onChange={setPickFilter}
+              />
+            </div>
           </div>
           <div>
-            <FilterButton
-              filters={[
-                'Reputation',
-                'New users',
-                'Voters',
-                'Editors',
-                'Moderators',
-              ]}
-              onChange={setPickFilter}
-            />
+            <div>
+              {daysFilter.map((category, i) => (
+                <span
+                  className={i === pickDaysFilter ? 'focus_span' : ''}
+                  onClick={() => setPickDaysFilter(i)}
+                  key={category}
+                >
+                  {category}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
           <div>
-            {daysFilter.map((category, i) => (
-              <span
-                className={i === pickDaysFilter ? 'focus_span' : ''}
-                onClick={() => setPickDaysFilter(i)}
-                key={category}
-              >
-                {category}
-              </span>
+            {isLoading && <p>Loading...</p>}
+            {data?.map((user: User) => (
+              <div key={user.id} className="grid-item">
+                <div>
+                  <img src={user.user_img} alt="" />
+                </div>
+                <div>
+                  <Link href={'/users/21615528/신동민'}>{user.first_name}</Link>
+                  <span>{user.last_name}</span>
+                  <span>{user.reputation}</span>
+                </div>
+                <div>
+                  {<a>{user.tags}</a>}
+                  {/* <a>git</a>, <a>github</a>, <a>go</a> */}
+                </div>
+              </div>
             ))}
-          </div>
-        </div>
-        <div>
-          <div className="grid-item">
+            {/* <div className="grid-item">
             <div>
               <img
                 src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
@@ -64,16 +91,41 @@ const Users = () => {
             <div>
               <a>git</a>, <a>github</a>, <a>go</a>
             </div>
+          </div> */}
           </div>
-        </div>
-      </UsersContainer>
-      <PageContainer>
-        <div>weekly / monthly / quarterly reputation leagues</div>
-        <div>우</div>
-      </PageContainer>
-    </>
-  );
+        </UsersContainer>
+        <PageContainer>
+          <div>weekly / monthly / quarterly reputation leagues</div>
+          <div>우</div>
+        </PageContainer>
+      </>
+    );
 };
+
+// {data.map(
+//   (user: {
+//     id: Key;
+//     user_img: string;
+//     first_name: string;
+//     last_name: string;
+//     reputation: number;
+//   }) => (
+//     <div key={user.id} className="grid-item">
+//       <div>
+//         <img src={user.user_img} alt="" />
+//       </div>
+//       <div>
+//         <Link href={'/users/21615528/신동민'}>{user.first_name}</Link>
+//         <span>{user.last_name}</span>
+//         <span>{user.reputation}</span>
+//       </div>
+//       <div>
+//         {<a>user.tags</a>}
+//         {/* <a>git</a>, <a>github</a>, <a>go</a> */}
+//       </div>
+//     </div>
+//   )
+// )}
 
 export default Users;
 
@@ -171,6 +223,8 @@ const UsersContainer = styled.div`
         height: 48px;
         img {
           border-radius: 4px;
+          width: 100%;
+          height: 100%;
         }
       }
       div:nth-child(2) {
