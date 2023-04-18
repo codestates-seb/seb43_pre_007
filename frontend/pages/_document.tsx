@@ -9,7 +9,10 @@ type Props = {
 const MyDocument = ({ styles }: Props) => {
   return (
     <Html lang="ko">
-      <Head>{styles}</Head>
+      <Head>
+        <link rel="icon" href="/favicon.png" />
+        {styles}
+      </Head>
       <body>
         <Main />
         <NextScript />

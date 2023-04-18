@@ -6,7 +6,7 @@ const Home = () => {
       <Head>
         <title>Stack Overflow</title>
       </Head>
-      <div>ㅇㅇㅇ</div>
+      <div>홈입니다.</div>
     </>
   );
 };
