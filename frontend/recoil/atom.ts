@@ -1,4 +1,4 @@
-import { localState } from '@/function/local_storage/localStorage';
+import { localState } from '@/util/local_storage/localStorage';
 import { atom } from 'recoil';
 
 export const userLogState = atom({

@@ -3,11 +3,14 @@ import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
 import { daysFilter } from '@/constant/constant';
 import Link from 'next/link';
+import { useState } from 'react';
 import { GoSearch } from 'react-icons/go';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users
 const Users = () => {
+  const [pickFilter, setPickFilter] = useState('Reputation');
+  const [pickDaysFilter, setPickDaysFilter] = useState(1);
   return (
     <UsersContainer>
       <div>Users</div>
@@ -27,14 +30,20 @@ const Users = () => {
               'Editors',
               'Moderators',
             ]}
-            onChange={() => {}}
+            onChange={setPickFilter}
           />
         </div>
       </div>
       <div>
         <div>
-          {daysFilter.map((category) => (
-            <span key={category}>{category}</span>
+          {daysFilter.map((category, i) => (
+            <span
+              className={i === pickDaysFilter ? 'focus_span' : ''}
+              onClick={() => setPickDaysFilter(i)}
+              key={category}
+            >
+              {category}
+            </span>
           ))}
         </div>
       </div>
@@ -126,6 +135,9 @@ const UsersContainer = styled.div`
         :hover {
           border-bottom: 1px solid var(--bg-orange);
         }
+      }
+      .focus_span{
+        border-bottom: 1px solid var(--bg-orange);
       }
     }
   }

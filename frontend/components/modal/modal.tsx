@@ -16,7 +16,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   updateLocalStorage,
-} from '@/function/local_storage/localStorage';
+} from '@/util/local_storage/localStorage';
 
 const Modal = () => {
   //모달 상태 및 함수
