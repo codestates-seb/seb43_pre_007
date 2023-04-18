@@ -15,6 +15,7 @@ public class TagDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class ResponseDtos{
         private TagsResponseDto.TagsQuestionResponseDtos data;
     }
