@@ -12,60 +12,66 @@ const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   return (
-    <UsersContainer>
-      <div>Users</div>
-      <div>
+    <>
+      <UsersContainer>
+        <div>Users</div>
         <div>
-          <i>
-            <GoSearch />
-          </i>
-          <Input paddingLeft="28px" placeholder="Filter by user" />
-        </div>
-        <div>
-          <FilterButton
-            filters={[
-              'Reputation',
-              'New users',
-              'Voters',
-              'Editors',
-              'Moderators',
-            ]}
-            onChange={setPickFilter}
-          />
-        </div>
-      </div>
-      <div>
-        <div>
-          {daysFilter.map((category, i) => (
-            <span
-              className={i === pickDaysFilter ? 'focus_span' : ''}
-              onClick={() => setPickDaysFilter(i)}
-              key={category}
-            >
-              {category}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <div className="grid-item">
           <div>
-            <img
-              src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
-              alt=""
+            <i>
+              <GoSearch />
+            </i>
+            <Input paddingLeft="28px" placeholder="Filter by user" />
+          </div>
+          <div>
+            <FilterButton
+              filters={[
+                'Reputation',
+                'New users',
+                'Voters',
+                'Editors',
+                'Moderators',
+              ]}
+              onChange={setPickFilter}
             />
           </div>
+        </div>
+        <div>
           <div>
-            <Link href={'/users/21615528/신동민'}>Guru Stron</Link>
-            <span>St. Petersburg</span>
-            <span>3,808</span>
-          </div>
-          <div>
-            <a>git</a>, <a>github</a>, <a>go</a>
+            {daysFilter.map((category, i) => (
+              <span
+                className={i === pickDaysFilter ? 'focus_span' : ''}
+                onClick={() => setPickDaysFilter(i)}
+                key={category}
+              >
+                {category}
+              </span>
+            ))}
           </div>
         </div>
-      </div>
-    </UsersContainer>
+        <div>
+          <div className="grid-item">
+            <div>
+              <img
+                src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
+                alt=""
+              />
+            </div>
+            <div>
+              <Link href={'/users/21615528/신동민'}>Guru Stron</Link>
+              <span>St. Petersburg</span>
+              <span>3,808</span>
+            </div>
+            <div>
+              <a>git</a>, <a>github</a>, <a>go</a>
+            </div>
+          </div>
+        </div>
+      </UsersContainer>
+      <PageContainer>
+        <div>weekly / monthly / quarterly reputation leagues</div>
+        <div>우</div>
+      </PageContainer>
+    </>
   );
 };
 
@@ -73,6 +79,7 @@ export default Users;
 
 const UsersContainer = styled.div`
   padding: 24px;
+  min-height: 60vh;
   > div:first-child {
     font-size: 1.5rem;
   }
@@ -116,7 +123,7 @@ const UsersContainer = styled.div`
     }
   }
   > div:nth-child(3) {
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 10px;
     margin-right: 10px;
     > div {
@@ -130,13 +137,14 @@ const UsersContainer = styled.div`
       > span {
         height: 30px;
         padding: 0px 10px;
+        padding-top: 10px;
         padding-bottom: 16px;
         cursor: pointer;
         :hover {
           border-bottom: 1px solid var(--bg-orange);
         }
       }
-      .focus_span{
+      .focus_span {
         border-bottom: 1px solid var(--bg-orange);
       }
     }
@@ -195,5 +203,20 @@ const UsersContainer = styled.div`
         }
       }
     }
+  }
+`;
+
+const PageContainer = styled.div`
+  padding: 24px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  > div:first-child {
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-blue);
+  }
+  > div:last-child {
   }
 `;
