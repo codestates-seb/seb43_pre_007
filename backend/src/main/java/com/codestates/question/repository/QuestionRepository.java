@@ -1,4 +1,7 @@
 package com.codestates.question.repository;
 
-public interface QuestionRepository {
+import com.codestates.question.entity.Question;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface QuestionRepository extends JpaRepository<Question, Long> {
 }
