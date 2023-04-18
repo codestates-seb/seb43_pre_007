@@ -2,11 +2,13 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { Chip } from '../chip/Chip';
 import { parseDate } from '@/util/date';
+import { useRouter } from 'next/router';
+import { MouseEvent } from 'react';
 
 export type QuestionItemProps = {
+  id: string;
   body: string;
   title: string;
-  userId: string;
   isVote: number;
   isScore: number;
   answerCount: number;
@@ -18,57 +20,70 @@ export type QuestionItemProps = {
 };
 
 export const QuestionItem = (props: QuestionItemProps) => {
+  const router = useRouter();
+
+  const handleUserRouterClick = (e: MouseEvent<HTMLSpanElement>) => {
+    router.push(`/users/${props.user.displayName}`);
+  };
+
   return (
-    <Container href="">
-      <QuestionHeader>
-        <div className="votes">
-          <span>{props.isVote}</span>
-          <span>votes</span>
-        </div>
-        <div className="answers_cnt">
-          <span>{props.isScore}</span>
-          <span>answers</span>
-        </div>
-        <div className="views_cnt">
-          <span>{props.answerCount}</span>
-          <span>views</span>
-        </div>
-      </QuestionHeader>
-      <QuestionContent>
-        <h2 className="title">{props.title}</h2>
-        <div className="content">{props.body}</div>
-        <div className="qustion_info">
-          <div className="tags">
-            {props.tags.map((tag) => (
-              <Chip href={tag.name} key={tag.id}>
-                {tag.name}
-              </Chip>
-            ))}
+    <Container>
+      <Link href={`/questions/${props.id}`}>
+        <QuestionHeader>
+          <div className="votes" aria-hidden>
+            <span>{props.isVote}</span>
+            <span>votes</span>
           </div>
-          <div className="user">
-            <Link href={`/users/${props.user.displayName}`}>
-              {props.user.displayName}
-            </Link>
-            {`asked ${parseDate(props.creationData, false)}`}
+          <div className="answers_cnt">
+            <span>{props.isScore}</span>
+            <span>answers</span>
           </div>
-        </div>
-      </QuestionContent>
+          <div className="views_cnt" aria-hidden>
+            <span>{props.answerCount}</span>
+            <span>views</span>
+          </div>
+        </QuestionHeader>
+        <QuestionContent>
+          <h2 className="title">{props.title}</h2>
+          <div className="content">{props.body}</div>
+          <div className="qustion_info">
+            <ul className="tags">
+              {props.tags.map((tag) => (
+                <li key={tag.id} aria-label={`tag ${tag.name}`}>
+                  <Chip href={tag.name}>{tag.name}</Chip>
+                </li>
+              ))}
+            </ul>
+            <div className="user">
+              <UserRoute onClick={handleUserRouterClick} aria-hidden>
+                {props.user.displayName}
+              </UserRoute>
+              <span>{`asked ${parseDate(props.creationData, true)}`}</span>
+            </div>
+          </div>
+        </QuestionContent>
+      </Link>
     </Container>
   );
 };
 
-const Container = styled(Link)`
-  display: flex;
+const Container = styled.li`
   padding: 16px;
   max-width: 751px;
+  list-style: none;
   font-family: 'Roboto', sans-serif;
+
+  & > a {
+    position: inline-block;
+    display: flex;
+
+    @media (max-width: 980px) {
+      flex-direction: column;
+    }
+  }
 
   &:not(:last-child) {
     border-bottom: 1px solid #e3e6e8;
-  }
-
-  @media (max-width: 980px) {
-    flex-direction: column;
   }
 `;
 
@@ -93,12 +108,6 @@ const QuestionHeader = styled.div`
 
   .votes {
     color: #0c0d0e;
-  }
-
-  .answers_cnt {
-  }
-
-  .views_cnt {
   }
 
   @media (max-width: 980px) {
@@ -131,6 +140,8 @@ const QuestionContent = styled.div`
 
   .qustion_info {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 
     .tags {
       display: inline-flex;
@@ -138,15 +149,22 @@ const QuestionContent = styled.div`
     }
 
     .user {
-      font-size: 13px;
-      margin-left: auto;
       display: inline-flex;
+      align-items: end;
+      margin-left: auto;
+      font-size: 12px;
+      color: #6a737c;
+      gap: 4px;
     }
   }
 `;
 
-const User = styled(Link)`
+const UserRoute = styled.span`
   font-size: 12px;
+  color: #0074cc;
   margin-left: auto;
   display: inline-flex;
+  border: none;
+  background: none;
+  cursor: pointer;
 `;
