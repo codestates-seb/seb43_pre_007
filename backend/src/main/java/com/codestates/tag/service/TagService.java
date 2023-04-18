@@ -3,22 +3,16 @@ package com.codestates.tag.service;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.question.entity.Question;
-import com.codestates.question.entity.QuestionTag;
 import com.codestates.question.repository.QuestionRepository;
 import com.codestates.question.service.QuestionService;
-import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.repository.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,14 +40,14 @@ public class TagService {
 //    }
 
 
-    public Page<QuestionTag> findTag(String name, int size, int page) {
+    public Page<Question> findTag(String name, int size, int page) {
         //1. DB에서 태그찾기
         //2. 질문에 사용된 태그를 저장하는 questionTag 페이지 가져오기
         //3. 페이지의 컨텐츠 List로 저장
         findVerifyTags(name);
-        Page<QuestionTag> questionPage =questionRepository.findAll(PageRequest.of(page, size));
-        List<QuestionTag> questionTagList = questionPage.getContent();
-        questionTagList.stream().filter(q->!q.getTag().getQuestionTagList().contains(name))
+        Page<Question> questionPage =questionRepository.findAll(PageRequest.of(page, size));
+        List<Question> questionTagList = questionPage.getContent();
+        questionTagList.stream().filter(q->!q.getTags().contains(name))
                 .collect(Collectors.toList());
 
         questionPage = new PageImpl<>(questionTagList,questionPage.getPageable(),questionTagList.size());

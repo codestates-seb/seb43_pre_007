@@ -2,12 +2,9 @@ package com.codestates.tag.controller;
 
 import com.codestates.dto.MultiResponseDto;
 import com.codestates.question.entity.Question;
-import com.codestates.question.entity.QuestionTag;
-import com.codestates.question.service.QuestionService;
+import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
-import com.codestates.tag.dto.TagDto;
-import com.codestates.tag.entity.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,8 +34,8 @@ public class TagController {
     public ResponseEntity getTag(@PathVariable String tags,
                                  @Positive @RequestParam("size") int size,
                                  @Positive @RequestParam("page") int page){
-        Page<QuestionTag> tagPage = tagService.findTag(tags, size, page-1);
-        List<QuestionTag> tagList = tagPage.getContent();
+        Page<Question> tagPage = tagService.findTag(tags, size, page-1);
+        List<Question> tagList = tagPage.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(tagMapper.tagToTagResponseDto(tagList), tagPage), HttpStatus.OK);
     }
