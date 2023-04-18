@@ -77,7 +77,7 @@ public class UserDto {
             private LocalDateTime creationDate;
             private int questionCount;
             private int answerCount;
-            private UsersTagDto.UserTagResponseDto tag;
+            private List<UsersTagDto.UserTagResponseDto> tag;
         }
 
     }

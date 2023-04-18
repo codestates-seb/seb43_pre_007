@@ -1,10 +1,9 @@
 package com.codestates.user.dto;
 
-import com.codestates.user.entity.UserTag;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UsersTagDto {
     @Builder
