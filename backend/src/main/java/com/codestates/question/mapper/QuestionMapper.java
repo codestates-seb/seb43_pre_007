@@ -7,7 +7,7 @@ import com.codestates.question.dto.QuestionTagDto;
 import com.codestates.question.dto.QuestionUserResponseDto;
 import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
-import com.codestates.tag.Tag;
+import com.codestates.tag.entity.Tag;
 import com.codestates.user.entity.User;
 import org.mapstruct.Mapper;
 
