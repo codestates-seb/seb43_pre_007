@@ -15,123 +15,104 @@ const Users = () => {
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(1);
 
-  const { isLoading, error, data } = useQuery<User[], Error>('users', () =>
-    axios(`/users/${36}/${page}`).then((res) => res.data)
-  );
-  if (isLoading) return <p>Loading...</p>;
+  const { isLoading, error, data } = useQuery<
+    { data: User[]; total: number },
+    Error
+  >('users', () => axios(`/users/${36}/${page}`).then((res) => res.data));
   if (error) return <p>Error: {error.message}</p>;
   else
     return (
       <>
         <UsersContainer>
-          <div>Users</div>
-          <div>
-            <div>
-              <i>
-                <GoSearch />
-              </i>
-              <Input paddingLeft="28px" placeholder="Filter by user" />
+          {isLoading && (
+            <div className="loading_message">
+              <p>Loading...</p>
             </div>
-            <div>
-              <FilterButton
-                filters={[
-                  'Reputation',
-                  'New users',
-                  'Voters',
-                  'Editors',
-                  'Moderators',
-                ]}
-                onChange={setPickFilter}
-              />
-            </div>
-          </div>
-          <div>
-            <div>
-              {daysFilter.map((category, i) => (
-                <span
-                  className={i === pickDaysFilter ? 'focus_span' : ''}
-                  onClick={() => setPickDaysFilter(i)}
-                  key={category}
-                >
-                  {category}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div>
-            {isLoading && <p>Loading...</p>}
-            {data?.map((user: User) => (
-              <div key={user.id} className="grid-item">
+          )}
+          {data && (
+            <>
+              <div>Users</div>
+              <div>
                 <div>
-                  <img src={user.user_img} alt="" />
+                  <i>
+                    <GoSearch />
+                  </i>
+                  <Input paddingLeft="28px" placeholder="Filter by user" />
                 </div>
                 <div>
-                  <Link href={'/users/21615528/신동민'}>{user.first_name}</Link>
-                  <span>{user.last_name}</span>
-                  <span>{user.reputation}</span>
-                </div>
-                <div>
-                  {<a>{user.tags}</a>}
-                  {/* <a>git</a>, <a>github</a>, <a>go</a> */}
+                  <FilterButton
+                    filters={[
+                      'Reputation',
+                      'New users',
+                      'Voters',
+                      'Editors',
+                      'Moderators',
+                    ]}
+                    onChange={setPickFilter}
+                  />
                 </div>
               </div>
-            ))}
-            {/* <div className="grid-item">
-            <div>
-              <img
-                src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
-                alt=""
-              />
-            </div>
-            <div>
-              <Link href={'/users/21615528/신동민'}>Guru Stron</Link>
-              <span>St. Petersburg</span>
-              <span>3,808</span>
-            </div>
-            <div>
-              <a>git</a>, <a>github</a>, <a>go</a>
-            </div>
-          </div> */}
-          </div>
+              <div>
+                <div>
+                  {daysFilter.map((category, i) => (
+                    <span
+                      className={i === pickDaysFilter ? 'focus_span' : ''}
+                      onClick={() => setPickDaysFilter(i)}
+                      key={category}
+                    >
+                      {category}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                {data.data?.map((user: User) => (
+                  <div key={user.id} className="grid-item">
+                    <div>
+                      <img src={user.user_img} alt="" />
+                    </div>
+                    <div>
+                      <Link href={'/users/21615528/신동민'}>
+                        {user.first_name}
+                      </Link>
+                      <span>{user.last_name}</span>
+                      <span>{user.reputation}</span>
+                    </div>
+                    <div>
+                      {<a>{user.tags}</a>}
+                      {/* <a>git</a>, <a>github</a>, <a>go</a> */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </UsersContainer>
-        <PageContainer>
-          <div>weekly / monthly / quarterly reputation leagues</div>
-          <div>우</div>
-        </PageContainer>
+        {data && (
+          <PageContainer>
+            <div>weekly / monthly / quarterly reputation leagues</div>
+            <div className="pagenation">{data.total}</div>
+          </PageContainer>
+        )}
       </>
     );
 };
-
-// {data.map(
-//   (user: {
-//     id: Key;
-//     user_img: string;
-//     first_name: string;
-//     last_name: string;
-//     reputation: number;
-//   }) => (
-//     <div key={user.id} className="grid-item">
-//       <div>
-//         <img src={user.user_img} alt="" />
-//       </div>
-//       <div>
-//         <Link href={'/users/21615528/신동민'}>{user.first_name}</Link>
-//         <span>{user.last_name}</span>
-//         <span>{user.reputation}</span>
-//       </div>
-//       <div>
-//         {<a>user.tags</a>}
-//         {/* <a>git</a>, <a>github</a>, <a>go</a> */}
-//       </div>
-//     </div>
-//   )
-// )}
 
 export default Users;
 
 const UsersContainer = styled.div`
   padding: 24px;
   min-height: 60vh;
+  .loading_message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    > p {
+      font-size: 1.5rem;
+    }
+  }
   > div:first-child {
     font-size: 1.5rem;
   }
@@ -271,6 +252,7 @@ const PageContainer = styled.div`
     font-size: 0.8rem;
     color: var(--text-blue);
   }
-  > div:last-child {
+  .pagenation {
+    border: 1px solid black;
   }
 `;
