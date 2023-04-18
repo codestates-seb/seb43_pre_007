@@ -4,7 +4,7 @@ import Input from '@/components/input/Input';
 import { daysFilter } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
@@ -14,11 +14,13 @@ const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(1);
-
-  const { isLoading, error, data } = useQuery<
+  const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
     Error
   >('users', () => axios(`/users/${36}/${page}`).then((res) => res.data));
+  useEffect(() => {
+    refetch();
+  }, [page, refetch]);
   if (error) return <p>Error: {error.message}</p>;
   else
     return (
@@ -91,7 +93,15 @@ const Users = () => {
         {data && (
           <PageContainer>
             <div>weekly / monthly / quarterly reputation leagues</div>
-            <div className="pagenation">{data.total}</div>
+            <div className="pagenation">
+              {Array(Math.round(data.total / 36))
+                .fill(1)
+                .map((x, i) => (
+                  <span key={i} onClick={() => setPage(i + 1)}>
+                    {i + 1}
+                  </span>
+                ))}
+            </div>
           </PageContainer>
         )}
       </>
@@ -253,6 +263,15 @@ const PageContainer = styled.div`
     color: var(--text-blue);
   }
   .pagenation {
-    border: 1px solid black;
+    display: flex;
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0px 8px;
+      height: 25px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
   }
 `;
