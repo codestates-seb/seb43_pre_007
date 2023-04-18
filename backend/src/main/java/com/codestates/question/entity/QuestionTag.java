@@ -1,7 +1,6 @@
 package com.codestates.question.entity;
 
-import com.codestates.tag.Tag;
-import com.codestates.user.entity.User;
+import com.codestates.tag.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
