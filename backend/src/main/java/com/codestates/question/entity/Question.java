@@ -56,6 +56,4 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
-
-
 }
