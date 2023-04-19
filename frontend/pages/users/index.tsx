@@ -5,6 +5,7 @@ import Pagenation from '@/components/pagenation/Pagenation';
 import { daysFilter } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
 import { useQuery } from 'react-query';
@@ -12,9 +13,11 @@ import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users
 const Users = () => {
+  const router = useRouter();
+  const pageNum = new URLSearchParams(router.asPath).get('page');
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(Number(pageNum) || 1);
 
   const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
@@ -22,8 +25,14 @@ const Users = () => {
   >('users', () =>
     axios(`/users?size=36&page=${page}`).then((res) => res.data)
   );
+
   useEffect(() => {
     refetch();
+    router.push({
+      pathname: router.pathname,
+      query: { size: 36, page: page },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, refetch]);
 
   if (error) return <p>Error: {error.message}</p>;
@@ -98,7 +107,11 @@ const Users = () => {
         {data && (
           <PageContainer>
             <div>weekly / monthly / quarterly reputation leagues</div>
-            <Pagenation setPage={setPage} items={Math.round(data.total / 36)} />
+            <Pagenation
+              initialPage={page}
+              onPageChange={setPage}
+              pageSize={Math.round(data.total / 36)}
+            />
           </PageContainer>
         )}
       </>
