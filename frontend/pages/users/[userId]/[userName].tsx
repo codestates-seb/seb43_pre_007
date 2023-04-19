@@ -19,7 +19,6 @@ import {
   pickCategoryState,
   pickState,
 } from '@/recoil/atom';
-
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);

@@ -10,11 +10,13 @@ import styled, { css, keyframes } from 'styled-components';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { useEffect, useRef } from 'react';
-import { updateLocalStorage } from '@/function/local_storage/updateLocalStorage';
-import { getLocalStorage } from '@/function/local_storage/getLocalStorage';
-import { setLocalStorage } from '@/function/local_storage/setLocalStorage';
-import { editLocalStorage } from '@/function/local_storage/editLocalStorage';
-import { deleteLocalStorage } from '@/function/local_storage/deleteLocalStorage';
+import {
+  deleteLocalStorage,
+  editLocalStorage,
+  getLocalStorage,
+  setLocalStorage,
+  updateLocalStorage,
+} from '@/util/local_storage/localStorage';
 
 const Modal = () => {
   //모달 상태 및 함수
