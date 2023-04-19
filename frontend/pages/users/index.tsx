@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
-import PaginatedItems from '@/components/pagenation/Pagenation';
+import Pagenation from '@/components/pagenation/Pagenation';
 import { daysFilter } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
@@ -98,14 +98,7 @@ const Users = () => {
         {data && (
           <PageContainer>
             <div>weekly / monthly / quarterly reputation leagues</div>
-            <div id="pagenation">
-              <PaginatedItems
-                setPage={setPage}
-                items={Array(Math.round(data.total / 36))
-                  .fill(1)
-                  .map((x, i) => (x = x + i))}
-              />
-            </div>
+            <Pagenation setPage={setPage} items={Math.round(data.total / 36)} />
           </PageContainer>
         )}
       </>

@@ -3,7 +3,7 @@ import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 
 type PagenationProps = {
-  items: number[];
+  items: number;
   setPage: Dispatch<SetStateAction<number>>;
 };
 
@@ -20,7 +20,7 @@ const Pagenation = ({ items, setPage }: PagenationProps) => {
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
         marginPagesDisplayed={1}
-        pageCount={items.length}
+        pageCount={items}
         previousLabel="Prev"
         renderOnZeroPageCount={null}
       />
