@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 export type PerPageProps = {
@@ -8,10 +7,7 @@ export type PerPageProps = {
 };
 
 export const PerPage = (props: PerPageProps) => {
-  const [current, setCurrent] = useState(props.current);
-
   const handlePerPageClick = (page: number) => {
-    setCurrent(page);
     props.onChangePage(page);
   };
 
@@ -21,7 +17,7 @@ export const PerPage = (props: PerPageProps) => {
         {props.perPageList.map((page, i) => (
           <PageNumber
             key={i}
-            current={current}
+            current={props.current}
             onClick={() => handlePerPageClick(page)}
           >
             {page}
