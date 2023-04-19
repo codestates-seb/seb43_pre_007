@@ -108,14 +108,15 @@ const Users = () => {
               {page > 1 && <span onClick={downPage}>Prev</span>}
               {Array(Math.round(data.total / 36))
                 .fill(1)
-                .slice(0, 5)
-                .map((x, i) => (
+                .map((x, i) => (x = x + i))
+                .slice(page - 1, page + 4)
+                .map((x) => (
                   <span
-                    className={i + 1 === page ? 'focus_orange' : ''}
-                    key={i}
-                    onClick={() => setPage(i + 1)}
+                    className={x === page ? 'focus_orange' : ''}
+                    key={x}
+                    onClick={() => setPage(x)}
                   >
-                    {i + 1}
+                    {x}
                   </span>
                 ))}
               <div>...</div>
