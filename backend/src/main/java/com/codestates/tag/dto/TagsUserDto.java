@@ -1,9 +1,11 @@
 package com.codestates.tag.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class TagUserDto {
+@Setter
+public class TagsUserDto {
     private long userId;
     private String displayName;
 }

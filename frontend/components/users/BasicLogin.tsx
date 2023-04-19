@@ -90,36 +90,32 @@ const FormInputs = styled.input<InvalidInput>`
 `;
 
 const BasicLogin = () => {
-  //email,password 비어있는지에 대한 상태 (유효성검사 + border 색상 변경)
-  const [emptyEmail, setemptyEmail] = useState(false);
-  const [emptyPassword, setemptyPassword] = useState(false);
+  // 로그인 했는가?
+  // 전역 변수 recoil(클라이언트)
+  const [userLog, setUserLog] = useRecoilState(userLogState);
+  // 로그인 실패시 안내 문구
   const [loginFailed, setloginFailed] = useState(false);
   // 유효성검사
+  //email,password 비어있는지 + 유효성 검사 통과 했는지
+  const [emptyEmail, setemptyEmail] = useState(false);
+  const [emptyPassword, setemptyPassword] = useState(false);
   const [invalidEmail, setinvalidEmail] = useState(false);
   const [invalidPassword, setinvalidPassword] = useState(false);
-  const [invalidcheck, setinvalidcheck] = useState(false);
-
-  const [userLog, setUserLog] = useRecoilState(userLogState);
   // useInput 훅을 이용하여 이벤트의 email, password 값으로 설정
   const [{ email, password }, onInputChange, resetInput] = useInput({
     email: '',
     password: '',
   });
-  // next navigation 기능
+  // next: navigation 기능
   const navi = useRouter();
-
+  // Login 버튼 누르고 나서부터 계속 업데이트
   useEffect(() => {
-    // 로그인 실패시 유효성 검사
-    // if (loginFailed) {
     // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
-    // console.log('눌림');
-    if (email === '') setemptyEmail(false);
-    // else if (email === '') setemptyEmail(true);
-    // else setemptyEmail(false);
+    if (email !== '') setemptyEmail(false);
     // email이 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
-    if (password === '') setemptyPassword(false);
+    if (password !== '') setemptyPassword(false);
   }, [email, password]);
-
+  // 로그인 눌렀을때
   const onSubmit = async (e: React.FormEvent) => {
     // email이 "username@domain.com" 형태의 이메일인지 유효성검사
     // 영문 대소문자, 숫자, 특수문자(!, @, #, $, %, ^, &, *) 중에서
@@ -127,32 +123,35 @@ const BasicLogin = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+    // 비동기 처리(?)
+    let emailcheck = false;
+    let passwordcheck = false;
+
     // 유효한 이메일이 아니면 포함되어야 하는 형식 메세지 출력 + border 변경
     if (email === '') setemptyEmail(true);
-    if (!emailRegex.test(email)) {
+    if (emailRegex.test(email)) {
+      emailcheck = true;
       setemptyEmail(false);
       setinvalidEmail(true);
-      console.log('이메일 유효성', emailRegex.test(email));
     }
 
     // 유효한 이메일이 아니면 포함되어야 하는 형식 메세지 출력 + border 변경
     if (password === '') setemptyPassword(true);
-    if (!passwordRegex.test(password)) {
+    if (passwordRegex.test(password)) {
+      passwordcheck = true;
       setemptyPassword(false);
       setinvalidPassword(true);
-      console.log('비밀번호 유효성', passwordRegex.test(password));
     }
-    // 이메일 & 비밀번호 유효성 검사 통과 시
-    if (invalidEmail && invalidPassword) {
-      setinvalidcheck(true);
-      console.log('유효성검사', invalidcheck);
+    // 이메일 & 비밀번호 유효성 검사 통과 못할 시
+    if (!emailcheck && !passwordcheck) {
+      setloginFailed(true);
     }
 
     // 이벤트의 기본 동작을 취소하는 메서드
     e.preventDefault();
 
     // 유효성 검사가 다 통과되면 로그인 요청
-    if (invalidcheck) {
+    if (emailcheck && passwordcheck) {
       return (
         axios
           .post('/users/login', { email, password })
@@ -163,9 +162,9 @@ const BasicLogin = () => {
             alert('로그인 성공');
             // 로컬스토리에 토큰 저장
             localStorage.setItem('user', JSON.stringify(res.data.accessToken));
-            // 로그인 성공하면 입력 폼 초기화
             setloginFailed(false);
             setUserLog(true);
+            // 로그인 성공하면 입력 폼 초기화
             resetInput();
           })
           // 실패시
@@ -178,13 +177,14 @@ const BasicLogin = () => {
             // 상태코드 503 = 서버 상태가 안 좋을 시
             else if (err.response.status === 503) {
               alert('서버 상태가 안 좋습니다. 잠시 후 다시 시도해 주세요.');
+              setloginFailed(true);
             }
-            setloginFailed(true);
           })
       );
     }
   };
 
+  emptyEmail ? 'red' : emptyPassword ? 'blue' : 'green';
   return (
     <FormContainer className="form-container">
       <div className="login-email">
@@ -194,10 +194,20 @@ const BasicLogin = () => {
           name="email"
           value={email}
           onChange={onInputChange}
-          border={emptyEmail || invalidcheck ? '#DE4F54' : null}
+          border={
+            emptyEmail ||
+            emptyPassword ||
+            ((!emptyEmail || !emptyPassword) &&
+              loginFailed &&
+              (!invalidEmail || !invalidPassword))
+              ? '#DE4F54'
+              : null
+          }
         />
         {emptyEmail ? <p className="empty">Email cannot be empty.</p> : null}
-        {invalidcheck ? (
+        {(!emptyEmail || !emptyPassword) &&
+        loginFailed &&
+        (!invalidEmail || !invalidPassword) ? (
           <p className="valid">The email or password is incorrect.</p>
         ) : null}
       </div>

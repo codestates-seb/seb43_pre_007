@@ -2,6 +2,7 @@ package com.codestates.user.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.question.repository.QuestionRepository;
 import com.codestates.user.entity.User;
 import com.codestates.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
     }
 
     // 회원등록
@@ -41,14 +44,13 @@ public class UserService {
 
     // 회원조회
     public User findUser(long userId){
-       User findUser = findVerifiedUser(userId);
-       return findUser;
+       User user = findVerifiedUser(userId);
+       return user;
     }
 
     // 전체회원조회(우선 id 기준 정렬)
-    public Page<User> findUsers(int size, int page) {
-        Page<User> users =  userRepository.findAll(PageRequest.of(size,page, Sort.by("userId").descending()));
-        return users;
+    public Page<User> findUsers(int page, int size) {
+        return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
     }
 
     // 회원탈퇴
@@ -69,6 +71,9 @@ public class UserService {
     private User findVerifiedUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(()->new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        if(findUser.getUserStatus().equals(User.UserStatus.USER_DELETED)){
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+        }
         return findUser;
     }
 }

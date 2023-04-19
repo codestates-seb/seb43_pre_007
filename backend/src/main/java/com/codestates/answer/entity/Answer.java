@@ -26,10 +26,10 @@ public class Answer {
     private boolean isAccepted;
 
     @Column(nullable = false)
-    private LocalDateTime creationDate;
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime lastEditDate;
+    private LocalDateTime lastEditDate = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")

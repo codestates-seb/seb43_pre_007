@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserDto {
+    // [회원가입 요청 DTO]
     @Getter
     public static class PostDto{
         @NotBlank
@@ -22,6 +23,7 @@ public class UserDto {
         private String password;
     }
 
+    // [프로필수정 요청 DTO]
     @Getter
     @AllArgsConstructor
     public static class PatchDto{
@@ -37,8 +39,9 @@ public class UserDto {
         }
     }
 
+    // [회원가입 응답 DTO]
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class UserResponseDto{
         private long userId;
         private String displayName;
@@ -52,9 +55,11 @@ public class UserDto {
     }
 
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class UserGetResponseDto{
+        @NotBlank
         private long userId;
+        @NotBlank
         private String displayName;
         private String aboutMe;
         private String location;
@@ -63,22 +68,7 @@ public class UserDto {
         private int answerCount;
         private List<UsersQuestionResponseDto> questions;
         private List<UsersAnswerResponseDto> answers;
-        private List<UsersTagDto.UserTagsResponseDtos> tags;
+        private List<UsersTagResponseDto.UserTagResponseDtos> tags;
     }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    public static class UsersGetResponseDtos {
-            private long userId;
-            private String displayName;
-            private String aboutMe;
-            private String location;
-            private LocalDateTime creationDate;
-            private int questionCount;
-            private int answerCount;
-            private List<UsersTagDto.UserTagResponseDto> tag;
-        }
-
-    }
+}
 

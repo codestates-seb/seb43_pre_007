@@ -1,13 +1,11 @@
 package com.codestates.tag.controller;
 
 import com.codestates.dto.MultiResponseDto;
-import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
-import com.codestates.question.service.QuestionService;
-import com.codestates.tag.mapper.TagMapper;
-import com.codestates.tag.service.TagService;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.entity.Tag;
+import com.codestates.tag.mapper.TagMapper;
+import com.codestates.tag.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -35,21 +33,23 @@ public class TagController {
     //태그조회
     @GetMapping("/{tags}")
     public ResponseEntity getTag(@PathVariable String tags,
-                                 @Positive @RequestParam("size") int size,
-                                 @Positive @RequestParam("page") int page){
-        Page<QuestionTag> tagPage = tagService.findTag(tags, size, page-1);
+                                 @Positive @RequestParam("page") int page,
+                                 @Positive @RequestParam("size") int size){
+        Page<QuestionTag> tagPage = tagService.findTag(tags, page-1, size);
         List<QuestionTag> tagList = tagPage.getContent();
+        List<TagDto.ResponseDto> responseDtos = tagMapper.tagToTagResponseDto(tagList);
         return new ResponseEntity<>(
-                new MultiResponseDto<>(tagMapper.tagToTagResponseDto(tagList), tagPage), HttpStatus.OK);
+                new MultiResponseDto<>(responseDtos, tagPage), HttpStatus.OK);
     }
 
     //태그전체조회
     @GetMapping
-    public ResponseEntity getTags(@Positive @RequestParam int size,
-                                  @Positive @RequestParam int page){
-        Page<Tag> tagPage = tagService.findTags(size, page-1);
+    public ResponseEntity getTags(@Positive @RequestParam int page,
+                                  @Positive @RequestParam int size){
+        Page<Tag> tagPage = tagService.findTags(page,size);
         List<Tag> tagList = tagPage.getContent();
+        List<TagDto.ResponseDtos> responseDtos = tagMapper.tagsToTagResponseDtos(tagList);
         return new ResponseEntity<>(
-                new MultiResponseDto<>(tagMapper.tagsToTagResponseDtos(tagList),tagPage),HttpStatus.OK);
+                new MultiResponseDto<>(responseDtos,tagPage),HttpStatus.OK);
     }
 }

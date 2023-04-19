@@ -12,6 +12,7 @@ import com.codestates.user.entity.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 //TODO : Mapper 작성
 @Mapper(componentModel = "spring")
@@ -29,7 +30,21 @@ public interface QuestionMapper {
         question.setUser(user);
         question.setTitle( questionPostDto.getTitle() );
         question.setBody( questionPostDto.getBody() );
-        question.setTags( questionTagDtoListToQuestionTagList( questionPostDto.getTags() ));
+
+        //questionTag 해결
+        List<QuestionTag> questionTags = questionPostDto.getTags()
+                        .stream().map(questionTagDto ->{
+                            QuestionTag questionTag = new QuestionTag();
+
+                            Tag tag = new Tag();
+                            tag.setTagId(questionTagDto.getTagId());
+                            tag.setName(questionTagDto.getName());
+                            questionTag.setTag(tag);
+
+                            questionTag.setQuestion(question);
+                            return questionTag;
+                    }).collect(Collectors.toList());
+        question.setTags( questionTags );
 
         return question;
     }
@@ -103,12 +118,6 @@ public interface QuestionMapper {
 
         QuestionDto.Response response = new QuestionDto.Response();
 
-        if ( response.getTags() != null ) {
-            List<QuestionTagDto> list = questionTagListToQuestionTagDtoList( question.getTags() );
-            if ( list != null ) {
-                response.getTags().addAll( list );
-            }
-        }
         response.setQuestionId(question.getQuestionId());
         response.setTitle(question.getTitle());
         response.setBody(question.getBody());
@@ -118,7 +127,8 @@ public interface QuestionMapper {
         response.setAnswerCount(question.getAnswerCount());
         response.setCreationDate(question.getCreationDate());
         response.setLastEditDate(question.getLastEditDate());
-
+        //questionTag 해결
+        response.setTags(questionTagListToQuestionTagDtoList(question.getTags()));
         return response;
     }
 
@@ -157,6 +167,7 @@ public interface QuestionMapper {
 
         QuestionAnswerResponseDto questionAnswerResponseDto = new QuestionAnswerResponseDto();
         questionAnswerResponseDto.setUser(userToquestionUserResponseDto(answer.getUser()));
+        questionAnswerResponseDto.setAnswerId(answer.getAnswerId());
         questionAnswerResponseDto.setBody(answer.getBody());
         questionAnswerResponseDto.setAccepted(answer.isAccepted());
         questionAnswerResponseDto.setCreationDate(answer.getCreationDate());

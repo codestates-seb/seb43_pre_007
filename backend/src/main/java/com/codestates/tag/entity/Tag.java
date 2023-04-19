@@ -1,6 +1,5 @@
 package com.codestates.tag.entity;
 
-import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
 import com.codestates.user.entity.UserTag;
 import lombok.Getter;
@@ -36,7 +35,5 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag")
     private List<UserTag> userTagList = new ArrayList<>();
-
-
 
 }

@@ -105,3 +105,5 @@ export const footerSocial = [
     Instagram
   </a>,
 ];
+
+export const daysFilter = ['week', 'month', 'quarter', 'year', 'all'];

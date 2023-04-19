@@ -9,7 +9,8 @@ public enum ExceptionCode {
     TAG_NOT_FOUND(404,"Tag not found"),
 
     //에러 코드 추가 - 이채은
-    QUESTION_NOT_FOUND(404, "Question not found");
+    QUESTION_NOT_FOUND(404, "Question not found"),
+    ANSWER_NOT_FOUND(404, "Answer not found");
 
     @Getter
     private int status;

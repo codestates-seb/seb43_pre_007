@@ -1,16 +1,18 @@
 package com.codestates.tag.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 public class TagsResponseDto {
-        @Builder
         @Getter
+        @Setter
         public static class TagsQuestionResponseDto {
             private long tagId;
             private String name;
         }
 
+        @Getter
+        @Setter
         public static class TagsQuestionResponseDtos{
             private long tagId;
             private String name;
