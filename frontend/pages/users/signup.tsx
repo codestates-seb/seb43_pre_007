@@ -1,14 +1,15 @@
 //경로 https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fusers
 import styled, { css } from 'styled-components';
 import SosialLogin from '@/components/users/SosialLogin';
-import useInput from '@/hooks/useInput';
+
+import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const SignUp = () => {
-  const [{ displayname, email, password }, onInputChange, resetInput] =
+  const [{ display_name, email, password }, onInputChange, resetInput] =
     useInput({
-      displayname: '',
+      display_name: '',
       email: '',
       password: '',
     });
@@ -17,27 +18,34 @@ const SignUp = () => {
   const SignUpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    axios
-      .post('/signup', { displayname, email, password })
-      // 성공시
-      .then((res) => {
-        navi.push('/');
-        alert('회원 가입 성공');
-        // 로그인 성공하면 입력 폼 초기화
-        resetInput();
-      })
-      // 실패시
-      .catch((err) => {
-        // 상태코드 401 = 로그인 정보가 없을 시
-        if (err.response.status === 401) {
-          alert('로그인 정보가 없습니다.');
-        } else if (err.response.status === 409) {
-        }
-        // 상태코드 503 = 서버 상태가 안 좋을 시
-        else if (err.response.status === 503) {
-          alert('서버 상태가 안 좋습니다. 잠시 후 다시 시도해 주세요.');
-        }
-      });
+    return (
+      axios
+        .post('/users', { display_name, email, password })
+        // 성공시
+        .then((res) => {
+          console.log(res);
+          navi.push('/login');
+          alert('회원 가입 성공');
+          // 로그인 성공하면 입력 폼 초기화
+          resetInput();
+        })
+        // 실패시
+        .catch((err) => {
+          // 상태코드 401 = 로그인 정보가 없을 시
+          if (err.response.status === 401) {
+            alert('로그인 정보가 없습니다.');
+          }
+          // 상태코드 409 =
+          else if (err.response.status === 409) {
+          }
+          // 상태코드 503 = 서버 상태가 안 좋을 시
+          else if (err.response.status === 503) {
+            alert('서버 상태가 안 좋습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log(err.status);
+          }
+        })
+    );
   };
 
   return (
@@ -99,8 +107,8 @@ const SignUp = () => {
             <label htmlFor="display-name">Display name</label>
             <FormInputs
               id="display-name"
-              name="email"
-              value={email}
+              name="display_name"
+              value={display_name}
               onChange={onInputChange}
               border={null}
             />
@@ -120,6 +128,7 @@ const SignUp = () => {
             <FormInputs
               name="password"
               value={password}
+              type="password"
               onChange={onInputChange}
               border={null}
             />
@@ -196,6 +205,7 @@ const BasicContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: #f1f2f3;
+  padding: 47px;
   .form-container {
     display: flex;
     flex-direction: column;
@@ -267,7 +277,7 @@ display: flex;
   justify-content: center;
   align-items: center;
   padding: 16px;
-  margin-bottom: 24px;
+  
   text-align: center;
   font-size: 13px;
   div {
@@ -300,6 +310,7 @@ const FormContainer = styled.div`
   justify-content: center;
   item-ailgn: center;
   padding: 24px;
+
   margin-bottom: 24px;
   border-radius: 5px;
   box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),

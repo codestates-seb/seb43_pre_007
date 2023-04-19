@@ -14,6 +14,7 @@ const BasicContainer = styled.div`
   background: #f1f2f3;
   background-size: cover;
   > .container {
+    margin-top: 47px;
     max-width: 288px;
   }
   @media screen and (max-width: 816px) {
@@ -21,11 +22,12 @@ const BasicContainer = styled.div`
   }
   @media screen and (max-width: 641px) {
     padding: 24px 16px;
-    background: blue;
+    // background: blue;
   }
 `;
 
 const LogoContainer = styled.div`
+  min-width: 37px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +41,6 @@ const SignUpContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 16px;
-  margin-bottom: 24px;
   text-align: center;
   font-size: 13px;
   div {

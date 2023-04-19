@@ -22,9 +22,7 @@ const Socialbutton = styled.button<SocialProps>`
   width: 100%;
   height: 2.3rem;
   margin: 4px 0px;
-
   text-align: center;
-
   font-size: 13px;
   background: ${(props) => props.background || 'blue'};
   color: ${(props) => props.color || 'green'};
