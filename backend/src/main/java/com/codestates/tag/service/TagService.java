@@ -2,23 +2,16 @@ package com.codestates.tag.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
-import com.codestates.question.repository.QuestionRepository;
-import com.codestates.question.service.QuestionService;
-import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.repository.TagRepository;
+import com.codestates.user.entity.UserTag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,16 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class TagService {
     private final TagRepository tagRepository;
-    private final QuestionService questionService;
-    private final QuestionRepository questionRepository;
 
-    public TagService(TagRepository tagRepository, QuestionService questionService, QuestionRepository questionRepository) {
+    public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.questionService = questionService;
-        this.questionRepository = questionRepository;
     }
 
-//    질문등록시 필요한 태그생성 로직
+    //    질문등록시 필요한 태그생성 로직
 //    public Tag createTag(Tag tag){
 //        if(tagRepository.findById(tag.getTagId()) == null){return null;}//1개 이상, 5개 이하, 태그를 입력하세요
 //        else {
@@ -46,29 +35,57 @@ public class TagService {
 //    }
 
 
-    public Page<QuestionTag> findTag(String name, int size, int page) {
+    // [태그조회] : 태그를 클릭하면 해당태그를 사용한 질문목록 페이지로 넘어감.
+    public Page<QuestionTag> findTag(String name, int page, int size) {
         //1. DB에서 태그찾기
         //2. 질문에 사용된 태그를 저장하는 questionTag 페이지 가져오기
         //3. 페이지의 컨텐츠 List로 저장
         findVerifyTags(name);
-        Page<QuestionTag> questionPage =questionRepository.findAll(PageRequest.of(page, size));
-        List<QuestionTag> questionTagList = questionPage.getContent();
-        questionTagList.stream().filter(q->!q.getTag().getQuestionTagList().contains(name))
+        Page<Tag> questionPage =tagRepository.findAll(PageRequest.of(page, size));
+        List<Tag> questionTagList = questionPage.getContent();
+
+        questionTagList.stream().filter(q->!q.getQuestionTagList().contains(name))
                 .collect(Collectors.toList());
 
         questionPage = new PageImpl<>(questionTagList,questionPage.getPageable(),questionTagList.size());
-        return questionPage;
+
+        List<QuestionTag> questionTags = questionTagList.stream().map(tag->{
+            QuestionTag questionTag = new QuestionTag();
+            questionTag.getTag().setName(tag.getName());
+        return questionTag; })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(questionTags,questionPage.getPageable(),questionPage.getTotalElements());
+      }
+
+//    🟡생성자필요(null체크)🟡
+//    @ManyToOne
+//    @JoinColumn(name = "TAG_ID")
+//    private Tag tag;
+
+
+
+
+    // [태그전체조회]
+    public Page<Tag> findTags(int page, int size) {
+        Page<Tag> tagPage = tagRepository.findAll(PageRequest.of(page,size, Sort.by("tagId").descending()));
+        List<Tag> tagList = tagPage.getContent();
+
+        return tagPage = new PageImpl<>(tagList,tagPage.getPageable(),tagList.size());
     }
 
-    //DB 에서 태그 찾기
+
+    // [태그존재여부]
     private Tag findVerifyTags(String name) {
         Optional<Tag> optionalTag = tagRepository.findByName(name);
         Tag findTag = optionalTag.orElseThrow(()-> new BusinessLogicException(ExceptionCode.TAG_NOT_FOUND));
         return findTag;
     }
 
-
-    public Page<Tag> findTags(int size, int page) {
-        return tagRepository.findAll(PageRequest.of(size,page, Sort.by("tagId").descending()));
+    // [postCount 증가]
+    private void increamentPostCount(UserTag tag){
+        if(tag.getUser().getQuestion().contains(tag.getTag().getName())){
+            tag.setPostsCount(tag.getPostsCount()+1);
+        }
     }
 }

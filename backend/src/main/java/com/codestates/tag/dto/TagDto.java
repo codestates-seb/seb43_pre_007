@@ -1,12 +1,12 @@
 package com.codestates.tag.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 public class TagDto {
 
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class ResponseDto{
         private String name;
         private String info;
@@ -15,6 +15,7 @@ public class TagDto {
     }
 
     @Getter
+    @Setter
     public static class ResponseDtos{
         private TagsResponseDto.TagsQuestionResponseDtos data;
     }
