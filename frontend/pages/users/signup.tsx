@@ -121,7 +121,7 @@ const SignUp = () => {
               onChange={onInputChange}
               border={null}
             />
-            <p className="empty hide red">Email cannot be empty.</p>
+            <p className="red">Email cannot be empty.</p>
           </div>
           <div className="login-password">
             <label>Password</label>
@@ -132,11 +132,49 @@ const SignUp = () => {
               onChange={onInputChange}
               border={null}
             />
-            <p className="empty hide red">Password cannot be empty.</p>
+            <p className="red">Password cannot be empty.</p>
             <p className="p-margin">
               Passwords must contain at least eight characters, including at
               least 1 letter and 1 number.
             </p>
+          </div>
+          <div className="product">
+            <div className="product-checkbox">
+              <input
+                type="checkbox"
+                name="EmailOptIn"
+                className="s-checkbox"
+                data-ga-action="Email Opt-In"
+                data-ga-is-pii="false"
+              />
+            </div>
+            <div></div>
+            <div>
+              Opt-in to receive occasional product updates, user research
+              invitations, company announcements, and digests.
+            </div>
+            {/* <div
+              className="s-popover ws2 is-visible"
+              id="opt-in-learn-more"
+              role="menu"
+              aria-hidden="true"
+              // style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-324.5px, 544.5px, 0px);"
+              data-popper-placement="left"
+            >
+              <div
+                className="s-popover--arrow"
+                // style="position: absolute; top: 0px; transform: translate3d(0px, 80.5px, 0px);"
+              ></div>
+              <p>
+                We know you hate spam, and we do too. That’s why we make it easy
+                for you to update your email preferences or unsubscribe at
+                anytime.
+              </p>
+              <p className="mb0">
+                We never share your email address with third parties for
+                marketing purposes.
+              </p>
+            </div> */}
           </div>
           <div className="login-button">
             <button onClick={SignUpSubmit}>Log in</button>
@@ -349,10 +387,17 @@ const FormContainer = styled.div`
   .hide {
     display: none;
   }
+  .product {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .product-checkbox {
+      margin-right: 4px;
+    }
+  }
   .privacy {
     font-size: 0.7rem;
     margin: 0px;
-
     > a {
       word-break: keep-all;
     }

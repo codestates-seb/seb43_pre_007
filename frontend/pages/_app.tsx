@@ -1,10 +1,6 @@
 import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
-<<<<<<< HEAD
-
-=======
 import { QueryClient, QueryClientProvider } from 'react-query';
->>>>>>> c63cd291bb7df928aa0bc6451c42b85692d2874f
 import '../styles/App.css';
 import Header from '@/components/header/Header';
 import Container from '@/components/container/Container';

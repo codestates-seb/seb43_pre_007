@@ -112,7 +112,7 @@ const BasicLogin = () => {
   useEffect(() => {
     // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
     if (email !== '') setemptyEmail(false);
-    // email이 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
+    // password가 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
     if (password !== '') setemptyPassword(false);
   }, [email, password]);
   // 로그인 눌렀을때
@@ -123,7 +123,7 @@ const BasicLogin = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    // 비동기 처리(?)
+    // 유효성 검사 확인
     let emailcheck = false;
     let passwordcheck = false;
 
@@ -142,8 +142,8 @@ const BasicLogin = () => {
       setemptyPassword(false);
       setinvalidPassword(true);
     }
-    // 이메일 & 비밀번호 유효성 검사 통과 못할 시
-    if (!emailcheck && !passwordcheck) {
+    // 이메일 & 비밀번호 유효성 검사 둘 중 하나라도 통과 못할 시
+    if (!emailcheck || !passwordcheck) {
       setloginFailed(true);
     }
 
