@@ -1,10 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 
 type PagenationProps = {
   items: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage: (page: number) => void;
 };
 
 const Pagenation = ({ items, setPage }: PagenationProps) => {
