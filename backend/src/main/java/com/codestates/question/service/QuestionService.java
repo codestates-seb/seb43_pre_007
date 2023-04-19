@@ -4,6 +4,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.question.dto.QuestionUserResponseDto;
 import com.codestates.question.entity.Question;
+import com.codestates.question.entity.QuestionTag;
 import com.codestates.question.repository.QuestionRepository;
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -28,11 +31,13 @@ public class QuestionService {
 
     public Question createQuestion(Question question) {
 
+        //TODO: 있는 유저인지 확인
+
         // 이부분을 안해주면 user의 displayName이 null값으로 나온다. 왜지 영속성 컨텍스트와 관련이 있을까?
         long userId = question.getUser().getUserId();
         User user = userService.findUser(userId);
-
         question.setUser(user);
+
 
         return questionRepository.save(question);
     }
@@ -50,7 +55,7 @@ public class QuestionService {
         findQuestion.setLastEditDate(LocalDateTime.now());
 
 
-        return questionRepository.save(question);
+        return questionRepository.save(findQuestion);
     }
 
     public Question findQuestion(long questionId) {
