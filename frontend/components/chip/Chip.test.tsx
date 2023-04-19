@@ -1,16 +1,21 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter } from 'next/router';
 import { Chip } from './Chip';
 
 describe('<Chip/>', () => {
-  beforeEach(() => {});
+  test('chip을 클릭하면 라우터가 이동된다.', () => {
+    const handleClick = jest.fn();
 
-  test('required props로 받아 렌더링 되고, Link 태그를 사용한다.', () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: handleClick,
+    });
+
     render(<Chip href="/">react</Chip>);
-    const ins: HTMLAnchorElement = screen.getByText('react');
+    const chip = screen.getByRole('button');
 
-    expect(ins.tagName).toBe('A');
-    expect(ins.href).not.toBeNull();
-    expect(ins).toBeInTheDocument();
+    fireEvent.click(chip);
+
+    expect(handleClick).toBeCalled();
   });
 
   test('props로 watch를 사용시 아이콘이 렌더링 된다', () => {
