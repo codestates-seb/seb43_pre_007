@@ -11,19 +11,17 @@ export type QuestionItemProps = {
   title: string;
   isVote: number;
   isScore: number;
+  userName: string;
   answerCount: number;
   creationData: string;
   tags: Array<{ id: string; name: string }>;
-  user: {
-    displayName: string;
-  };
 };
 
 export const QuestionItem = (props: QuestionItemProps) => {
   const router = useRouter();
 
   const handleUserRouterClick = (e: MouseEvent<HTMLSpanElement>) => {
-    router.push(`/users/${props.user.displayName}`);
+    router.push(`/users/${props.userName}`);
   };
 
   return (
@@ -56,7 +54,7 @@ export const QuestionItem = (props: QuestionItemProps) => {
             </ul>
             <div className="user">
               <UserRoute onClick={handleUserRouterClick} aria-hidden>
-                {props.user.displayName}
+                {props.userName}
               </UserRoute>
               <span>{`asked ${parseDate(props.creationData, true)}`}</span>
             </div>
@@ -111,6 +109,7 @@ const QuestionHeader = styled.div`
   }
 
   @media (max-width: 980px) {
+    font-size: 12px;
     flex-direction: row;
     margin-bottom: 4px;
   }
@@ -157,6 +156,23 @@ const QuestionContent = styled.div`
       gap: 4px;
     }
   }
+
+  @media (max-width: 640px) {
+    .title {
+      font-size: 14px;
+    }
+
+    .content {
+      font-size: 10px;
+      line-height: 13px;
+    }
+
+    .qustion_info {
+      .user {
+        font-size: 10px;
+      }
+    }
+  }
 `;
 
 const UserRoute = styled.span`
@@ -167,4 +183,8 @@ const UserRoute = styled.span`
   border: none;
   background: none;
   cursor: pointer;
+
+  @media (max-width: 640px) {
+    font-size: 10px;
+  }
 `;

@@ -14,9 +14,7 @@ const mockData = {
   ],
   body: ` I have Googled this, but I keep finding different types of icons that refer to different things. How do I add these types of icons to the app?`,
   creationData: '2022-04-17T17:19:50.26007',
-  user: {
-    displayName: 'front-king',
-  },
+  userName: 'front-king',
 };
 
 describe('<QuestionItem />', () => {
