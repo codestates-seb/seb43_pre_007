@@ -13,14 +13,20 @@ import styled from 'styled-components';
 const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
+
   const [page, setPage] = useState(1);
+
   const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
     Error
-  >('users', () => axios(`/users/${36}/${page}`).then((res) => res.data));
+  >('users', () =>
+    axios(`/users?size=36&page=${page}`).then((res) => res.data)
+  );
+
   useEffect(() => {
     refetch();
   }, [page, refetch]);
+
   if (error) return <p>Error: {error.message}</p>;
   else
     return (
