@@ -13,16 +13,13 @@ import styled from 'styled-components';
 const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
-
   const [page, setPage] = useState(1);
-
   const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
     Error
   >('users', () =>
     axios(`/users?size=36&page=${page}`).then((res) => res.data)
   );
-
   useEffect(() => {
     refetch();
   }, [page, refetch]);
@@ -84,7 +81,7 @@ const Users = () => {
                         {user.first_name}
                       </Link>
                       <span>{user.last_name}</span>
-                      <span>{user.reputation}</span>
+                      <span>{user.reputation.toLocaleString()}</span>
                     </div>
                     <div>
                       {<a>{user.tags}</a>}
@@ -103,7 +100,11 @@ const Users = () => {
               {Array(Math.round(data.total / 36))
                 .fill(1)
                 .map((x, i) => (
-                  <span key={i} onClick={() => setPage(i + 1)}>
+                  <span
+                    className={i + 1 === page ? 'focus_orange' : ''}
+                    key={i}
+                    onClick={() => setPage(i + 1)}
+                  >
                     {i + 1}
                   </span>
                 ))}
@@ -270,14 +271,28 @@ const PageContainer = styled.div`
   }
   .pagenation {
     display: flex;
+    .focus_orange {
+      background-color: var(--bg-orange);
+      color: white;
+      :hover {
+        background-color: var(--bg-orange);
+        color: white;
+      }
+    }
     span {
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 0px 8px;
-      height: 25px;
-      border: 1px solid black;
+      height: 27px;
+      font-size: 0.9rem;
+      border: 1px solid #d8d9da;
+      border-radius: 4px;
+      margin: 0px 3px;
       cursor: pointer;
+      :hover {
+        background-color: #cccdce;
+      }
     }
   }
 `;
