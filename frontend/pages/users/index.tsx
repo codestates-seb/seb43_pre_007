@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
+import PaginatedItems from '@/components/pagenation/Pagenation';
 import { daysFilter } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
@@ -14,13 +15,6 @@ const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(1);
-
-  const upPage = () => {
-    setPage(page + 1);
-  };
-  const downPage = () => {
-    setPage(page - 1);
-  };
 
   const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
@@ -104,31 +98,13 @@ const Users = () => {
         {data && (
           <PageContainer>
             <div>weekly / monthly / quarterly reputation leagues</div>
-            <div className="pagenation">
-              {page > 1 && <span onClick={downPage}>Prev</span>}
-              {Array(Math.round(data.total / 36))
-                .fill(1)
-                .map((x, i) => (x = x + i))
-                .slice(page - 1, page + 4)
-                .map((x) => (
-                  <span
-                    className={x === page ? 'focus_orange' : ''}
-                    key={x}
-                    onClick={() => setPage(x)}
-                  >
-                    {x}
-                  </span>
-                ))}
-              <div>...</div>
-              <span
-                className={28 === page ? 'focus_orange' : ''}
-                onClick={() => setPage(28)}
-              >
-                {Math.round(data.total / 36)}
-              </span>
-              {page < Math.round(data.total / 36) && (
-                <span onClick={upPage}>Next</span>
-              )}
+            <div id="pagenation">
+              <PaginatedItems
+                setPage={setPage}
+                items={Array(Math.round(data.total / 36))
+                  .fill(1)
+                  .map((x, i) => (x = x + i))}
+              />
             </div>
           </PageContainer>
         )}
@@ -290,9 +266,9 @@ const PageContainer = styled.div`
     font-size: 0.8rem;
     color: var(--text-blue);
   }
-  .pagenation {
+  #pagenation {
     display: flex;
-    .focus_orange {
+    .selected > a {
       background-color: var(--bg-orange);
       color: white;
       :hover {
@@ -300,13 +276,16 @@ const PageContainer = styled.div`
         color: white;
       }
     }
+    > ul {
+      display: flex;
+    }
     > div {
       margin: 0px 10px;
       display: flex;
       align-items: end;
       padding-bottom: 7px;
     }
-    span {
+    a {
       display: flex;
       justify-content: center;
       align-items: center;
