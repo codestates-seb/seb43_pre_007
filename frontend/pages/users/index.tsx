@@ -14,6 +14,14 @@ const Users = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(1);
+
+  const upPage = () => {
+    setPage(page + 1);
+  };
+  const downPage = () => {
+    setPage(page - 1);
+  };
+
   const { isLoading, error, data, refetch } = useQuery<
     { data: User[]; total: number },
     Error
@@ -97,8 +105,10 @@ const Users = () => {
           <PageContainer>
             <div>weekly / monthly / quarterly reputation leagues</div>
             <div className="pagenation">
+              {page > 1 && <span onClick={downPage}>Prev</span>}
               {Array(Math.round(data.total / 36))
                 .fill(1)
+                .slice(0, 5)
                 .map((x, i) => (
                   <span
                     className={i + 1 === page ? 'focus_orange' : ''}
@@ -108,6 +118,16 @@ const Users = () => {
                     {i + 1}
                   </span>
                 ))}
+              <div>...</div>
+              <span
+                className={28 === page ? 'focus_orange' : ''}
+                onClick={() => setPage(28)}
+              >
+                {Math.round(data.total / 36)}
+              </span>
+              {page < Math.round(data.total / 36) && (
+                <span onClick={upPage}>Next</span>
+              )}
             </div>
           </PageContainer>
         )}
@@ -278,6 +298,12 @@ const PageContainer = styled.div`
         background-color: var(--bg-orange);
         color: white;
       }
+    }
+    > div {
+      margin: 0px 10px;
+      display: flex;
+      align-items: end;
+      padding-bottom: 7px;
     }
     span {
       display: flex;
