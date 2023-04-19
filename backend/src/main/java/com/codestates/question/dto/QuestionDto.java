@@ -1,5 +1,8 @@
 package com.codestates.question.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +15,9 @@ public class QuestionDto {
 
 
     @Getter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Post{
-        //엥 유저아이디로 바꿔야함
+
         private long userId;  // TODO : jwt로 유저정보를 받아와야한다... 일단 적용전까진 유저 정보를 수동으로 받고있음 (현재는 API 명세서대로 프론트에서 요청못받음)
         private String title;
         private String body;
@@ -22,6 +26,7 @@ public class QuestionDto {
     }
 
     @Getter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Patch{
         private long questionId;
         private String title;
@@ -35,6 +40,7 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class POSTResponse{
         private QuestionUserResponseDto user;
         private Response question;
@@ -43,6 +49,7 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class GETResponse{
         private QuestionUserResponseDto user;
         private Response question;
@@ -52,6 +59,7 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class GETALLResponse {
         private QuestionUserResponseDto user;
         private Response question;
@@ -60,11 +68,14 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Response{
         private long questionId;
         private String title;
         private String body;
+        @JsonProperty("is_answered")
         private boolean isAnswered;
+        @JsonProperty("is_accepted")
         private boolean isAccepted;
         private int viewCount;
         private int answerCount;
