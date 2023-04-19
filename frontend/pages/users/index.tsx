@@ -38,8 +38,8 @@ const Users = () => {
           )}
           {data && (
             <>
-              <div>Users</div>
-              <div>
+              <div className="title">Users</div>
+              <div className="sub">
                 <div>
                   <i>
                     <GoSearch />
@@ -59,7 +59,7 @@ const Users = () => {
                   />
                 </div>
               </div>
-              <div>
+              <div className="days_filter">
                 <div>
                   {daysFilter.map((category, i) => (
                     <span
@@ -72,7 +72,7 @@ const Users = () => {
                   ))}
                 </div>
               </div>
-              <div>
+              <div className="content">
                 {data.data?.map((user: User) => (
                   <div key={user.id} className="grid-item">
                     <div>
@@ -120,10 +120,10 @@ const UsersContainer = styled.div`
       font-size: 1.5rem;
     }
   }
-  > div:first-child {
+  > .title {
     font-size: 1.5rem;
   }
-  > div:nth-child(2) {
+  > .sub {
     position: relative;
     margin-top: 30px;
     display: flex;
@@ -162,7 +162,7 @@ const UsersContainer = styled.div`
       }
     }
   }
-  > div:nth-child(3) {
+  > .days_filter {
     margin-top: 20px;
     margin-bottom: 10px;
     margin-right: 10px;
@@ -189,7 +189,7 @@ const UsersContainer = styled.div`
       }
     }
   }
-  > div:nth-child(4) {
+  > .content {
     padding-top: 10px;
     display: grid;
     grid-row-gap: 30px;
@@ -220,7 +220,6 @@ const UsersContainer = styled.div`
         width: calc(100% - 64px);
         line-height: 1.3;
         a {
-          display: block;
           color: var(--text-blue);
         }
         span {
