@@ -8,7 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+//TODO : Entity 작성
 
 @NoArgsConstructor
 @Getter
@@ -29,19 +32,30 @@ public class Question {
     @Column(nullable = false)
     private boolean isAnswered;
 
+    @Column(nullable = false)
+    private boolean isAccepted;
+    @Column
+    private int viewCount;
+
     @Column
     private int answerCount;
 
     @Column(nullable = false)
-    private LocalDateTime creationDate;
+    private LocalDateTime creationDate = LocalDateTime.now();;
 
     @Column(nullable = false)
-    private LocalDateTime lastEditDate;
+    private LocalDateTime lastEditDate = LocalDateTime.now();;
+
+    @OneToMany(mappedBy = "question")
+    private List<QuestionTag> tags = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @OneToMany(mappedBy = "question")
-    private List<Answer> answer;
+    private List<Answer> answers;
+
+
+
 }
