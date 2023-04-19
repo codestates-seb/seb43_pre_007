@@ -3,13 +3,18 @@ import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 
 type PagenationProps = {
-  items: number;
-  setPage: (page: number) => void;
+  pageSize: number;
+  initialPage: number;
+  onPageChange: (page: number) => void;
 };
 
-const Pagenation = ({ items, setPage }: PagenationProps) => {
+const Pagenation = ({
+  pageSize,
+  initialPage,
+  onPageChange,
+}: PagenationProps) => {
   const handlePageClick = (event: { selected: number }) => {
-    setPage(event.selected + 1);
+    onPageChange(event.selected + 1);
   };
 
   return (
@@ -19,8 +24,9 @@ const Pagenation = ({ items, setPage }: PagenationProps) => {
         nextLabel="Next"
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
+        initialPage={initialPage - 1}
         marginPagesDisplayed={1}
-        pageCount={items}
+        pageCount={pageSize}
         previousLabel="Prev"
         renderOnZeroPageCount={null}
       />
