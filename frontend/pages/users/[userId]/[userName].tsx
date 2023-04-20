@@ -970,7 +970,7 @@ const EditContent = () => {
 
   const saveImgFile = () => {
     if (!target.current) return;
-    if (!target.current.files) return;
+    if (!target.current.files || !target.current.files[0]) return;
     const file = target.current.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -978,7 +978,7 @@ const EditContent = () => {
       const formData = new FormData();
       formData.append('data', file);
       axios
-        .post('/img/upload', formData, {
+        .post('/img', formData, {
           headers: {
             'Content-Type': `multipart/form-data`,
           },
@@ -1114,7 +1114,7 @@ const EditContentContainer = styled.div`
     }
     .text_editor {
       margin: 0px;
-      padding: 0px 6px;
+      padding: 0px 8px;
       width: 100%;
       > div {
         margin-top: 8px;
