@@ -2,7 +2,7 @@
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
 import Pagenation from '@/components/pagenation/Pagenation';
-import { daysFilter } from '@/constant/constant';
+import { DAYS_FILTER } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -70,7 +70,7 @@ const Users = () => {
               </div>
               <div className="days_filter">
                 <div>
-                  {daysFilter.map((category, i) => (
+                  {DAYS_FILTER.map((category, i) => (
                     <span
                       className={i === pickDaysFilter ? 'focus_span' : ''}
                       onClick={() => setPickDaysFilter(i)}

@@ -1,16 +1,16 @@
 import Link from 'next/link';
 
-export const publicLi = ['Questions', 'Tags', 'Users', 'Companies'];
+export const PUBLIC_LI = ['Questions', 'Tags', 'Users', 'Companies'];
 
-export const nonContainerRoutes = [
+export const NON_CONTAINER_ROUTES = [
   '/users/signup',
   '/users/login',
   '/questions/ask',
 ];
 
-export const detailNav = ['Profile', 'Activity', 'Saves'];
+export const DETAIL_NAV = ['Profile', 'Activity', 'Saves'];
 
-export const detailActivityContent: { [key: string]: JSX.Element } = {
+export const DETAIL_ACTIVITY_CONTENT: { [key: string]: JSX.Element } = {
   Answers: (
     <span>
       You have not <a>answered</a> any questions
@@ -58,9 +58,9 @@ export const detailActivityContent: { [key: string]: JSX.Element } = {
   ),
 };
 
-export const detailSaves = ['All saves', 'For later'];
+export const DETAIL_SAVES = ['All saves', 'For later'];
 
-export const footerNav: {
+export const FOOTER_NAV: {
   [key: string]: string[];
 }[] = [
   { ['STACK OVERFLOW']: ['Questions', 'Help'] },
@@ -90,7 +90,7 @@ export const footerNav: {
   },
 ];
 
-export const footerSocial = [
+export const FOOTER_SOCIAL = [
   <a key={0}>Blog</a>,
   <a key={1} href={'https://ko-kr.facebook.com/'} target="_blank">
     Facebook
@@ -106,4 +106,4 @@ export const footerSocial = [
   </a>,
 ];
 
-export const daysFilter = ['week', 'month', 'quarter', 'year', 'all'];
+export const DAYS_FILTER = ['week', 'month', 'quarter', 'year', 'all'];

@@ -5,9 +5,9 @@ import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
 import SelectContent from '@/components/select_content/SelectContent';
 import {
-  detailActivityContent,
-  detailNav,
-  detailSaves,
+  DETAIL_ACTIVITY_CONTENT,
+  DETAIL_NAV,
+  DETAIL_SAVES,
 } from '@/constant/constant';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -105,7 +105,7 @@ const UserDetail = () => {
       </div>
       <div className="detail_nav">
         <ul>
-          {detailNav.map((category, i) => (
+          {DETAIL_NAV.map((category, i) => (
             <li key={category}>
               <MenuItem onClick={() => pickHandler(i)} idx={i} pick={pick}>
                 {category}
@@ -449,7 +449,7 @@ const ActiveContent = ({
   selectPickCategory,
   pick,
 }: ActiveProps) => {
-  const detailActivity = Object.keys(detailActivityContent);
+  const detailActivity = Object.keys(DETAIL_ACTIVITY_CONTENT);
   return (
     <ActiveContentContainer pickCategory={pickCategory}>
       <div>
@@ -471,7 +471,7 @@ const ActiveContent = ({
         selectPickCategory={selectPickCategory}
         pickCategory={pickCategory}
         categories={detailActivity}
-        sub={detailNav[pick]}
+        sub={DETAIL_NAV[pick]}
       />
       <div>
         {pickCategory === 0 && (
@@ -557,7 +557,7 @@ const ActiveContent = ({
                   </div>
                 </div>
                 <Card>
-                  <div>{detailActivityContent[category]}</div>
+                  <div>{DETAIL_ACTIVITY_CONTENT[category]}</div>
                 </Card>
               </div>
             )
@@ -578,7 +578,7 @@ const ActiveContent = ({
                   </div>
                 </div>
                 <Card>
-                  <div>{detailActivityContent[category]}</div>
+                  <div>{DETAIL_ACTIVITY_CONTENT[category]}</div>
                 </Card>
               </div>
             )
@@ -768,7 +768,7 @@ const SavesContent = ({
       <div>
         <div>
           <ul>
-            {detailSaves.map((category, i) => (
+            {DETAIL_SAVES.map((category, i) => (
               <li key={category}>
                 <MenuItem
                   idx={i}
@@ -801,12 +801,12 @@ const SavesContent = ({
       <SelectContent
         selectPickCategory={selectPickCategory}
         pickCategory={pickCategory}
-        categories={[...detailSaves, ...myList]}
-        sub={detailNav[pick]}
+        categories={[...DETAIL_SAVES, ...myList]}
+        sub={DETAIL_NAV[pick]}
       />
       <div>
         <div>
-          <div>{[...detailSaves, ...myList][pickCategory]}</div>
+          <div>{[...DETAIL_SAVES, ...myList][pickCategory]}</div>
           <div>
             {pickCategory < 2 ? (
               <Button color="var(--text-white)" onClick={onAdd}>
