@@ -9,6 +9,8 @@ import {
   DETAIL_NAV,
   DETAIL_SAVES,
   USER_EDIT_INPUT,
+  USER_EDIT_LINKS,
+  USER_EDIT_LINKS_ICON,
 } from '@/constant/constant';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -970,10 +972,11 @@ const EditContent = () => {
 
   const saveImgFile = () => {
     if (!target.current) return;
-    if (!target.current.files || !target.current.files[0]) return;
+    if (!target.current.files) return;
     const file = target.current.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    //서버 유무에 따라 추가 작업 결정
     reader.onloadend = () => {
       const formData = new FormData();
       formData.append('data', file);
@@ -991,6 +994,7 @@ const EditContent = () => {
   };
 
   const inputLabel = Object.keys(USER_EDIT_INPUT);
+  const linkLabel = Object.keys(USER_EDIT_LINKS);
 
   return (
     <EditContentContainer>
@@ -1034,6 +1038,31 @@ const EditContent = () => {
             </div>
           ))}
         </div>
+        <div className="form_title">Links</div>
+        <div className="form_content links">
+          {linkLabel.map((label, i) => (
+            <div key={label}>
+              <label htmlFor={label}>{USER_EDIT_LINKS[label]}</label>
+              <Input id={label} name={label} paddingLeft="30px" />
+              <div className={`link_icon`}>{USER_EDIT_LINKS_ICON[i]}</div>
+            </div>
+          ))}
+        </div>
+        <div className="form_title">Private information</div>
+        <div className="form_content">
+          <div className="full_name_box">
+            <label htmlFor={'full_name'}>Full name</label>
+            <Input id={'full_name'} name={'full_name'} paddingLeft="10px" />
+          </div>
+        </div>
+        <div className="submit_box">
+          <Button color="var(--text-white)">
+            <a>Save profile</a>
+          </Button>
+          <button>
+            <a>Cancel</a>
+          </button>
+        </div>
       </form>
     </EditContentContainer>
   );
@@ -1046,7 +1075,6 @@ const EditContentContainer = styled.div`
   flex-direction: column;
   padding: 30px calc((100% - 800px) / 2);
   width: 100%;
-  margin-bottom: 30px;
   .title {
     width: 100%;
     font-size: 1.5rem;
@@ -1054,9 +1082,9 @@ const EditContentContainer = styled.div`
     border-bottom: 1px solid #dcdfdd;
   }
   form {
-    margin-top: 30px;
     width: 100%;
     .form_title {
+      margin-top: 36px;
       font-size: 1.25rem;
       width: 100%;
       padding: 10px 0px;
@@ -1121,6 +1149,57 @@ const EditContentContainer = styled.div`
       }
       .cm-null {
         background: none !important;
+      }
+    }
+    .links {
+      display: flex;
+      > div {
+        flex: 1;
+        margin: 20px 10px;
+        position: relative;
+        > label {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+        > input {
+          margin-top: 4px;
+        }
+      }
+      .link_icon {
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        opacity: 0.6;
+      }
+    }
+  }
+  .full_name_box {
+    padding: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    input {
+      margin-top: 4px;
+      width: 50%;
+    }
+  }
+  .submit_box {
+    margin: 60px 0px;
+    display: flex;
+    button {
+      width: auto;
+      padding: 10.4px;
+      cursor: pointer;
+    }
+    > button:last-child {
+      margin-left: 10px;
+      border: none;
+      background-color: white;
+      :hover{
+        background-color: #cfeeff75;
+      }
+      > a {
+        color: var(--text-blue);
       }
     }
   }
