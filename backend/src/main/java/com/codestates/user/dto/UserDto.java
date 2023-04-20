@@ -1,5 +1,8 @@
 package com.codestates.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 import org.springframework.util.Assert;
 
@@ -11,6 +14,7 @@ import java.util.List;
 public class UserDto {
     // [회원가입 요청 DTO]
     @Getter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class PostDto{
         @NotBlank
         private String displayName;
@@ -29,6 +33,7 @@ public class UserDto {
     public static class PatchDto{
         private long userId; //추가
         private String displayName;
+        @JsonProperty("about_me")
         private String aboutMe;
         private String location;
 
@@ -42,10 +47,12 @@ public class UserDto {
     // [회원가입 응답 DTO]
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserResponseDto{
         private long userId;
         private String displayName;
         private String email;
+        @JsonProperty("about_me")
         private String aboutMe;
         private String location;
         private LocalDateTime creationDate;
@@ -56,11 +63,13 @@ public class UserDto {
 
     @Getter
     @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserGetResponseDto{
         @NotBlank
         private long userId;
         @NotBlank
         private String displayName;
+        @JsonProperty("about_me")
         private String aboutMe;
         private String location;
         private LocalDateTime creationDate;
