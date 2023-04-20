@@ -23,6 +23,14 @@ import {
 import { useRef, useState } from 'react';
 import axios from 'axios';
 import Input from '@/components/input/Input';
+import dynamic from 'next/dynamic';
+
+//navigator에 의존하는 라이브러리이기 때문에, 클라이언트 측에서만 렌더링 되도록 dynamic을 사용하여 컴포넌트를 래핑해줌
+const DynamicTextEditor = dynamic(
+  () => import('@/components/text_editor/TextEditor'),
+  { ssr: false }
+);
+
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -983,8 +991,6 @@ const EditContent = () => {
   };
 
   const inputLabel = Object.keys(USER_EDIT_INPUT);
-  console.log(USER_EDIT_INPUT);
-  console.log(inputLabel);
 
   return (
     <EditContentContainer>
@@ -1008,14 +1014,23 @@ const EditContent = () => {
             </div>
           </div>
           {inputLabel.map((label) => (
-            <div className="input_box" key={label}>
+            <div
+              className={
+                label === 'about_me' ? 'input_box text_editor' : 'input_box'
+              }
+              key={label}
+            >
               <label htmlFor={label}>{USER_EDIT_INPUT[label]}</label>
-              <Input
-                id={label}
-                name={label}
-                placeholder={label === 'title' ? 'No title has been set' : ''}
-                paddingLeft="10px"
-              />
+              {label === 'about_me' ? (
+                <DynamicTextEditor />
+              ) : (
+                <Input
+                  id={label}
+                  name={label}
+                  placeholder={label === 'title' ? 'No title has been set' : ''}
+                  paddingLeft="10px"
+                />
+              )}
             </div>
           ))}
         </div>
@@ -1031,6 +1046,7 @@ const EditContentContainer = styled.div`
   flex-direction: column;
   padding: 30px calc((100% - 800px) / 2);
   width: 100%;
+  margin-bottom: 30px;
   .title {
     width: 100%;
     font-size: 1.5rem;
@@ -1040,28 +1056,29 @@ const EditContentContainer = styled.div`
   form {
     margin-top: 30px;
     width: 100%;
-    div {
-      padding: 12px 8px;
-    }
     .form_title {
       font-size: 1.25rem;
       width: 100%;
       padding: 10px 0px;
     }
     .form_content {
+      padding: 12px;
       border-radius: 6px;
       border: 1px solid #dcdfdd;
     }
     .input_box {
-      width: 50%;
+      width: 60%;
+      margin: 18px 8px;
       input {
         margin-top: 6px;
       }
     }
     .img_content {
+      margin: 12px 8px;
       font-size: 0.9rem;
       font-weight: 600;
       .img_box {
+        margin-top: 8px;
         position: relative;
         padding: 0px;
         width: 164px;
@@ -1081,7 +1098,9 @@ const EditContentContainer = styled.div`
         position: absolute;
         top: 127px;
         width: 164px;
+        height: 23.5%;
         display: flex;
+        align-items: center;
         justify-content: center;
         z-index: 1;
         background-color: #363636;
@@ -1091,6 +1110,17 @@ const EditContentContainer = styled.div`
         :hover {
           background-color: #1d1c1c;
         }
+      }
+    }
+    .text_editor {
+      margin: 0px;
+      padding: 0px 6px;
+      width: 100%;
+      > div {
+        margin-top: 8px;
+      }
+      .cm-null {
+        background: none !important;
       }
     }
   }
