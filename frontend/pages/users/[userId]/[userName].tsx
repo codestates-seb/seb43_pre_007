@@ -1153,6 +1153,9 @@ const EditContentContainer = styled.div`
     }
     .links {
       display: flex;
+      @media (max-width: 800px) {
+        flex-direction: column;
+      }
       > div {
         flex: 1;
         margin: 20px 10px;
@@ -1181,6 +1184,9 @@ const EditContentContainer = styled.div`
     input {
       margin-top: 4px;
       width: 50%;
+      @media (max-width: 800px) {
+        width: 100%;
+      }
     }
   }
   .submit_box {
@@ -1195,7 +1201,7 @@ const EditContentContainer = styled.div`
       margin-left: 10px;
       border: none;
       background-color: white;
-      :hover{
+      :hover {
         background-color: #cfeeff75;
       }
       > a {
