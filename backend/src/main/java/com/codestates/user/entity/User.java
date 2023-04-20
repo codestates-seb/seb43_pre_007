@@ -11,11 +11,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
+
 @Setter
 @Getter
-@Table(name = "users")
 @Entity
+@NoArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -25,10 +26,10 @@ public class User {
     @Column(nullable = false)
     private String displayName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Column
@@ -54,14 +55,13 @@ public class User {
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
     @OneToMany(mappedBy = "user")
-    private List<Question> question = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Answer> answer = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserTag> userTagList = new ArrayList<>();
-
+    private List<UserTag> userTagLists = new ArrayList<>();
 
 
 

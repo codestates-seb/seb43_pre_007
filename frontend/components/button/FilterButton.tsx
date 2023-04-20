@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent } from 'react';
 import styled from 'styled-components';
 
 export type FilterButtonProps = {
@@ -9,21 +9,20 @@ export type FilterButtonProps = {
 };
 
 export const FilterButton = (props: FilterButtonProps) => {
-  const [current, setCurrent] = useState<string>(props.default || '');
-
   const handleFilterChange = (e: MouseEvent<HTMLLIElement>) => {
     const text = e.currentTarget.textContent;
 
-    if (text) {
-      setCurrent(text);
-      props.onChange(text);
-    }
+    if (text) props.onChange(text);
   };
 
   return (
     <Container>
       {props.filters.map((filter) => (
-        <Filter key={filter} setFilter={current} onClick={handleFilterChange}>
+        <Filter
+          key={filter}
+          setFilter={props.default}
+          onClick={handleFilterChange}
+        >
           {filter}
         </Filter>
       ))}
