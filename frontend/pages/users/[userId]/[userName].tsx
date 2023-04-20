@@ -19,6 +19,8 @@ import {
   pickCategoryState,
   pickState,
 } from '@/recoil/atom';
+import { useRef, useState } from 'react';
+import axios from 'axios';
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -79,7 +81,7 @@ const UserDetail = () => {
                   <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
                 </svg>
               </span>
-              <span>Edit profile</span>
+              <span onClick={() => pickHandler(3)}>Edit profile</span>
             </Button>
           </div>
           <div>
@@ -131,6 +133,7 @@ const UserDetail = () => {
           selectPickCategory={selectPickCategory}
         />
       )}
+      {pick === 3 && <EditContent />}
     </UsersDetailContainer>
   );
 };
@@ -939,6 +942,132 @@ const SavesContentContainer = styled.div`
       > p {
         margin-top: 30px;
         font-size: 0.8rem;
+      }
+    }
+  }
+`;
+
+//========================Edit 컨텐츠========================
+
+const EditContent = () => {
+  const target = useRef<HTMLInputElement>(null);
+  const uploadClick = () => {
+    if (target.current) target.current.click();
+  };
+  const [img, setImg] = useState(
+    'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
+  );
+
+  const saveImgFile = () => {
+    if (!target.current) return;
+    if (!target.current.files) return;
+    const file = target.current.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      const formData = new FormData();
+      formData.append('data', file);
+      axios
+        .post('/img/upload', formData, {
+          headers: {
+            'Content-Type': `multipart/form-data`,
+          },
+        })
+        .then((res) => setImg(res.data))
+        .catch(() => {
+          alert('사진 등록에 실패하였습니다.');
+        });
+    };
+  };
+
+  return (
+    <EditContentContainer>
+      <div className="title">Edit your profile</div>
+      <form>
+        <div className="form_title">Public information</div>
+        <div className="form_content">
+          <div className="img_content">
+            <div>Profile Image</div>
+            <div className="img_box">
+              <img src={img} alt="profile" />
+              <div className="img_change" onClick={uploadClick}>
+                Change picture
+              </div>
+              <input
+                ref={target}
+                onChange={saveImgFile}
+                type="file"
+                accept="image/*"
+              ></input>
+            </div>
+          </div>
+        </div>
+      </form>
+    </EditContentContainer>
+  );
+};
+
+const EditContentContainer = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px calc((100% - 800px) / 2);
+  width: 100%;
+  .title {
+    width: 100%;
+    font-size: 1.5rem;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #dcdfdd;
+  }
+  form {
+    margin-top: 30px;
+    width: 100%;
+    div {
+      padding: 12px 8px;
+    }
+    .form_title {
+      font-size: 1.25rem;
+      width: 100%;
+      padding: 10px 0px;
+    }
+    .form_content {
+      border-radius: 6px;
+      border: 1px solid #dcdfdd;
+    }
+    .img_content {
+      font-size: 0.9rem;
+      font-weight: 600;
+      .img_box {
+        position: relative;
+        padding: 0px;
+        width: 164px;
+        height: 164px;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+        }
+        input {
+          display: none;
+        }
+      }
+      .img_change {
+        font-weight: normal;
+        font-size: 0.8rem;
+        position: absolute;
+        top: 127px;
+        width: 164px;
+        display: flex;
+        justify-content: center;
+        z-index: 1;
+        background-color: #363636;
+        border-radius: 0px 0px 4px 4px;
+        color: white;
+        cursor: pointer;
+        :hover {
+          background-color: #1d1c1c;
+        }
       }
     }
   }
