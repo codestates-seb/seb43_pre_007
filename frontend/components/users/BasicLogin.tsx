@@ -1,7 +1,7 @@
+import axios from 'axios';
 import styled, { css } from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 
 import { useRecoilState } from 'recoil';
@@ -90,7 +90,6 @@ const FormInputs = styled.input<InvalidInput>`
 `;
 
 const BasicLogin = () => {
-  // 로그인 했는가?
   // 전역 변수 recoil(클라이언트)
   const [userLog, setUserLog] = useRecoilState(userLogState);
   // 로그인 실패시 안내 문구
@@ -114,6 +113,10 @@ const BasicLogin = () => {
     if (email !== '') setemptyEmail(false);
     // email이 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
     if (password !== '') setemptyPassword(false);
+    if (loginFailed) {
+      if (email === '') setemptyEmail(true);
+      if (password === '') setemptyPassword(true);
+    }
   }, [email, password]);
   // 로그인 눌렀을때
   const onSubmit = async (e: React.FormEvent) => {
@@ -123,7 +126,7 @@ const BasicLogin = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    // 비동기 처리(?)
+    // 유효성 검사 확인
     let emailcheck = false;
     let passwordcheck = false;
 
@@ -151,7 +154,7 @@ const BasicLogin = () => {
     e.preventDefault();
 
     // 유효성 검사가 다 통과되면 로그인 요청
-    if (emailcheck && passwordcheck) {
+    if (emailcheck || passwordcheck) {
       return (
         axios
           .post('/users/login', { email, password })
@@ -184,7 +187,6 @@ const BasicLogin = () => {
     }
   };
 
-  emptyEmail ? 'red' : emptyPassword ? 'blue' : 'green';
   return (
     <FormContainer className="form-container">
       <div className="login-email">
@@ -195,19 +197,20 @@ const BasicLogin = () => {
           value={email}
           onChange={onInputChange}
           border={
-            emptyEmail ||
-            emptyPassword ||
-            ((!emptyEmail || !emptyPassword) &&
-              loginFailed &&
-              (!invalidEmail || !invalidPassword))
+            emptyEmail || emptyPassword
+              ? '#DE4F54'
+              : (!emptyEmail || !emptyPassword) &&
+                loginFailed &&
+                (!invalidEmail || !invalidPassword)
               ? '#DE4F54'
               : null
           }
         />
-        {emptyEmail ? <p className="empty">Email cannot be empty.</p> : null}
-        {(!emptyEmail || !emptyPassword) &&
-        loginFailed &&
-        (!invalidEmail || !invalidPassword) ? (
+        {emptyEmail ? (
+          <p className="empty">Email cannot be empty.</p>
+        ) : (!emptyEmail || !emptyPassword) &&
+          loginFailed &&
+          (!invalidEmail || !invalidPassword) ? (
           <p className="valid">The email or password is incorrect.</p>
         ) : null}
       </div>
