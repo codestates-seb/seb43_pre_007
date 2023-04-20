@@ -33,9 +33,9 @@ public interface UserMapper {
         userGetResponseDto.setCreationDate(user.getCreationDate());
         userGetResponseDto.setQuestionCount(user.getQuestionCount());
         userGetResponseDto.setAnswerCount(user.getAnswerCount());
-        userGetResponseDto.setQuestions(ToQuestionResponseDto(user.getQuestion()));
-        userGetResponseDto.setAnswers(ToAnswerResponseDto(user.getAnswer()));
-        userGetResponseDto.setTags(ToTagResponseDtos(user.getUserTagList()));
+        userGetResponseDto.setQuestions(ToQuestionResponseDto(user.getQuestions()));
+        userGetResponseDto.setAnswers(ToAnswerResponseDto(user.getAnswers()));
+        userGetResponseDto.setTags(ToTagResponseDtos(user.getUserTagLists()));
         return userGetResponseDto;
     }
 
@@ -118,8 +118,6 @@ public interface UserMapper {
         if (userList == null) {
             return null;
         }
-        //🟡 이중으로 감싸진 data, 이부분 주석 1
-        //   List<UserDto.UserGetResponseDtos> responseList = new ArrayList<>(userList.size());
 
         List<UsersAllResponseDtos> responseList = new ArrayList<>(userList.size());
         for (User user : userList) {
@@ -131,16 +129,12 @@ public interface UserMapper {
             usersAllResponseDtos.setCreationDate(user.getCreationDate());
             usersAllResponseDtos.setQuestionCount(user.getQuestionCount());
             usersAllResponseDtos.setAnswerCount(user.getAnswerCount());
-            usersAllResponseDtos.setTags(ToTagResponseDto(user.getUserTagList()));
-
-//            UserDto.UserGetResponseDtos userGetResponseDtos = new UserDto.UserGetResponseDtos();
-//            userGetResponseDtos.setData(allResponseDtos);
-
-            //🟡 이부분 주석 2 해서 테스트해보자
+            usersAllResponseDtos.setTags(ToTagResponseDto(user.getUserTagLists()));
             responseList.add(usersAllResponseDtos);
         }
         return responseList;
     }
+
 
     // [회원전체조회 : tagList]
     default List<UsersTagResponseDto.UserTagResponseDto> ToTagResponseDto(List<UserTag> userTagList) {
