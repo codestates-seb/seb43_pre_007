@@ -107,3 +107,7 @@ export const FOOTER_SOCIAL = [
 ];
 
 export const DAYS_FILTER = ['week', 'month', 'quarter', 'year', 'all'];
+
+export const USER_EDIT_INPUT: {
+  [key: string]: string;
+} = { display_name: 'Display Name', location: 'Location', title: 'Title' };

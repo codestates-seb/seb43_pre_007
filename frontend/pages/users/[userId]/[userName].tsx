@@ -8,6 +8,7 @@ import {
   DETAIL_ACTIVITY_CONTENT,
   DETAIL_NAV,
   DETAIL_SAVES,
+  USER_EDIT_INPUT,
 } from '@/constant/constant';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -21,6 +22,7 @@ import {
 } from '@/recoil/atom';
 import { useRef, useState } from 'react';
 import axios from 'axios';
+import Input from '@/components/input/Input';
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -980,6 +982,10 @@ const EditContent = () => {
     };
   };
 
+  const inputLabel = Object.keys(USER_EDIT_INPUT);
+  console.log(USER_EDIT_INPUT);
+  console.log(inputLabel);
+
   return (
     <EditContentContainer>
       <div className="title">Edit your profile</div>
@@ -1001,6 +1007,17 @@ const EditContent = () => {
               ></input>
             </div>
           </div>
+          {inputLabel.map((label) => (
+            <div className="input_box" key={label}>
+              <label htmlFor={label}>{USER_EDIT_INPUT[label]}</label>
+              <Input
+                id={label}
+                name={label}
+                placeholder={label === 'title' ? 'No title has been set' : ''}
+                paddingLeft="10px"
+              />
+            </div>
+          ))}
         </div>
       </form>
     </EditContentContainer>
@@ -1034,6 +1051,12 @@ const EditContentContainer = styled.div`
     .form_content {
       border-radius: 6px;
       border: 1px solid #dcdfdd;
+    }
+    .input_box {
+      width: 50%;
+      input {
+        margin-top: 6px;
+      }
     }
     .img_content {
       font-size: 0.9rem;
