@@ -2,7 +2,7 @@ import { rest } from 'msw';
 import { Users } from './dummy/users';
 
 export const handlers = [
-  rest.get('/users', async (req, res, ctx) => {
+  rest.get('/users', (req, res, ctx) => {
     const url = new URL(req.url);
     const size = Number(url.searchParams.get('size'));
     const page = Number(url.searchParams.get('page'));
