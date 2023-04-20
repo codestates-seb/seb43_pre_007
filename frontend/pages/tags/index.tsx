@@ -1,16 +1,38 @@
 import { FilterButton } from '@/components/button/FilterButton';
 import Card from '@/components/card/Card';
 import Input from '@/components/input/Input';
-import { useState } from 'react';
+import Pagenation from '@/components/pagenation/Pagenation';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/tags
 const Tags = () => {
   const [pickFilter, setPickFilter] = useState('Reputation');
+  const router = useRouter();
+  const pageNum = new URLSearchParams(router.asPath).get('page');
+  const [page, setPage] = useState(Number(pageNum) || 1);
+  const { isLoading, error, data, refetch } = useQuery<
+    { data: Tags[]; total: number },
+    Error
+  >('tags', () => axios(`/tags?size=36&page=${page}`).then((res) => res.data));
+  useEffect(() => {
+    refetch();
+    router.push({
+      pathname: router.pathname,
+      query: { size: 36, page: page },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, refetch]);
+
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <TagsContainer>
-      <div className="title">Users</div>
+      <div className="title">Tags</div>
       <p className="title_sub">
         A tag is a keyword or label that categorizes your question with other,
         similar questions. Using the right tags makes it easier for others to
@@ -31,15 +53,28 @@ const Tags = () => {
           />
         </div>
       </div>
+      {isLoading && (
+        <div className="loading_message">
+          <p>Loading...</p>
+        </div>
+      )}
       <div className="content">
-        <Card>
-          <div>태그</div>
-          <div>본문</div>
-          <div>
-            <div>ques</div>
-            <div>week</div>
-          </div>
-        </Card>
+        {data?.data.map((tag) => (
+          <Card key={tag.name}>
+            <div className="tag_name">
+              <a>{tag.name}</a>
+            </div>
+            <div className="tag_info">{tag.info}</div>
+            <div className="tag_count">{`${tag.count} questions`}</div>
+          </Card>
+        ))}
+      </div>
+      <div className="pagenation_box">
+        <Pagenation
+          initialPage={page}
+          onPageChange={setPage}
+          pageSize={data ? Math.round(data.total / 36) : 0}
+        />
       </div>
     </TagsContainer>
   );
@@ -50,6 +85,16 @@ export default Tags;
 const TagsContainer = styled.div`
   padding: 24px;
   min-height: 60vh;
+  .loading_message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    > p {
+      font-size: 1.5rem;
+    }
+  }
   > .title {
     font-size: 1.5rem;
   }
@@ -117,5 +162,45 @@ const TagsContainer = styled.div`
     @media (max-width: 640px) {
       grid-template-columns: repeat(1, minmax(0, 1fr));
     }
+    > .card {
+      padding: 12px;
+      margin-right: 10px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      overflow: hidden;
+      white-space: nowrap; /* 줄 바꿈 없이 한 줄에 표시합니다 */
+      text-overflow: ellipsis; /* 잘린 부분을 ...으로 표시합니다 */
+      .tag_name {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        margin-bottom: 16px;
+        > a {
+          background-color: aliceblue;
+          padding: 6px 4.8px;
+          color: #3077b6;
+          border-radius: 4px;
+        }
+      }
+      .tag_info {
+        width: 100%;
+        font-size: 0.75rem;
+        margin-bottom: 20px;
+      }
+
+      .tag_count {
+        width: 100%;
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+        opacity: 0.6;
+      }
+    }
+  }
+  .pagenation_box {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    margin: 30px 0px;
   }
 `;
