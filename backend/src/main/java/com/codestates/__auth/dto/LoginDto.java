@@ -1,4 +1,4 @@
-package com.codestates.user.dto;
+package com.codestates.__auth.dto;
 
 import lombok.Getter;
 

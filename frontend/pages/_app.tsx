@@ -2,11 +2,12 @@ import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import '../styles/App.css';
+import 'easymde/dist/easymde.min.css';
 import Header from '@/components/header/Header';
 import Container from '@/components/container/Container';
 import { useRouter } from 'next/router';
-import { nonContainerRoutes } from '@/constant/constant';
 import Footer from '@/components/footer/Footer';
+import { NON_CONTAINER_ROUTES } from '@/constant/constant';
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <Header />
-        {!nonContainerRoutes.includes(currentPath) ? (
+        {!NON_CONTAINER_ROUTES.includes(currentPath) ? (
           <Container>
             <Component {...pageProps} />
           </Container>
