@@ -4,13 +4,14 @@ import com.codestates.answer.entity.Answer;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.question.entity.Question;
-import com.codestates.question.repository.QuestionRepository;
 import com.codestates.user.entity.User;
 import com.codestates.user.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,20 +22,33 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final QuestionRepository questionRepository;
+    private final ApplicationEventPublisher publisher;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, QuestionRepository questionRepository) {
+    public UserService(UserRepository userRepository,
+                       ApplicationEventPublisher publisher,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.questionRepository = questionRepository;
+        this.publisher = publisher;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // 회원등록
+    // [회원등록]
     public User createUser(User user) {
         verifyExistsEmail(user.getEmail());
+
+        // 회원가입시, 사용자 password 암호화
+//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(encryptedPassword);
+//        User saveUser = userRepository.save(user);
+
+//        // 신규회원등록시 인증 이메일전송을 위한 event 발생로직
+//        publisher.publishEvent(new UserRegistrationEvent(saveUser));
         return userRepository.save(user);
     }
 
-    // 회원프로필수정
+
+    // [회원프로필수정]
     public User updateUser(User user) {
         User findUser = findVerifiedUser(user.getUserId());
         Optional.ofNullable(findUser.getDisplayName())
@@ -51,6 +65,7 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
+
     // 회원조회
     public User findUser(long userId){
        User user = findVerifiedUser(userId);
@@ -58,6 +73,7 @@ public class UserService {
        user.setAnswerCount(getAnswerCount(user.getUserId()));
        return user;
     }
+
 
     // 전체회원조회(우선 id 기준 정렬)
     public Page<User> findUsers(int page, int size) {
@@ -76,6 +92,7 @@ public class UserService {
         return new PageImpl<>(updatedList, users.getPageable(), users.getTotalElements());
     }
 
+
     // 회원탈퇴
     public void removeUser(long userId){
         User user = findVerifiedUser(userId);
@@ -83,12 +100,14 @@ public class UserService {
         userRepository.save(user);
     }
 
+
     // 이미 등록된 이메일인지 확인
     private void verifyExistsEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent())
             throw new BusinessLogicException(ExceptionCode.USER_EXIST);
     }
+
 
     // 존재하는 회원인지 확인
     private User findVerifiedUser(long userId) {
@@ -99,6 +118,7 @@ public class UserService {
         }
         return findUser;
     }
+
 
     // questionCount 정보불러오기
     private int getQuestionCount(long userId){
@@ -113,6 +133,7 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
     }
+
 
     private int getAnswerCount(long userId){
         Optional<User> findUser = userRepository.findById(userId);
