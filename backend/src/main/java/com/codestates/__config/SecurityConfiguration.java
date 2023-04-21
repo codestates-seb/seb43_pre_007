@@ -68,17 +68,17 @@ public class SecurityConfiguration {
         // CORS 설정로직으로, 요청을 허용할 Origin 과 HTTP Method 설정
         // CorsConfiguration 객체 : 모든 도메인의 요청을 허용, 아래 메서드에 대한 요청 허용
         // UrlBased...Source 객체 : CorsConfiguration 객체등록 및 CORS 설정을 등록할 URL 패턴지정
-    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
 }
-
 
 
 
