@@ -21,7 +21,7 @@ const Container = ({ children }: ContainerProps) => {
 };
 export default Container;
 
-const PagesContainer = styled.div`
+const PagesContainer = styled.main`
   width: 100%;
   display: flex;
   justify-content: center;
