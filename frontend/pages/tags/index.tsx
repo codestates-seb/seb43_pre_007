@@ -60,7 +60,7 @@ const Tags = () => {
       )}
       <div className="content">
         {data?.data.map((tag) => (
-          <Card key={tag.name}>
+          <Card key={tag.tag_id}>
             <div className="tag_name">
               <a>{tag.name}</a>
             </div>
@@ -152,6 +152,7 @@ const TagsContainer = styled.div`
     padding-top: 10px;
     display: grid;
     grid-row-gap: 30px;
+    grid-column-gap: 10px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     @media (max-width: 1264px) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -164,13 +165,8 @@ const TagsContainer = styled.div`
     }
     > .card {
       padding: 12px;
-      margin-right: 10px;
       display: flex;
       flex-direction: column;
-      flex-wrap: wrap;
-      overflow: hidden;
-      white-space: nowrap; /* 줄 바꿈 없이 한 줄에 표시합니다 */
-      text-overflow: ellipsis; /* 잘린 부분을 ...으로 표시합니다 */
       .tag_name {
         display: flex;
         justify-content: space-between;
@@ -184,9 +180,14 @@ const TagsContainer = styled.div`
         }
       }
       .tag_info {
-        width: 100%;
         font-size: 0.75rem;
         margin-bottom: 20px;
+        word-break: break-word;
+        margin-bottom: var(--su12);
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .tag_count {
