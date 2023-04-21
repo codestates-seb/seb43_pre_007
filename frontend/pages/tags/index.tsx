@@ -1,14 +1,13 @@
-import { FilterButton } from '@/components/button/FilterButton';
+import styled from 'styled-components';
 import Card from '@/components/card/Card';
 import Input from '@/components/input/Input';
 import Pagenation from '@/components/pagenation/Pagenation';
+import { FilterButton } from '@/components/button/FilterButton';
 import { api } from '@/util/api';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/tags
 const Tags = () => {
