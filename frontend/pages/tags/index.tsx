@@ -2,6 +2,7 @@ import { FilterButton } from '@/components/button/FilterButton';
 import Card from '@/components/card/Card';
 import Input from '@/components/input/Input';
 import Pagenation from '@/components/pagenation/Pagenation';
+import { api } from '@/util/api';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -18,7 +19,7 @@ const Tags = () => {
   const { isLoading, error, data, refetch } = useQuery<
     { data: Tags[]; total: number },
     Error
-  >('tags', () => axios(`/tags?size=36&page=${page}`).then((res) => res.data));
+  >('tags', () => api(`/tags?size=36&page=${page}`).then((res) => res.data));
   useEffect(() => {
     refetch();
     router.push({
