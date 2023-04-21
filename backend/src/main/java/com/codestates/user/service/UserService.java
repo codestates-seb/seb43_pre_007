@@ -1,15 +1,20 @@
 package com.codestates.user.service;
 
+import com.codestates.answer.entity.Answer;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.question.entity.Question;
 import com.codestates.question.repository.QuestionRepository;
 import com.codestates.user.entity.User;
 import com.codestates.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,18 +44,36 @@ public class UserService {
         Optional.ofNullable(user.getLocation())
                 .ifPresent(location->findUser.setLocation(location));
 
+        //questionCount 정보를 user 의 questionCount 필드에 불러오기
+        findUser.setQuestionCount(getQuestionCount(user.getUserId()));
+        findUser.setAnswerCount(getAnswerCount(user.getUserId()));
+
         return userRepository.save(findUser);
     }
 
     // 회원조회
     public User findUser(long userId){
        User user = findVerifiedUser(userId);
+       user.setQuestionCount(getQuestionCount(user.getUserId()));
+       user.setAnswerCount(getAnswerCount(user.getUserId()));
        return user;
     }
 
     // 전체회원조회(우선 id 기준 정렬)
     public Page<User> findUsers(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
+        Page<User> users =  userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
+        List<User> userList = users.getContent();
+        List<User> updatedList = new ArrayList<>();
+
+        for(User user : userList){
+//            int questionCount = questionRepository.countByUserId(user.getUserId());
+            int questionCount = getQuestionCount(user.getUserId());
+            int answerCount = getAnswerCount(user.getUserId());
+            user.setQuestionCount(questionCount);
+            user.setAnswerCount(answerCount);
+            updatedList.add(user);
+        }
+        return new PageImpl<>(updatedList, users.getPageable(), users.getTotalElements());
     }
 
     // 회원탈퇴
@@ -75,5 +98,32 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
         return findUser;
+    }
+
+    // questionCount 정보불러오기
+    private int getQuestionCount(long userId){
+        Optional<User> findUser = userRepository.findById(userId);
+        if(findUser.isPresent()){
+            User user = findUser.get();
+            List<Question> questionList = user.getQuestions();
+
+            return questionList.size();
+
+        } else {
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+        }
+    }
+
+    private int getAnswerCount(long userId){
+        Optional<User> findUser = userRepository.findById(userId);
+        if(findUser.isPresent()){
+            User user = findUser.get();
+            List<Answer> answerList = user.getAnswers();
+
+            return answerList.size();
+
+        } else {
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+        }
     }
 }

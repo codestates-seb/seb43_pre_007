@@ -1,5 +1,10 @@
 import { rest } from 'msw';
+<<<<<<< HEAD
 import { USERS } from './dummy/users';
+=======
+import { Users } from './dummy/users';
+import { questions } from './dummy/questions';
+>>>>>>> 9846414bc4f49339723a6941ad67b080be421880
 
 export const handlers = [
   rest.get('/users', (req, res, ctx) => {
@@ -10,10 +15,25 @@ export const handlers = [
     const data = USERS.slice((page - 1) * size, page * size);
     return res(ctx.status(200), ctx.json({ data, total }));
   }),
+<<<<<<< HEAD
   //이미지 임시 테스트
   rest.post('/img', (req, res, ctx) => {
     const data =
       'https://www.gravatar.com/avatar/0555bd0deb416a320a0069abef08078a?s=256&d=identicon&r=PG&f=1';
     return res(ctx.status(200), ctx.json(data));
+=======
+
+  rest.get('/questions', async (req, res, ctx) => {
+    const size = req.url.searchParams.get('perPage') || 10;
+    const page = req.url.searchParams.get('page') || 1;
+    const filter = req.url.searchParams.get('filter') || 'newest';
+
+    console.log(size, page);
+
+    return res(
+      ctx.status(200),
+      ctx.json(questions(Number(page), Number(size)))
+    );
+>>>>>>> 9846414bc4f49339723a6941ad67b080be421880
   }),
 ];

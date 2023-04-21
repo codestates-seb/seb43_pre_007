@@ -31,11 +31,11 @@ public class TagController {
     }
 
     //태그조회
-    @GetMapping("/{tags}")
-    public ResponseEntity getTag(@PathVariable String tags,
+    @GetMapping("/{tag-id}")
+    public ResponseEntity getTag(@Positive@PathVariable long tagId,
                                  @Positive @RequestParam("page") int page,
                                  @Positive @RequestParam("size") int size){
-        Page<QuestionTag> tagPage = tagService.findTag(tags, page-1, size);
+        Page<QuestionTag> tagPage = tagService.findTag(tagId, page-1, size);
         List<QuestionTag> tagList = tagPage.getContent();
         List<TagDto.ResponseDto> responseDtos = tagMapper.tagToTagResponseDto(tagList);
         return new ResponseEntity<>(

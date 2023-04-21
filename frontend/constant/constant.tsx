@@ -108,6 +108,12 @@ export const FOOTER_SOCIAL = [
 
 export const DAYS_FILTER = ['week', 'month', 'quarter', 'year', 'all'];
 
+export const INIT_FILTER = { FILTER: 'Newest', PER_PAGE: 10, PAGE: 1 };
+
+export const QUESTION_PER_PAGE_LIST = [10, 20, 30];
+
+export const QUESTION_FILTER_LIST = ['Newest', 'Active', 'Boundtied'];
+
 export const USER_EDIT_INPUT: {
   [key: string]: string;
 } = {
