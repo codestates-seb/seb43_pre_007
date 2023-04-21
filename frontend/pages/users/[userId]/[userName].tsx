@@ -960,7 +960,7 @@ const SavesContentContainer = styled.div`
   }
 `;
 
-//========================Edit 컨텐츠========================
+//=======================Edit 컨텐츠=======================
 
 const EditContent = () => {
   const target = useRef<HTMLInputElement>(null);
