@@ -3,7 +3,9 @@ package com.codestates.question.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -18,6 +20,8 @@ public class QuestionDto {
 
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Post{
 
@@ -35,6 +39,8 @@ public class QuestionDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Patch{
         private long questionId;
@@ -53,6 +59,8 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class POSTResponse{
         private QuestionUserResponseDto user;
@@ -62,6 +70,8 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class GETResponse{
         private QuestionUserResponseDto user;
@@ -72,6 +82,8 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class GETALLResponse {
         private QuestionUserResponseDto user;
@@ -81,6 +93,8 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Response{
         private long questionId;
