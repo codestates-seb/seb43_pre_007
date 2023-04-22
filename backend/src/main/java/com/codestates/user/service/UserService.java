@@ -1,5 +1,6 @@
 package com.codestates.user.service;
 
+import com.codestates.__event.UserRegistrationEvent;
 import com.codestates.answer.entity.Answer;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -38,18 +39,19 @@ public class UserService {
         verifyExistsEmail(user.getEmail());
 
         // 회원가입시, 사용자 password 암호화
-//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encryptedPassword);
-//        User saveUser = userRepository.save(user);
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+        User saveUser = userRepository.save(user);
 
-//        // 신규회원등록시 인증 이메일전송을 위한 event 발생로직
-//        publisher.publishEvent(new UserRegistrationEvent(saveUser));
+        // 신규회원등록시 인증 이메일전송을 위한 event 발생로직
+        publisher.publishEvent(new UserRegistrationEvent(saveUser));
         return userRepository.save(user);
     }
 
 
     // [회원프로필수정]
     public User updateUser(User user) {
+
         User findUser = findVerifiedUser(user.getUserId());
         Optional.ofNullable(findUser.getDisplayName())
                 .ifPresent(displayName->findUser.setDisplayName(displayName));
@@ -147,4 +149,22 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
     }
+
+
+//    // 로그인요청의 email 로 User 객체반환 (로그인요청시 JWT 토큰정보와 user DB 비교를위해 필요)
+//    public User findUserEmail(LoginDto loginDto) {
+//        String email = loginDto.getEmail();
+//        Optional<User> optionalUser = userRepository.findByEmail(email);
+//
+//        if(optionalUser.isEmpty()){
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//        User user = optionalUser.get();
+//        String password = loginDto.getPassword();
+//
+//        if(!password.equals(user.getPassword())){ //Error 리스폰스 적용해야합니다.
+//            throw new BusinessLogicException(ExceptionCode.USER_EXIST); //일단 임시응답
+//        }
+//        return user;
+//    }
 }

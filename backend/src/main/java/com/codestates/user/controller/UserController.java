@@ -1,11 +1,15 @@
 package com.codestates.user.controller;
 
 import com.codestates.dto.MultiResponseDto;
-import com.codestates.user.dto.UsersAllResponseDtos;
 import com.codestates.user.dto.UserDto;
+import com.codestates.user.dto.UsersAllResponseDtos;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
 import com.codestates.user.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -41,11 +45,55 @@ public class UserController {
     }
 
 
+//    // [로그인]
+//    @PostMapping("/login")
+//    public ResponseEntity<String> postLogin(@RequestHeader(name="Authorization") String token,
+//                                            @Valid @RequestBody LoginDto requestBody){
+//
+//        String secretKey = System.getenv("JWT_SECRET_KEY");
+//        Jws<Claims> jws;
+//
+//        try{
+//            jws = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build().parseClaimsJws(token);
+//        } catch (JwtException e){
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        long jwtUserId = Long.parseLong(jws.getBody().getSubject());
+//        User user = userService.findUserEmail(requestBody);
+//        long dbUserId = user.getUserId();
+//
+//        if(jwtUserId != dbUserId){
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+
     // [회원프로필 수정]
     @PatchMapping("/{user-id}/edit")
-    public ResponseEntity patchUser(@PathVariable("user-id") @Positive long userId,
+    public ResponseEntity patchUser(@RequestHeader(name="Authorization") String token,
+                                    @PathVariable("user-id") @Positive long userId,
                                     @Valid @RequestBody UserDto.PatchDto requestBody){
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody.addUserId(userId)));
+
+        //Todo: JWT 검증
+        String secretKey = System.getenv("JWT_SECRET_KEY");
+        Jws<Claims> jws;
+
+        try {
+            jws = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build().parseClaimsJws(token);
+        } catch (JwtException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        long jwtUserId = Long.parseLong(jws.getBody().getSubject());
+
+        if(jwtUserId != userId){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody));
         return new ResponseEntity<>(userMapper.userToUserResponseDto(user),HttpStatus.OK);
     }
 
