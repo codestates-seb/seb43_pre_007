@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -30,25 +29,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 
 
-//Todo: attemptAuthentication 메소드
-//    : 사용자가 입력한 로그인 정보를 담은 UsernamePasswordAuthenticationToken 객체를 생성한다.
+// Todo: attemptAuthentication 메소드
+// 사용자가 입력한 로그인 정보를 담은 UsernamePasswordAuthenticationToken 객체를 생성한다.
 
-//Todo: successfulAuthentication 메소드
-//    : 사용자인증(Authentication)이 성공하면 호출되는 메서드.
-//    : JWT 액세스토큰, 리프레시토큰을 생성해서 HTTP 응답헤더에 추가하고 인증성공핸들러를 호출하는 역할을 한다.
+// Todo: successfulAuthentication 메소드
+// 사용자인증(Authentication)이 성공하면 호출되는 메서드.
+// JWT 액세스토큰, 리프레시토큰을 생성해서 HTTP 응답헤더에 추가하고 인증성공핸들러를 호출하는 역할을 한다.
 
-//Todo: delegateAccessToken 메소드
-//    : User 객체에서 claims 정보를 추출해 토큰에 필요한 정보를 만든 뒤 JWT Access Token 을 생성한다.
+// Todo: delegateAccessToken 메소드
+// User 객체에서 claims 정보를 추출해 토큰에 필요한 정보를 만든 뒤 JWT Access Token 을 생성한다.
 
-//Todo: delegateRefreshToken 메소드
-//    : 리프레시 토큰을 생성한다.
-//    : 단순히 액세스토큰을 발급할 수 있는 권한을가진 사용자를 식별할 정보만 가지면돼서 클레임(권한정보 등)이 필요없다.
+// Todo: delegateRefreshToken 메소드
+// 리프레시 토큰을 생성한다.
+// 단순히 액세스토큰을 발급할 수 있는 권한을가진 사용자를 식별할 정보만 가지면돼서 클레임(권한정보 등)이 필요없다.
 
 
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException {
+                                                HttpServletResponse response){
 
         //ObjectMapper 는 HTTP 요청바디를 LoginDto 객체(사용자가 입력한 로그인 정보)로 변환한다.
         ObjectMapper objectMapper = new ObjectMapper();
