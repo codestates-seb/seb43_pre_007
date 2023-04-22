@@ -1,0 +1,254 @@
+= Stack Overflow 클론코딩
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+Team T.M.T (Too Much Talker)
+
+v1.0.0, 2022.04.21
+
+***
+API 문서 개요
+
+ 이 문서는 프론트엔드와 백엔드가 협업하여 StackOverflow 웹 사이트를 클론 코딩하는 프로젝트에 대한 API 문서 입니다.
+
+CAUTION: 프로젝트 진행 상황에 따라 수정 되거나, 기능이 추가될 수 있습니다.
+
+***
+
+== UserController
+=== 회원 등록
+
+.http-request
+include::{snippets}/post-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-user/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-user/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-user/response-fields.adoc[]
+
+=== 회원 수정
+
+.path-parameters
+include::{snippets}/patch-user/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/patch-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/patch-user/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-user/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-user/response-fields.adoc[]
+
+=== 회원 조회
+
+.path-parameters
+include::{snippets}/get-user/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/get-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-user/request-fields.adoc[]
+
+.http-response
+include::{snippets}/get-user/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-user/response-fields.adoc[]
+
+
+=== 회원 전체조회
+
+.http-request
+include::{snippets}/get-users/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-users/request-fields.adoc[]
+
+.http-response
+include::{snippets}/get-users/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-users/response-fields.adoc[]
+
+
+=== 회원 삭제
+
+.path-parameters
+include::{snippets}/delete-user/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/delete-user/http-request.adoc[]
+
+.request-fields
+include::{snippets}/delete-user/request-fields.adoc[]
+
+.http-response
+include::{snippets}/delete-user/http-response.adoc[]
+
+.response-fields
+include::{snippets}/delete-user/response-fields.adoc[]
+
+
+***
+
+== QuestionController
+
+=== 질문 등록
+
+.http-request
+include::{snippets}/post-question/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-question/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-question/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-question/response-fields.adoc[]
+
+
+
+=== 질문 수정
+
+.path-parameters
+include::{snippets}/patch-question/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/patch-question/http-request.adoc[]
+
+.request-fields
+include::{snippets}/patch-question/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-question/http-response.adoc[]
+
+
+=== 질문 조회
+
+.path-parameters
+include::{snippets}/get-question/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/get-question/http-request.adoc[]
+
+.http-response
+include::{snippets}/get-question/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-question/response-fields.adoc[]
+
+
+=== 질문 전체조회
+
+.request-parameters
+include::{snippets}/get-questions/request-parameters.adoc[]
+
+.http-request
+include::{snippets}/get-questions/http-request.adoc[]
+
+.http-response
+include::{snippets}/get-questions/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-questions/response-fields.adoc[]
+
+
+=== 질문 삭제
+
+.path-parameters
+include::{snippets}/delete-question/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/delete-question/http-request.adoc[]
+
+.http-response
+include::{snippets}/delete-question/http-response.adoc[]
+
+
+***
+== AnswerController
+=== 답변 등록
+
+.http-request
+include::{snippets}/post-answer/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-answer/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-answer/http-response.adoc[]
+
+
+=== 답변 수정
+
+.path-parameters
+include::{snippets}/patch-answer/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/patch-answer/http-request.adoc[]
+
+.request-fields
+include::{snippets}/patch-answer/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-answer/http-response.adoc[]
+
+
+
+=== 답변 삭제
+
+.path-parameters
+include::{snippets}/delete-answer/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/delete-answer/http-request.adoc[]
+
+.http-response
+include::{snippets}/delete-answer/http-response.adoc[]
+
+
+***
+== TagController
+=== 태그 조회 (해당 태그가 사용된 전체질문 조회)
+
+.path-parameters
+include::{snippets}/get-tag/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/get-tag/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-tag/request-fields.adoc[]
+
+.http-response
+include::{snippets}/get-tag/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-tag/response-fields.adoc[]
+
+=== 태그 전체조회
+
+.http-request
+include::{snippets}/get-tags/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-tags/request-fields.adoc[]
+
+.http-response
+include::{snippets}/get-tags/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-tags/response-fields.adoc[]

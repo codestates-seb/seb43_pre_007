@@ -2,7 +2,9 @@ package com.codestates.question.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +13,8 @@ import javax.validation.constraints.Positive;
 //TODO : DTO 작성
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class QuestionTagDto {
     @Positive
