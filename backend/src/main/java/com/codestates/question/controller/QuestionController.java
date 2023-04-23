@@ -38,8 +38,8 @@ public class QuestionController {
     @PostMapping("/add")
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto,
                                        Authentication authentication) {
-        Map<String,Object> principal = (Map) authentication.getPrincipal();
-        long userId = (long) principal.get("userId");
+        Map<String,Object> user2 = (Map) authentication.getPrincipal();
+        Object userId = user2.get("userId");
 
         Question question = questionService.createQuestion(mapper.questionPostDtoToQuestion(questionPostDto));
 
