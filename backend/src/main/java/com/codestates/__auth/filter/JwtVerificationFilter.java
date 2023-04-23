@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -73,9 +74,12 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 //Todo: setAuthenticationToContext 메서드
 //검증된 클레임정보를 바탕으로 사용자 인증정보와 권한정보를 생성해서 SecurityContextHolder 에 저장
     private void setAuthenticationToContext(Map<String, Object> claims){
-        String username = (String) claims.get("username");
-       //List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles")); 권한사용시 필요
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null);
+        Map<String, Object> principal = new HashMap<>();
+        principal.put("userId", claims.get("userId"));
+        principal.put("username", claims.get("username"));
+        //String username = (String) claims.get("username");
+        //List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles")); 권한사용시 필요
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
     }
