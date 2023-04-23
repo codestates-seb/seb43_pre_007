@@ -88,6 +88,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private String delegateAccessToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         //토큰발급시 userId 넣어보기
+        claims.put("userId", user.getUserId()); //UserId 넣기
         claims.put("username", user.getEmail());
 
         String subject = user.getEmail(); //✅UserId 식별자로 대체해보기

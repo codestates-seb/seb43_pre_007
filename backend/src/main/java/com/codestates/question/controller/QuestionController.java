@@ -6,9 +6,12 @@ import com.codestates.question.dto.QuestionDto;
 import com.codestates.question.entity.Question;
 import com.codestates.question.mapper.QuestionMapper;
 import com.codestates.question.service.QuestionService;
+import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/questions")
@@ -32,7 +36,11 @@ public class QuestionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto) {
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto,
+                                       Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = (long) principal.get("userId");
+
         Question question = questionService.createQuestion(mapper.questionPostDtoToQuestion(questionPostDto));
 
         return new ResponseEntity<>(mapper.questionToQuestionPOSTResponseDto(question), HttpStatus.CREATED);
