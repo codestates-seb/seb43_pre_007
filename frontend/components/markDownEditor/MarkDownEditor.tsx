@@ -29,6 +29,7 @@ const DEFAULT_OPTIONS: EasyMDE.Options = {
   maxHeight: '300px',
   previewClass: ['markdown-body'],
   autofocus: false,
+  hideIcons: ['guide', 'fullscreen', 'preview'],
 };
 
 export const MarkDownEditor = ({

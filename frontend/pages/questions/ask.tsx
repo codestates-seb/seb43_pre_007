@@ -18,16 +18,6 @@ const Ask = () => {
 
 export default Ask;
 
-const 도우미 = styled.div`
-  width: 315px;
-  background: blue;
-  margin-left: 24px;
-
-  @media (max-width: 770px) {
-    display: none;
-  }
-`;
-
 const ScreenView = styled.div`
   display: flex;
   justify-content: center;
