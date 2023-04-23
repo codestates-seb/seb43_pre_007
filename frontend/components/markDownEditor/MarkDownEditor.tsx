@@ -8,9 +8,11 @@ import 'easymde/dist/easymde.min.css';
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'github-markdown-css/github-markdown.css';
 
-type MarkDownEditorProps = EasyMDE.Options & {
-  onChange: (v: string) => void;
+type MarkDownEditorProps = {
+  onChange?: (v: string) => void;
+  value?: string;
   preview?: boolean;
+  options?: EasyMDE.Options;
 };
 
 const DEFAULT_OPTIONS: EasyMDE.Options = {
@@ -26,19 +28,23 @@ const DEFAULT_OPTIONS: EasyMDE.Options = {
   lineWrapping: true,
   maxHeight: '300px',
   previewClass: ['markdown-body'],
+  autofocus: false,
 };
 
 export const MarkDownEditor = ({
   preview,
   onChange,
-  ...propsOptions
+  value,
+  options,
 }: MarkDownEditorProps) => {
   const instance = useRef<EasyMDE | null>(null);
   const codeMirror = useRef<CodeMirror.Editor | null>(null);
   const [textArea, setTextArea] = useState<HTMLTextAreaElement | null>(null);
 
   const handleChange = useCallback(
-    (ins: Editor) => onChange(ins.getValue()),
+    (ins: Editor) => {
+      onChange && onChange(ins.getValue());
+    },
     [onChange]
   );
 
@@ -59,7 +65,7 @@ export const MarkDownEditor = ({
     const ins = new EasyMDE({
       element: textArea,
       ...DEFAULT_OPTIONS,
-      ...propsOptions,
+      ...options,
     });
 
     instance.current = ins;
@@ -73,7 +79,13 @@ export const MarkDownEditor = ({
       ins.toTextArea();
       ins.cleanup();
     };
-  }, [propsOptions, textArea, preview]);
+  }, [textArea, preview, options]);
+
+  useEffect(() => {
+    if (!instance.current || !value) return;
+
+    instance.current.value(value);
+  }, [value]);
 
   useEffect(() => {
     // setTextArea 되면 useEffect가 순서대로 실행이 되어, codeMirror.current.on이 실행이된다.
