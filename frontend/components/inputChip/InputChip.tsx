@@ -3,20 +3,34 @@ import { KeyboardEvent, MouseEvent, useRef, useState } from 'react';
 import { Chip } from '../chip/Chip';
 
 export type InputChipProps = {
-  onChange?: (chips: string[]) => void;
+  onChange?: (chips: Array<string>) => void;
   value?: Array<string>;
 };
 
-export const InputChip = (props: InputChipProps) => {
+export const InputChip = ({ onChange, value }: InputChipProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [chips, setChips] = useState<string[]>(props.value || []);
+  const [chips, setChips] = useState<string[]>(value || []);
 
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.code !== 'Space' || e.currentTarget.value.trim() === '') return;
+    switch (e.code) {
+      case 'Space':
+        if (e.currentTarget.value.trim() === '') return;
 
-    setChips([...chips, e.currentTarget.value.trim()]);
-    e.currentTarget.value = '';
-    props.onChange?.(chips);
+        const value = e.currentTarget.value.trim();
+        setChips([...chips, value]);
+        onChange && onChange([...chips, value]);
+        e.currentTarget.value = '';
+        break;
+
+      case 'Backspace':
+        if (e.currentTarget.value) return;
+        if (chips.length === 0) return;
+
+        const values = chips.slice(0, chips.length - 1);
+        onChange && onChange(values);
+        setChips(values);
+        break;
+    }
   };
 
   const handleDeleteChip =
