@@ -11,16 +11,17 @@ import { useQuery } from 'react-query';
 
 //경로 https://stackoverflow.com/tags
 const Tags = () => {
-  const [pickFilter, setPickFilter] = useState('Reputation');
+  const [, setPickFilter] = useState('Reputation');
   const router = useRouter();
   const pageNum = new URLSearchParams(router.asPath).get('page');
   const [page, setPage] = useState(Number(pageNum) || 1);
   const { isLoading, error, data, refetch } = useQuery<
     { data: Tags[]; total: number },
     Error
-  >('tags', () => api(`/tags?size=36&page=${page}`).then((res) => res.data));
+  >(['tags', page], () =>
+    api(`/tags?size=36&page=${page}`).then((res) => res.data)
+  );
   useEffect(() => {
-    refetch();
     router.push({
       pathname: router.pathname,
       query: { size: 36, page: page },
