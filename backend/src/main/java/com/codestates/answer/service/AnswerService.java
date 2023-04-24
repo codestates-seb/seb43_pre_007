@@ -62,6 +62,12 @@ public class AnswerService {
         return answerRepository.save(findAnswer);
     }
 
+    public Answer findAnswer(long answerId) {
+
+
+        return findVerifiedAnswer(answerId);
+    }
+
     public void deleteAnswer(long answerId) {
 
         Answer findAnswer = findVerifiedAnswer(answerId);

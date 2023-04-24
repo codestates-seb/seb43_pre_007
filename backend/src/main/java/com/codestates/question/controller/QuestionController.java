@@ -38,18 +38,26 @@ public class QuestionController {
     @PostMapping("/add")
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto,
                                        Authentication authentication) {
-        Map<String,Object> user2 = (Map) authentication.getPrincipal();
-        Object userId = user2.get("userId");
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
 
+        questionPostDto.setUserId(userId);
         Question question = questionService.createQuestion(mapper.questionPostDtoToQuestion(questionPostDto));
 
         return new ResponseEntity<>(mapper.questionToQuestionPOSTResponseDto(question), HttpStatus.CREATED);
-
     }
 
     @PatchMapping("/{question-id}/edit")
     public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-                                     @Valid @RequestBody QuestionDto.Patch questionPatchDto) {
+                                     @Valid @RequestBody QuestionDto.Patch questionPatchDto,
+                                        Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
+
+        //질문작성자가 아닌 사용자가 질문 수정 요청을 했을 경우
+        long findUserId = questionService.findQuestion(questionId).getUser().getUserId();
+        if(userId != findUserId) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         questionPatchDto.setQuestionId(questionId);
         questionService.updateQuestion(mapper.questionPatchDtoToQuestion(questionPatchDto)); //리턴값 필요없음
 
@@ -75,7 +83,15 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId,
+                                         Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
+
+        //질문작성자가 아닌 사용자가 질문 삭제 요청을 했을 경우
+        long findUserId = questionService.findQuestion(questionId).getUser().getUserId();
+        if(userId != findUserId) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         questionService.deleteQuestion(questionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
