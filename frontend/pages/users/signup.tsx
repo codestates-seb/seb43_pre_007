@@ -1,12 +1,24 @@
 //경로 https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fusers
+import axios from 'axios';
 import styled, { css } from 'styled-components';
-import SosialLogin from '@/components/users/SosialLogin';
-
+import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { userLogState } from '@/recoil/atom';
+import SosialLogin from '@/components/users/SosialLogin';
 
 const SignUp = () => {
+  const [userLog, setUserLog] = useRecoilState(userLogState);
+  // 로그인 실패시 안내 문구
+  const [loginFailed, setloginFailed] = useState(false);
+  // 유효성검사
+  //email,password 비어있는지 + 유효성 검사 통과 했는지
+  const [emptyEmail, setemptyEmail] = useState(false);
+  const [emptyPassword, setemptyPassword] = useState(false);
+  const [invalidEmail, setinvalidEmail] = useState(false);
+  const [invalidPassword, setinvalidPassword] = useState(false);
+  // useInput 훅을 이용하여 이벤트의 email, password 값으로 설정
   const [{ display_name, email, password }, onInputChange, resetInput] =
     useInput({
       display_name: '',
@@ -14,13 +26,52 @@ const SignUp = () => {
       password: '',
     });
   const navi = useRouter();
-
+  useEffect(() => {
+    // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
+    if (email !== '') setemptyEmail(false);
+    // email이 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
+    if (password !== '') setemptyPassword(false);
+    if (loginFailed) {
+      if (email === '') setemptyEmail(true);
+      if (password === '') setemptyPassword(true);
+    }
+  }, [email, password]);
+  //로그인 눌렀을때
   const SignUpSubmit = (e: React.FormEvent) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+    // 유효성 검사 확인
+    let emailcheck = false;
+    let passwordcheck = false;
+    // 비어있는지 검사
+
+    if (email === '') setemptyEmail(true);
+    if (emailRegex.test(email)) {
+      emailcheck = true;
+      setemptyEmail(false);
+      setinvalidEmail(true);
+    }
+
+    // 유효한 이메일이 아니면 포함되어야 하는 형식 메세지 출력 + border 변경
+    if (password === '') setemptyPassword(true);
+    if (passwordRegex.test(password)) {
+      passwordcheck = true;
+      setemptyPassword(false);
+      setinvalidPassword(true);
+    }
+
+    // 이메일 & 비밀번호 유효성 검사 통과 못할 시
+    if (!emailcheck && !passwordcheck) {
+      setloginFailed(true);
+    }
+
+    // 이벤트의 기본 동작을 취소하는 메서드
     e.preventDefault();
 
-    return (
+    if (emailcheck || passwordcheck) {
       axios
-        .post('/users', { display_name, email, password })
+        .post('/signup', { display_name, email, password })
         // 성공시
         .then((res) => {
           console.log(res);
@@ -44,8 +95,8 @@ const SignUp = () => {
           } else {
             console.log(err.status);
           }
-        })
-    );
+        });
+    }
   };
 
   return (
@@ -119,9 +170,19 @@ const SignUp = () => {
               name="email"
               value={email}
               onChange={onInputChange}
-              border={null}
+              border={
+                emptyEmail
+                  ? '#DE4F54'
+                  : loginFailed && !emptyEmail && !invalidEmail
+                  ? '#DE4F54'
+                  : null
+              }
             />
-            <p className="red">Email cannot be empty.</p>
+            {emptyEmail ? (
+              <p className="red">Email cannot be empty.</p>
+            ) : loginFailed && !emptyEmail && !invalidEmail ? (
+              <p>Please enter a valid email address.</p>
+            ) : null}
           </div>
           <div className="login-password">
             <label>Password</label>
@@ -130,51 +191,28 @@ const SignUp = () => {
               value={password}
               type="password"
               onChange={onInputChange}
-              border={null}
+              border={
+                emptyPassword
+                  ? '#DE4F54'
+                  : loginFailed && !emptyPassword && !invalidPassword
+                  ? '#DE4F54'
+                  : null
+              }
             />
-            <p className="red">Password cannot be empty.</p>
-            <p className="p-margin">
+            {emptyPassword ? (
+              <p className="red">Password cannot be empty.</p>
+            ) : loginFailed && !emptyPassword && !invalidPassword ? (
+              <p>Please enter a valid Password.</p>
+            ) : null}
+            <p className="passwordvalid">
               Passwords must contain at least eight characters, including at
               least 1 letter and 1 number.
             </p>
-          </div>
-          <div className="product">
-            <div className="product-checkbox">
-              <input
-                type="checkbox"
-                name="EmailOptIn"
-                className="s-checkbox"
-                data-ga-action="Email Opt-In"
-                data-ga-is-pii="false"
-              />
-            </div>
-            <div></div>
-            <div>
+            <div className="checkbox-input">
+              <input type="checkbox"></input>
               Opt-in to receive occasional product updates, user research
               invitations, company announcements, and digests.
             </div>
-            {/* <div
-              className="s-popover ws2 is-visible"
-              id="opt-in-learn-more"
-              role="menu"
-              aria-hidden="true"
-              // style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-324.5px, 544.5px, 0px);"
-              data-popper-placement="left"
-            >
-              <div
-                className="s-popover--arrow"
-                // style="position: absolute; top: 0px; transform: translate3d(0px, 80.5px, 0px);"
-              ></div>
-              <p>
-                We know you hate spam, and we do too. That’s why we make it easy
-                for you to update your email preferences or unsubscribe at
-                anytime.
-              </p>
-              <p className="mb0">
-                We never share your email address with third parties for
-                marketing purposes.
-              </p>
-            </div> */}
           </div>
           <div className="login-button">
             <button onClick={SignUpSubmit}>Log in</button>
@@ -368,6 +406,7 @@ const FormContainer = styled.div`
     font-weight: 600;
   }
   p {
+    color: #d03956;
     font-size: 0.7rem;
   }
   .-link {
@@ -381,7 +420,8 @@ const FormContainer = styled.div`
     color: #d03956;
     font-size: 0.7rem;
   }
-  .p-margin {
+  .passwordvalid {
+    color: #6a7384;
     margin: 4px 0px;
   }
   .hide {
@@ -400,6 +440,19 @@ const FormContainer = styled.div`
     margin: 0px;
     > a {
       word-break: keep-all;
+    }
+  }
+  .checkbox-input {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    font-size: 0.75em;
+    font-weight: 400;
+    color: var(--black-700);
+    > input {
+      margin-right: 4px;
+      cursor: pointer;
     }
   }
   .login-email {
