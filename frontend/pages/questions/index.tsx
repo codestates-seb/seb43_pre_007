@@ -61,7 +61,7 @@ const Questions = () => {
           </div>
           <div>
             <div className="question_cnt">
-              {addCommaToNumber(data?.page_info.total_elements || 0)} questions
+              {addCommaToNumber(data?.page_info?.total_elements || 0)} questions
             </div>
             <FilterButton
               default={filter?.toString() || INIT_FILTER.FILTER}
@@ -109,7 +109,7 @@ const Questions = () => {
         <QuestionFooter>
           <Pagenation
             initialPage={Number(page) || INIT_FILTER.PAGE}
-            pageSize={Number(data?.page_info.total_pages) - 1 || 0}
+            pageSize={Number(data?.page_info?.total_pages) - 1 || 0}
             onPageChange={(page) => handlePagefilter({ page })}
           />
           <PerPage
