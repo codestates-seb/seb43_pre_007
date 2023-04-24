@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
-
+import { api } from '@/util/api';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
 const FormContainer = styled.div`
@@ -154,13 +154,12 @@ const BasicLogin = () => {
     e.preventDefault();
 
     // 유효성 검사가 다 통과되면 로그인 요청
-    if (emailcheck || passwordcheck) {
+    if (emailcheck && passwordcheck) {
       return (
         axios
           .post('/users/login', { email, password })
           // 성공시
           .then((res) => {
-            console.log(res);
             navi.push('/questions');
             alert('로그인 성공');
             // 로컬스토리에 토큰 저장
