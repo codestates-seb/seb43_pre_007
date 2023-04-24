@@ -3,27 +3,42 @@ import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
 import Pagenation from '@/components/pagenation/Pagenation';
 import { DAYS_FILTER } from '@/constant/constant';
-import axios from 'axios';
+import { api } from '@/util/api';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 
 //경로 https://stackoverflow.com/users
 const Users = () => {
   const router = useRouter();
   const pageNum = new URLSearchParams(router.asPath).get('page');
-  const [pickFilter, setPickFilter] = useState('Reputation');
+  const [, setPickFilter] = useState('Reputation');
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(Number(pageNum) || 1);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (data && page < Math.round(data.total / 36)) {
+      const nextPage = page + 1;
+      queryClient.prefetchQuery(['users', nextPage], () =>
+        api(`/users?size=36&page=${nextPage}`).then((res) => res.data)
+      );
+    }
+  }, [page, queryClient]);
 
   const { isLoading, error, data } = useQuery<
     { data: User[]; total: number },
     Error
-  >(['users', page], () =>
-    axios(`/users?size=36&page=${page}`).then((res) => res.data)
+  >(
+    ['users', page],
+    () => api(`/users?size=36&page=${page}`).then((res) => res.data),
+    {
+      keepPreviousData: true,
+    }
   );
 
   useEffect(() => {
