@@ -1,14 +1,39 @@
 import { rest } from 'msw';
+import { signupusers } from './dummy';
 import { USERS } from './dummy/users';
 import { questions } from './dummy/questions';
+<<<<<<< HEAD
 import { TAGS } from './dummy/tags';
 
+=======
+>>>>>>> 86d3042cdeed5f6a2b6d57fdceab9d44975d1c7b
 export const handlers = [
+  rest.get('/login', async (req, res, ctx) => {
+    const data = req.json();
+    return res(ctx.status(200), ctx.json({ data }));
+  }),
+  rest.post('/login', async (req, res, ctx) => {
+    const data = req.json();
+    return res(ctx.status(200), ctx.json({ result: data }));
+  }),
+  rest.post('/signup', async (req, res, ctx) => {
+    const data = req.json();
+    const users = signupusers.push(data);
+    return res(ctx.status(200), ctx.json({ users }));
+  }),
+  rest.get('/users', async (req, res, ctx) => {
+    const url = new URL(req.url);
+    const size = Number(url.searchParams.get('size'));
+    const page = Number(url.searchParams.get('page'));
+    const total = USERS.length;
+    const data = USERS.slice((page - 1) * size, page * size);
+  }),
   rest.get('/users', (req, res, ctx) => {
     const size = Number(req.url.searchParams.get('size'));
     const page = Number(req.url.searchParams.get('page'));
     const total = USERS.length;
     const data = USERS.slice((page - 1) * size, page * size);
+
     return res(ctx.status(200), ctx.json({ data, total }));
   }),
   //이미지 임시 테스트
@@ -17,7 +42,6 @@ export const handlers = [
       'https://www.gravatar.com/avatar/0555bd0deb416a320a0069abef08078a?s=256&d=identicon&r=PG&f=1';
     return res(ctx.status(200), ctx.json(data));
   }),
-
   rest.get('/questions', async (req, res, ctx) => {
     const size = req.url.searchParams.get('perPage') || 10;
     const page = req.url.searchParams.get('page') || 1;
