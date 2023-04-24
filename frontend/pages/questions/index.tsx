@@ -17,6 +17,7 @@ import {
   QUESTION_PER_PAGE_LIST,
 } from '@/constant/constant';
 import { Skeleton } from '@/components/skeleton/Skeleton';
+import SideCard from '@/components/side_card/SideCard';
 
 const Questions = () => {
   const { push, query, isReady } = useRouter();
@@ -54,70 +55,81 @@ const Questions = () => {
         </title>
       </Head>
       <Container>
-        <QuestionHeader>
-          <div>
-            <h1>All Questions</h1>
-            <CustomButton onClick={handleWriteClick}>Ask Question</CustomButton>
-          </div>
-          <div>
-            <div className="question_cnt">
-              {addCommaToNumber(data?.page_info?.total_elements || 0)} questions
+        <div>
+          <QuestionHeader>
+            <div>
+              <h1>All Questions</h1>
+              <CustomButton onClick={handleWriteClick}>
+                Ask Question
+              </CustomButton>
             </div>
-            <FilterButton
-              default={filter?.toString() || INIT_FILTER.FILTER}
-              onChange={(filter) => handlePagefilter({ filter })}
-              filters={QUESTION_FILTER_LIST}
+            <div>
+              <div className="question_cnt">
+                {addCommaToNumber(data?.page_info?.total_elements || 0)}{' '}
+                questions
+              </div>
+              <FilterButton
+                default={filter?.toString() || INIT_FILTER.FILTER}
+                onChange={(filter) => handlePagefilter({ filter })}
+                filters={QUESTION_FILTER_LIST}
+              />
+            </div>
+          </QuestionHeader>
+          {!isLoading && data?.data?.length ? (
+            <QuestionList>
+              {data?.data?.map(({ question, user }) => {
+                return (
+                  <QuestionItem
+                    id={question.question_id}
+                    title={question.title}
+                    body={question.body}
+                    isVote={question.vote.is_vote}
+                    isScore={question.vote.score}
+                    answerCount={question.answer_count}
+                    creationData={question.creation_date}
+                    userName={user.display_name}
+                    key={question.question_id}
+                    tags={question.tags.map((tag) => ({
+                      id: tag.tag_id,
+                      name: tag.name,
+                    }))}
+                  />
+                );
+              })}
+            </QuestionList>
+          ) : (
+            <SkeletonContainer>
+              <div>
+                <Skeleton width={`100px`} height={'20px'} />
+                <Skeleton width={`100px`} height={'20px'} />
+                <Skeleton width={`100px`} height={'20px'} />
+              </div>
+              <div>
+                <Skeleton width={`100%`} height={'20px'} />
+                <Skeleton width={`100%`} height={'20px'} />
+                <Skeleton width={`100%`} height={'20px'} />
+              </div>
+            </SkeletonContainer>
+          )}
+          <QuestionFooter>
+            <Pagenation
+              initialPage={Number(page) || INIT_FILTER.PAGE}
+              pageSize={Number(data?.page_info?.total_pages) - 1 || 0}
+              onPageChange={(page) => handlePagefilter({ page })}
             />
-          </div>
-        </QuestionHeader>
-        {!isLoading && data?.data?.length ? (
-          <QuestionList>
-            {data?.data?.map(({ question, user }) => {
-              return (
-                <QuestionItem
-                  id={question.question_id}
-                  title={question.title}
-                  body={question.body}
-                  isVote={question.vote.is_vote}
-                  isScore={question.vote.score}
-                  answerCount={question.answer_count}
-                  creationData={question.creation_date}
-                  userName={user.display_name}
-                  key={question.question_id}
-                  tags={question.tags.map((tag) => ({
-                    id: tag.tag_id,
-                    name: tag.name,
-                  }))}
-                />
-              );
-            })}
-          </QuestionList>
-        ) : (
-          <SkeletonContainer>
-            <div>
-              <Skeleton width={`100px`} height={'20px'} />
-              <Skeleton width={`100px`} height={'20px'} />
-              <Skeleton width={`100px`} height={'20px'} />
-            </div>
-            <div>
-              <Skeleton width={`100%`} height={'20px'} />
-              <Skeleton width={`100%`} height={'20px'} />
-              <Skeleton width={`100%`} height={'20px'} />
-            </div>
-          </SkeletonContainer>
-        )}
-        <QuestionFooter>
-          <Pagenation
-            initialPage={Number(page) || INIT_FILTER.PAGE}
-            pageSize={Number(data?.page_info?.total_pages) - 1 || 0}
-            onPageChange={(page) => handlePagefilter({ page })}
-          />
-          <PerPage
-            current={Number(perPage) || INIT_FILTER.PER_PAGE}
-            perPageList={QUESTION_PER_PAGE_LIST}
-            onChangePage={(perPage) => handlePagefilter({ perPage })}
-          />
-        </QuestionFooter>
+            <PerPage
+              current={Number(perPage) || INIT_FILTER.PER_PAGE}
+              perPageList={QUESTION_PER_PAGE_LIST}
+              onChangePage={(perPage) => handlePagefilter({ perPage })}
+            />
+          </QuestionFooter>
+        </div>
+        <SideContainer>
+          <SideCard>
+            <div>The Overflow Blog</div>
+            <div>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</div>
+          </SideCard>
+        </SideContainer>
       </Container>
     </>
   );
@@ -125,10 +137,16 @@ const Questions = () => {
 
 export default Questions;
 
+const SideContainer = styled.div`
+  margin-top: 24px;
+  margin-left: 20px;
+  width: 300px;
+`;
+
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  max-width: 727px;
+  flex-direction: row;
+  width: 100%;
   font-family: 'Roboto';
 `;
 
