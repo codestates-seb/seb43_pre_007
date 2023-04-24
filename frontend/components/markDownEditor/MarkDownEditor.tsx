@@ -75,12 +75,13 @@ export const MarkDownEditor = ({
     if (preview) setPreview(ins);
     //@ts-ignore
     if (!preview) ins.toggleSideBySide();
+    if (value) ins.value(value);
 
     return () => {
       ins.toTextArea();
       ins.cleanup();
     };
-  }, [textArea, preview, options]);
+  }, [textArea, preview, options, value]);
 
   useEffect(() => {
     if (!instance.current || !value) return;
