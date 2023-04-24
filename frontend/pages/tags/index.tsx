@@ -7,7 +7,7 @@ import { api } from '@/util/api';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 //경로 https://stackoverflow.com/tags
 const Tags = () => {
@@ -15,6 +15,18 @@ const Tags = () => {
   const router = useRouter();
   const pageNum = new URLSearchParams(router.asPath).get('page');
   const [page, setPage] = useState(Number(pageNum) || 1);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (data && page < Math.round(data.total / 36)) {
+      const nextPage = page + 1;
+      queryClient.prefetchQuery(['tags', nextPage], () =>
+        api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
+      );
+    }
+  }, [page, queryClient]);
+
   const { isLoading, error, data, refetch } = useQuery<
     { data: Tags[]; total: number },
     Error
