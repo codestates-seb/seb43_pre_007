@@ -8,7 +8,7 @@ import 'easymde/dist/easymde.min.css';
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'github-markdown-css/github-markdown.css';
 
-type MarkDownEditorProps = {
+export type MarkDownEditorProps = {
   onChange?: (v: string) => void;
   value?: string;
   preview?: boolean;
