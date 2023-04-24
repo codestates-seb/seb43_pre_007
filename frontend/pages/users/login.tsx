@@ -50,7 +50,7 @@ const SignUpContainer = styled.div`
     margin: -3px 4px;
     color: #0074cc;
     svg {
-      fill:#0074cc;
+      fill: #0074cc;
       margin: -3px -15px -3px 4px;
     }
   }
@@ -63,6 +63,7 @@ const SignUpContainer = styled.div`
     color: #3cacfa;
     svg {
       fill: #3cacfa;
+    }
   }
 `;
 
