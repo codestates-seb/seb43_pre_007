@@ -14,12 +14,12 @@ import javax.validation.constraints.Size;
 
 public class AnswerDto {
     @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Post{
 
-        @Positive
         private long userId;  // TODO : jwt로 유저정보를 받아와야한다... 일단 적용전까진 유저 정보를 수동으로 받고있음 (현재는 API 명세서대로 프론트에서 요청못받음)
         @Positive
         private long questionId;
