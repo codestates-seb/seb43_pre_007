@@ -64,7 +64,13 @@ const Tags = () => {
             <div className="tag_name">
               <a>{tag.name}</a>
             </div>
-            <div className="tag_info">{tag.info}</div>
+            <div className="tag_info">
+              {tag.info}
+              {tag.info}
+              {tag.info}
+              {tag.info}
+              {tag.info}
+            </div>
             <div className="tag_count">{`${tag.count} questions`}</div>
           </Card>
         ))}

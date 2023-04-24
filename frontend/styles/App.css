@@ -1,6 +1,12 @@
 @import url('./reset.css');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
+#__next{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 * {
   margin: 0px;
   padding: 0px;
