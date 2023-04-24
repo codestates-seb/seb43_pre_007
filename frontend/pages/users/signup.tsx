@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
 import SosialLogin from '@/components/users/SosialLogin';
-import { a } from 'msw/lib/glossary-de6278a9';
 
 const SignUp = () => {
   const [userLog, setUserLog] = useRecoilState(userLogState);
@@ -75,7 +74,6 @@ const SignUp = () => {
         .post('/signup', { display_name, email, password })
         // 성공시
         .then((res) => {
-          console.log(res);
           navi.push('/login');
           alert('회원 가입 성공');
           // 로그인 성공하면 입력 폼 초기화

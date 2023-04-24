@@ -14,7 +14,7 @@ export const handlers = [
   }),
   rest.post('/signup', async (req, res, ctx) => {
     const data = req.json();
-    const users = signupusers.push(data);
+    const users = signupusers.push(await data);
     return res(ctx.status(200), ctx.json({ users }));
   }),
   rest.get('/users', async (req, res, ctx) => {
