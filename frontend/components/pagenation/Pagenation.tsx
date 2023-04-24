@@ -1,26 +1,32 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 
 type PagenationProps = {
-  items: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  pageSize: number;
+  initialPage: number;
+  onPageChange: (page: number) => void;
 };
 
-const Pagenation = ({ items, setPage }: PagenationProps) => {
+const Pagenation = ({
+  pageSize,
+  initialPage,
+  onPageChange,
+}: PagenationProps) => {
   const handlePageClick = (event: { selected: number }) => {
-    setPage(event.selected + 1);
+    onPageChange(event.selected + 1);
   };
 
   return (
-    <PagenationContainer>
+    <PagenationContainer initialPage={initialPage}>
       <ReactPaginate
         breakLabel="..."
         nextLabel="Next"
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
+        forcePage={initialPage - 1}
         marginPagesDisplayed={1}
-        pageCount={items}
+        pageCount={pageSize}
         previousLabel="Prev"
         renderOnZeroPageCount={null}
       />
@@ -30,7 +36,11 @@ const Pagenation = ({ items, setPage }: PagenationProps) => {
 
 export default Pagenation;
 
-const PagenationContainer = styled.div`
+type PagenationContainerProps = {
+  initialPage: number;
+};
+
+const PagenationContainer = styled.div<PagenationContainerProps>`
   display: flex;
   .selected > a {
     background-color: var(--bg-orange);
@@ -42,6 +52,9 @@ const PagenationContainer = styled.div`
   }
   > ul {
     display: flex;
+    .previous {
+      display: ${(props) => props.initialPage === 1 && 'none'};
+    }
   }
   > div {
     margin: 0px 10px;

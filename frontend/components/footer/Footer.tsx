@@ -1,4 +1,4 @@
-import { footerNav, footerSocial } from '@/constant/constant';
+import { FOOTER_NAV, FOOTER_SOCIAL } from '@/constant/constant';
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -17,7 +17,7 @@ const Footer = () => {
         </Link>
       </div>
       <nav>
-        {footerNav.map((category, i) => (
+        {FOOTER_NAV.map((category, i) => (
           <div key={i}>
             <h5>
               <a>{Object.keys(category)}</a>
@@ -36,7 +36,7 @@ const Footer = () => {
       </nav>
       <div>
         <ul>
-          {footerSocial.map((list, i) => (
+          {FOOTER_SOCIAL.map((list, i) => (
             <li key={i}>{list}</li>
           ))}
         </ul>
