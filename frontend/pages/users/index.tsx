@@ -19,21 +19,20 @@ const Users = () => {
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(Number(pageNum) || 1);
 
-  const { isLoading, error, data, refetch } = useQuery<
+  const { isLoading, error, data } = useQuery<
     { data: User[]; total: number },
     Error
-  >('users', () =>
+  >(['users', page], () =>
     axios(`/users?size=36&page=${page}`).then((res) => res.data)
   );
 
   useEffect(() => {
-    refetch();
     router.push({
       pathname: router.pathname,
       query: { size: 36, page: page },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch]);
+  }, [page]);
 
   if (error) return <p>Error: {error.message}</p>;
   else
