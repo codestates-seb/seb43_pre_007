@@ -16,19 +16,28 @@ const MarkDownEditor = dynamic(
   }
 );
 
-type QuestionAskForm = {
+export type QuestionAskFormProps = {
+  value?: {
+    title: string;
+    content: string;
+    tags: string[];
+  };
+  onSubmit: (value: QuestionAskFormProps['value']) => void;
+};
+
+export type QuestionAskForm = {
   title: string;
   content: string;
   tags: string;
 };
 
-export const QuestionAskForm = () => {
+export const QuestionAskForm = (props: QuestionAskFormProps) => {
   const { data, handleChange, errors, handleSubmit } = useForm<QuestionAskForm>(
     {
       initialValues: {
-        title: '',
-        content: '',
-        tags: '',
+        title: props.value?.title || '',
+        content: props.value?.content || '',
+        tags: props.value?.tags.length ? props.value?.tags.join(',') : '',
       },
       validations: {
         title: {
@@ -54,7 +63,9 @@ export const QuestionAskForm = () => {
     }
   );
 
-  function handleAskFormSubmit() {}
+  function handleAskFormSubmit() {
+    props.onSubmit({ ...data, tags: data.tags.split(',') });
+  }
 
   const handlemarkdownChange = (content: string) => {
     handleChange('content')(content);
@@ -85,7 +96,10 @@ export const QuestionAskForm = () => {
       <InputContainer>
         <h3>Tags</h3>
         <p>Add up to 5 tags to describe what your question is about</p>
-        <InputChip onChange={(tags) => handleChange('tags')(tags.join(''))} />
+        <InputChip
+          value={data.tags ? data.tags.split(',') : []}
+          onChange={(tags) => handleChange('tags')(tags.join(','))}
+        />
         {errors.tags && <ErrorMessage>{errors.tags}</ErrorMessage>}
       </InputContainer>
       <SubmitButton>Post your question</SubmitButton>
@@ -99,10 +113,9 @@ const Container = styled.form`
   position: relative;
   flex-direction: column;
   display: flex;
-  width: calc(100% - 340px);
+  width: 100%;
   color: #232629;
   background-color: white;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   h3 {
     font-size: 14px;
@@ -112,10 +125,6 @@ const Container = styled.form`
   p {
     margin: 5px 0;
     font-size: 11px;
-  }
-
-  @media (max-width: 770px) {
-    width: 100%;
   }
 `;
 
@@ -134,7 +143,7 @@ const SubmitButton = styled(Button)`
   width: 135px;
   height: 38px;
   color: white;
-  left: 0;
+  left: 13px;
   bottom: -60px;
 `;
 

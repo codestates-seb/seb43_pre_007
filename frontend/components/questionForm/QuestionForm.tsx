@@ -52,7 +52,7 @@ export const QuestionForm = (props: QuestionForm) => {
         )}
         <div className="editing">
           <div className="link_container">
-            <Link href={`/posts/${props.question_id}/edit`}>Edit</Link>
+            <Link href={`/questions/${props.question_id}/edit`}>Edit</Link>
           </div>
           <User>
             <p>{parseDate(props.creation_date)}</p>

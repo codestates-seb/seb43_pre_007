@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { QuestionAskForm } from '@/components/questionAskForm/QuestionAskForm';
 
 const Ask = () => {
+  const handleUpdateSubmit = (value: any) => {};
+
   return (
     <ScreenView>
       <Container>
@@ -9,7 +11,7 @@ const Ask = () => {
           <h1>Ask a public question</h1>
         </AskHeader>
         <AskContent>
-          <QuestionAskForm />
+          <QuestionAskForm onSubmit={handleUpdateSubmit} />
         </AskContent>
       </Container>
     </ScreenView>
@@ -35,7 +37,6 @@ const Container = styled.div`
   width: 100%;
   max-width: 1215px;
   padding: 0 24px;
-  /* background: skyblue; */
 
   @media (max-width: 640px) {
     padding: 0px 16px;
@@ -45,7 +46,7 @@ const Container = styled.div`
 const AskHeader = styled.div`
   display: flex;
   justify-content: start;
-  width: 100%;
+  width: calc(100% - 340px);
 
   h1 {
     display: flex;
@@ -62,15 +63,21 @@ const AskHeader = styled.div`
       font-weight: 500;
     }
   }
+
+  @media (max-width: 980px) {
+    width: 100%;
+  }
 `;
 
 const AskContent = styled.div`
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
-  width: 100%;
+  width: calc(100% - 340px);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-  @media (max-width: 770px) {
+  @media (max-width: 980px) {
+    width: 100%;
     flex-direction: column;
     align-items: center;
   }
