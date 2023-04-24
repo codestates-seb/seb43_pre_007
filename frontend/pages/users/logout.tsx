@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Button from '@/components/button/Button';
+
 import faviconSprite from '@/public/faviconSprite.png';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
@@ -53,7 +53,6 @@ const serviceList = [
 
 interface logout {
   e: React.FormEvent;
-  termId: string;
 }
 
 const logout = () => {
