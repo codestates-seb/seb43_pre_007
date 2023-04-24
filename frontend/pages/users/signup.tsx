@@ -1,12 +1,13 @@
 //경로 https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fusers
 import axios from 'axios';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
 import SosialLogin from '@/components/users/SosialLogin';
+import Link from 'next/link';
 
 const SignUp = () => {
   const [userLog, setUserLog] = useRecoilState(userLogState);
@@ -247,9 +248,9 @@ const SignUp = () => {
         <SignUpContainer className="signup-container">
           <div className="signUp margin">
             Already have an account?
-            <a className="blue" href="/users/signup">
+            <Link href="/users/signup" className="blue">
               Log in
-            </a>
+            </Link>
           </div>
           <div className="employer ">
             Are you an employer?
