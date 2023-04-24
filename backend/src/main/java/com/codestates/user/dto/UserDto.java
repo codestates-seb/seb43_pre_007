@@ -29,6 +29,7 @@ public class UserDto {
 
     // [프로필수정 요청 DTO]
     @Getter
+    @Setter
     @AllArgsConstructor
     public static class PatchDto{
         private long userId; //추가
