@@ -8,7 +8,7 @@ import 'easymde/dist/easymde.min.css';
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'github-markdown-css/github-markdown.css';
 
-type MarkDownEditorProps = {
+export type MarkDownEditorProps = {
   onChange?: (v: string) => void;
   value?: string;
   preview?: boolean;
@@ -57,25 +57,27 @@ export const MarkDownEditor = ({
   useEffect(() => {
     if (!textArea) return;
 
+    const defaultOption = { ...DEFAULT_OPTIONS };
+
     if (preview) {
-      DEFAULT_OPTIONS['toolbar'] = false;
-      DEFAULT_OPTIONS['status'] = false;
-      DEFAULT_OPTIONS['maxHeight'] = 'auto';
+      defaultOption['toolbar'] = false;
+      defaultOption['status'] = false;
+      defaultOption['maxHeight'] = 'auto';
     }
 
     const ins = new EasyMDE({
       element: textArea,
-      ...DEFAULT_OPTIONS,
+      ...defaultOption,
       ...options,
     });
 
-    instance.current = ins;
-    codeMirror.current = ins.codemirror;
-
+    if (value) ins.value(value);
     if (preview) setPreview(ins);
     //@ts-ignore
     if (!preview) ins.toggleSideBySide();
-    if (value) ins.value(value);
+
+    instance.current = ins;
+    codeMirror.current = ins.codemirror;
 
     return () => {
       ins.toTextArea();
