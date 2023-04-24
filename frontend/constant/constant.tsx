@@ -5,6 +5,7 @@ export const PUBLIC_LI = ['Questions', 'Tags', 'Users', 'Companies'];
 export const NON_CONTAINER_ROUTES = [
   '/users/signup',
   '/users/login',
+  '/users/logout',
   '/questions/ask',
 ];
 

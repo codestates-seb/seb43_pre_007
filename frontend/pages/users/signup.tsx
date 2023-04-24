@@ -74,7 +74,6 @@ const SignUp = () => {
         .post('/signup', { display_name, email, password })
         // 성공시
         .then((res) => {
-          console.log(res);
           navi.push('/login');
           alert('회원 가입 성공');
           // 로그인 성공하면 입력 폼 초기화
