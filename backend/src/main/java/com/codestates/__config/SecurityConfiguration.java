@@ -1,10 +1,19 @@
 package com.codestates.__config;
 
+import com.codestates.__auth.filter.JwtAuthenticationFilter;
+import com.codestates.__auth.filter.JwtVerificationFilter;
+import com.codestates.__auth.handler.UserAuthenticationEntryPoint;
+import com.codestates.__auth.handler.UserAuthenticationFailureHandler;
+import com.codestates.__auth.handler.UserAuthenticationSuccessHandler;
+import com.codestates.__auth.jwt.JwtTokenizer;
+import com.codestates.__auth.userdetails.UserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +27,14 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
+
+    private final JwtTokenizer jwtTokenizer;
+    public final UserDetailService userDetailService;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserDetailService userDetailService) {
+        this.jwtTokenizer = jwtTokenizer;
+        this.userDetailService = userDetailService;
+    }
 
 
     @Bean
@@ -47,12 +64,13 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .apply(new CustomFilterConfigurer())
+                .and()
 
-//Todo ----- 인증오류,권한오류 발생시 처리방법 설정부분 -----
-//                .exceptionHandling()
-//                .authenticationEntryPoint()
-//                .accessDeniedHandler()
-
+//Todo ----- 인증오류,권한오류(현재빠져있음) 발생시 처리방법 설정부분 -----
+                .exceptionHandling()
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint())
+                .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll());
         return http.build();
@@ -68,17 +86,47 @@ public class SecurityConfiguration {
         // CORS 설정로직으로, 요청을 허용할 Origin 과 HTTP Method 설정
         // CorsConfiguration 객체 : 모든 도메인의 요청을 허용, 아래 메서드에 대한 요청 허용
         // UrlBased...Source 객체 : CorsConfiguration 객체등록 및 CORS 설정을 등록할 URL 패턴지정
-    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
-}
 
+
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+
+            // AuthenticationManager 객체를 가지고 옴
+            AuthenticationManager authenticationManager =
+                    builder.getSharedObject(AuthenticationManager.class);
+
+
+            // JwtAuthenticationFilter 객체를 생성하고 인증필터가 처리해야하는 URL 설정
+            // 설정한 url 로 요청이 들어오면 jwtAuthenticationFilter 가 해당요청을 처리
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/users/login");
+
+
+            //인증성공 또는 인증실패시 호출될 객체를 설정
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer);
+
+
+            // 빌더객체에 JwtAuthenticationFilter,JwtVerificationFilter 를 추가해 JWT 인증•검증기능을 적용
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter,JwtAuthenticationFilter.class);
+        }
+    }
+}
 
 
 
