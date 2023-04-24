@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
 import SosialLogin from '@/components/users/SosialLogin';
-import { a } from 'msw/lib/glossary-de6278a9';
 
 const SignUp = () => {
   const [userLog, setUserLog] = useRecoilState(userLogState);
@@ -428,10 +427,17 @@ const FormContainer = styled.div`
   .hide {
     display: none;
   }
+  .product {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .product-checkbox {
+      margin-right: 4px;
+    }
+  }
   .privacy {
     font-size: 0.7rem;
     margin: 0px;
-
     > a {
       word-break: keep-all;
     }
@@ -445,7 +451,7 @@ const FormContainer = styled.div`
     font-weight: 400;
     color: var(--black-700);
     > input {
-      marign-right: 4px;
+      margin-right: 4px;
       cursor: pointer;
     }
   }

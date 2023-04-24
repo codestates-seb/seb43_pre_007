@@ -18,13 +18,13 @@ const Pagenation = ({
   };
 
   return (
-    <PagenationContainer>
+    <PagenationContainer initialPage={initialPage}>
       <ReactPaginate
         breakLabel="..."
         nextLabel="Next"
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
-        initialPage={initialPage - 1}
+        forcePage={initialPage - 1}
         marginPagesDisplayed={1}
         pageCount={pageSize}
         previousLabel="Prev"
@@ -36,7 +36,11 @@ const Pagenation = ({
 
 export default Pagenation;
 
-const PagenationContainer = styled.div`
+type PagenationContainerProps = {
+  initialPage: number;
+};
+
+const PagenationContainer = styled.div<PagenationContainerProps>`
   display: flex;
   .selected > a {
     background-color: var(--bg-orange);
@@ -48,6 +52,9 @@ const PagenationContainer = styled.div`
   }
   > ul {
     display: flex;
+    .previous {
+      display: ${(props) => props.initialPage === 1 && 'none'};
+    }
   }
   > div {
     margin: 0px 10px;

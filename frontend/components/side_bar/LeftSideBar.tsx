@@ -5,7 +5,7 @@ import { IoEarthSharp } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { publicLi } from '@/constant/constant';
+import { PUBLIC_LI } from '@/constant/constant';
 
 type LeftSideBarProps = {
   width: number;
@@ -16,10 +16,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const currentPath = router.pathname;
 
   return (
-    <SideBarContainer
-      width={width}
-      className="left-side-bar"
-    >
+    <SideBarContainer width={width} className="left-side-bar">
       <div>
         <nav>
           <ol className="nav-links">
@@ -33,7 +30,7 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
             <li>
               <ol>
                 <li className="nav-main">PUBLIC</li>
-                {publicLi.map((li) => (
+                {PUBLIC_LI.map((li) => (
                   <li
                     key={li}
                     className={
