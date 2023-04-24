@@ -198,7 +198,7 @@ const Questions = () => {
             </SideCard>
           </div>
           <div>
-            <SideCard textSize={'sm'}>
+            <SideCard textSize={'big'}>
               <div>Custom Filters</div>
               <div>
                 <ul>
@@ -210,7 +210,7 @@ const Questions = () => {
             </SideCard>
           </div>
           <div>
-            <SideCard textSize={'sm'}>
+            <SideCard textSize={'big'}>
               <div>Watched Tags</div>
               <div>
                 <ul>
@@ -222,7 +222,7 @@ const Questions = () => {
             </SideCard>
           </div>
           <div>
-            <SideCard textSize={'sm'}>
+            <SideCard textSize={'big'}>
               <div>Ignored Tags</div>
               <div>
                 <ul>
@@ -234,7 +234,7 @@ const Questions = () => {
             </SideCard>
           </div>
           <div>
-            <SideCard textSize={'sm'}>
+            <SideCard textSize={'big'}>
               <div>Collectives</div>
               <div>
                 <ul>
@@ -301,7 +301,12 @@ export default Questions;
 const SideContainer = styled.div`
   margin-top: 24px;
   margin-left: 20px;
-  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+
+  @media (max-width: 980px) {
+    display: none;
+  }
 
   > div {
     margin-bottom: 16px;

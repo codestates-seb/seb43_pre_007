@@ -23,9 +23,9 @@ const SideCardBox = styled.div<SideCardProps>`
 
   > div:first-child {
     padding: 15px 12px;
-    font-weight: ${(props) => (props.textSize === 'sm' ? '100' : '500')};
+    font-weight: ${(props) => (props.textSize === 'big' ? '100' : '500')};
     border-bottom: 1px solid var(--border-gray);
-    font-size: ${(props) => props.textSize === 'sm' && '0.95rem'};
+    font-size: ${(props) => props.textSize === 'big' && '0.95rem'};
   }
 
   > div:last-child {
