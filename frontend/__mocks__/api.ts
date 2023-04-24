@@ -2,11 +2,8 @@ import { rest } from 'msw';
 import { signupusers } from './dummy';
 import { USERS } from './dummy/users';
 import { questions } from './dummy/questions';
-<<<<<<< HEAD
 import { TAGS } from './dummy/tags';
 
-=======
->>>>>>> 86d3042cdeed5f6a2b6d57fdceab9d44975d1c7b
 export const handlers = [
   rest.get('/login', async (req, res, ctx) => {
     const data = req.json();
