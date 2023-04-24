@@ -993,13 +993,18 @@ const EditContent = () => {
     };
   };
 
+  const test = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    axios('http://localhost:8080/questions/1').then((res) => console.log(res));
+  };
+
   const inputLabel = Object.keys(USER_EDIT_INPUT);
   const linkLabel = Object.keys(USER_EDIT_LINKS);
 
   return (
     <EditContentContainer>
       <div className="title">Edit your profile</div>
-      <form>
+      <form onSubmit={test}>
         <div className="form_title">Public information</div>
         <div className="form_content">
           <div className="img_content">
