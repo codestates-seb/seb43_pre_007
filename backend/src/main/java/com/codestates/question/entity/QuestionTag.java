@@ -17,9 +17,6 @@ public class QuestionTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long questionTagId;
 
-    @Column
-    private int count;
-
     @ManyToOne
     @JoinColumn(name = "TAG_ID")
     private Tag tag;

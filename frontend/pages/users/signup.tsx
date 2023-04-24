@@ -426,10 +426,17 @@ const FormContainer = styled.div`
   .hide {
     display: none;
   }
+  .product {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .product-checkbox {
+      margin-right: 4px;
+    }
+  }
   .privacy {
     font-size: 0.7rem;
     margin: 0px;
-
     > a {
       word-break: keep-all;
     }
@@ -443,7 +450,7 @@ const FormContainer = styled.div`
     font-weight: 400;
     color: var(--black-700);
     > input {
-      marign-right: 4px;
+      margin-right: 4px;
       cursor: pointer;
     }
   }

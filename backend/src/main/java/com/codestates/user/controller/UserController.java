@@ -1,8 +1,8 @@
 package com.codestates.user.controller;
 
 import com.codestates.dto.MultiResponseDto;
-import com.codestates.user.dto.UsersAllResponseDtos;
 import com.codestates.user.dto.UserDto;
+import com.codestates.user.dto.UsersAllResponseDtos;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
 import com.codestates.user.service.UserService;
@@ -10,12 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Validated
@@ -41,13 +43,48 @@ public class UserController {
     }
 
 
+//    // [로그인]
+//    @PostMapping("/login")
+//    public ResponseEntity<String> postLogin(@RequestHeader(name="Authorization") String token,
+//                                            @Valid @RequestBody LoginDto requestBody){
+//
+//        String secretKey = System.getenv("JWT_SECRET_KEY");
+//        Jws<Claims> jws;
+//
+//        try{
+//            jws = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build().parseClaimsJws(token);
+//        } catch (JwtException e){
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        long jwtUserId = Long.parseLong(jws.getBody().getSubject());
+//        User user = userService.findUserEmail(requestBody);
+//        long dbUserId = user.getUserId();
+//
+//        if(jwtUserId != dbUserId){
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+
     // [회원프로필 수정]
     @PatchMapping("/{user-id}/edit")
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive long userId,
-                                    @Valid @RequestBody UserDto.PatchDto requestBody){
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody.addUserId(userId)));
+                                    @Valid @RequestBody UserDto.PatchDto requestBody,
+                                    Authentication authentication){
+
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long jwtUserId = ((Number) principal.get("userId")).longValue();
+
+        if(jwtUserId != (userId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        requestBody.setUserId(userId);
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(requestBody));
         return new ResponseEntity<>(userMapper.userToUserResponseDto(user),HttpStatus.OK);
     }
+
 
     // [회원조회]
     @GetMapping("/{user-id}")
@@ -70,8 +107,16 @@ public class UserController {
 
     //회원탈퇴
     @DeleteMapping("/{user-id}")
-    public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId){
+    public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId,
+                                     Authentication authentication){
+
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long jwtUserId = ((Number) principal.get("userId")).longValue();
+
+        if(jwtUserId != userId){
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         userService.removeUser(userId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -2,7 +2,7 @@
 import { FilterButton } from '@/components/button/FilterButton';
 import Input from '@/components/input/Input';
 import Pagenation from '@/components/pagenation/Pagenation';
-import { daysFilter } from '@/constant/constant';
+import { DAYS_FILTER } from '@/constant/constant';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -70,7 +70,7 @@ const Users = () => {
               </div>
               <div className="days_filter">
                 <div>
-                  {daysFilter.map((category, i) => (
+                  {DAYS_FILTER.map((category, i) => (
                     <span
                       className={i === pickDaysFilter ? 'focus_span' : ''}
                       onClick={() => setPickDaysFilter(i)}
@@ -265,45 +265,17 @@ const PageContainer = styled.div`
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
   > div:first-child {
     font-weight: 900;
     cursor: pointer;
     font-size: 0.8rem;
     color: var(--text-blue);
-  }
-  #pagenation {
-    display: flex;
-    .selected > a {
-      background-color: var(--bg-orange);
-      color: white;
-      :hover {
-        background-color: var(--bg-orange);
-        color: white;
-      }
-    }
-    > ul {
-      display: flex;
-    }
-    > div {
-      margin: 0px 10px;
-      display: flex;
-      align-items: end;
-      padding-bottom: 7px;
-    }
-    a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0px 8px;
-      height: 27px;
-      font-size: 0.9rem;
-      border: 1px solid #d8d9da;
-      border-radius: 4px;
-      margin: 0px 3px;
-      cursor: pointer;
-      :hover {
-        background-color: #cccdce;
-      }
+    @media (max-width: 640px) {
+      margin-bottom: 30px;
     }
   }
 `;

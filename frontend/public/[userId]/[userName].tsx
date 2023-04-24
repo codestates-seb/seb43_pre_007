@@ -5,9 +5,12 @@ import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
 import SelectContent from '@/components/select_content/SelectContent';
 import {
-  detailActivityContent,
-  detailNav,
-  detailSaves,
+  DETAIL_ACTIVITY_CONTENT,
+  DETAIL_NAV,
+  DETAIL_SAVES,
+  USER_EDIT_INPUT,
+  USER_EDIT_LINKS,
+  USER_EDIT_LINKS_ICON,
 } from '@/constant/constant';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -19,6 +22,18 @@ import {
   pickCategoryState,
   pickState,
 } from '@/recoil/atom';
+import { useRef, useState } from 'react';
+import axios from 'axios';
+import Input from '@/components/input/Input';
+import dynamic from 'next/dynamic';
+import { api } from '@/util/api';
+
+//navigator에 의존하는 라이브러리이기 때문에, 클라이언트 측에서만 렌더링 되도록 dynamic을 사용하여 컴포넌트를 래핑해줌
+const DynamicTextEditor = dynamic(
+  () => import('@/components/text_editor/TextEditor'),
+  { ssr: false }
+);
+
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -79,7 +94,7 @@ const UserDetail = () => {
                   <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
                 </svg>
               </span>
-              <span>Edit profile</span>
+              <span onClick={() => pickHandler(3)}>Edit profile</span>
             </Button>
           </div>
           <div>
@@ -105,7 +120,7 @@ const UserDetail = () => {
       </div>
       <div className="detail_nav">
         <ul>
-          {detailNav.map((category, i) => (
+          {DETAIL_NAV.map((category, i) => (
             <li key={category}>
               <MenuItem onClick={() => pickHandler(i)} idx={i} pick={pick}>
                 {category}
@@ -131,6 +146,7 @@ const UserDetail = () => {
           selectPickCategory={selectPickCategory}
         />
       )}
+      {pick === 3 && <EditContent />}
     </UsersDetailContainer>
   );
 };
@@ -449,7 +465,7 @@ const ActiveContent = ({
   selectPickCategory,
   pick,
 }: ActiveProps) => {
-  const detailActivity = Object.keys(detailActivityContent);
+  const detailActivity = Object.keys(DETAIL_ACTIVITY_CONTENT);
   return (
     <ActiveContentContainer pickCategory={pickCategory}>
       <div>
@@ -471,7 +487,7 @@ const ActiveContent = ({
         selectPickCategory={selectPickCategory}
         pickCategory={pickCategory}
         categories={detailActivity}
-        sub={detailNav[pick]}
+        sub={DETAIL_NAV[pick]}
       />
       <div>
         {pickCategory === 0 && (
@@ -557,7 +573,7 @@ const ActiveContent = ({
                   </div>
                 </div>
                 <Card>
-                  <div>{detailActivityContent[category]}</div>
+                  <div>{DETAIL_ACTIVITY_CONTENT[category]}</div>
                 </Card>
               </div>
             )
@@ -578,7 +594,7 @@ const ActiveContent = ({
                   </div>
                 </div>
                 <Card>
-                  <div>{detailActivityContent[category]}</div>
+                  <div>{DETAIL_ACTIVITY_CONTENT[category]}</div>
                 </Card>
               </div>
             )
@@ -768,7 +784,7 @@ const SavesContent = ({
       <div>
         <div>
           <ul>
-            {detailSaves.map((category, i) => (
+            {DETAIL_SAVES.map((category, i) => (
               <li key={category}>
                 <MenuItem
                   idx={i}
@@ -801,12 +817,12 @@ const SavesContent = ({
       <SelectContent
         selectPickCategory={selectPickCategory}
         pickCategory={pickCategory}
-        categories={[...detailSaves, ...myList]}
-        sub={detailNav[pick]}
+        categories={[...DETAIL_SAVES, ...myList]}
+        sub={DETAIL_NAV[pick]}
       />
       <div>
         <div>
-          <div>{[...detailSaves, ...myList][pickCategory]}</div>
+          <div>{[...DETAIL_SAVES, ...myList][pickCategory]}</div>
           <div>
             {pickCategory < 2 ? (
               <Button color="var(--text-white)" onClick={onAdd}>
@@ -939,6 +955,257 @@ const SavesContentContainer = styled.div`
       > p {
         margin-top: 30px;
         font-size: 0.8rem;
+      }
+    }
+  }
+`;
+
+//=======================Edit 컨텐츠=======================
+
+const EditContent = () => {
+  const target = useRef<HTMLInputElement>(null);
+  const uploadClick = () => {
+    if (target.current) target.current.click();
+  };
+  const [img, setImg] = useState(
+    'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
+  );
+
+  const saveImgFile = () => {
+    if (!target.current?.files) return;
+    const file = target.current.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    //서버 유무에 따라 추가 작업 결정
+    reader.onloadend = () => {
+      const formData = new FormData();
+      formData.append('data', file);
+      api
+        .post('/img', formData, {
+          headers: {
+            'Content-Type': `multipart/form-data`,
+          },
+        })
+        .then((res) => setImg(res.data))
+        .catch(() => {
+          alert('사진 등록에 실패하였습니다.');
+        });
+    };
+  };
+
+  const inputLabel = Object.keys(USER_EDIT_INPUT);
+  const linkLabel = Object.keys(USER_EDIT_LINKS);
+
+  return (
+    <EditContentContainer>
+      <div className="title">Edit your profile</div>
+      <form>
+        <div className="form_title">Public information</div>
+        <div className="form_content">
+          <div className="img_content">
+            <div>Profile Image</div>
+            <div className="img_box">
+              <img src={img} alt="profile" />
+              <div className="img_change" onClick={uploadClick}>
+                Change picture
+              </div>
+              <input
+                ref={target}
+                onChange={saveImgFile}
+                type="file"
+                accept="image/*"
+              ></input>
+            </div>
+          </div>
+          {inputLabel.map((label) => (
+            <div
+              className={
+                label === 'about_me' ? 'input_box text_editor' : 'input_box'
+              }
+              key={label}
+            >
+              <label htmlFor={label}>{USER_EDIT_INPUT[label]}</label>
+              {label === 'about_me' ? (
+                <DynamicTextEditor />
+              ) : (
+                <Input
+                  id={label}
+                  name={label}
+                  placeholder={label === 'title' ? 'No title has been set' : ''}
+                  paddingLeft="10px"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="form_title">Links</div>
+        <div className="form_content links">
+          {linkLabel.map((label, i) => (
+            <div key={label}>
+              <label htmlFor={label}>{USER_EDIT_LINKS[label]}</label>
+              <Input id={label} name={label} paddingLeft="30px" />
+              <div className={`link_icon`}>{USER_EDIT_LINKS_ICON[i]}</div>
+            </div>
+          ))}
+        </div>
+        <div className="form_title">Private information</div>
+        <div className="form_content">
+          <div className="full_name_box">
+            <label htmlFor={'full_name'}>Full name</label>
+            <Input id={'full_name'} name={'full_name'} paddingLeft="10px" />
+          </div>
+        </div>
+        <div className="submit_box">
+          <Button color="var(--text-white)">
+            <a>Save profile</a>
+          </Button>
+          <button>
+            <a>Cancel</a>
+          </button>
+        </div>
+      </form>
+    </EditContentContainer>
+  );
+};
+
+const EditContentContainer = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px calc((100% - 800px) / 2);
+  width: 100%;
+  .title {
+    width: 100%;
+    font-size: 1.5rem;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #dcdfdd;
+  }
+  form {
+    width: 100%;
+    .form_title {
+      margin-top: 36px;
+      font-size: 1.25rem;
+      width: 100%;
+      padding: 10px 0px;
+    }
+    .form_content {
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #dcdfdd;
+    }
+    .input_box {
+      width: 60%;
+      margin: 18px 8px;
+      input {
+        margin-top: 6px;
+      }
+    }
+    .img_content {
+      margin: 12px 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      .img_box {
+        margin-top: 8px;
+        position: relative;
+        padding: 0px;
+        width: 164px;
+        height: 164px;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+        }
+        input {
+          display: none;
+        }
+      }
+      .img_change {
+        font-weight: normal;
+        font-size: 0.8rem;
+        position: absolute;
+        top: 127px;
+        width: 164px;
+        height: 23.5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        background-color: #363636;
+        border-radius: 0px 0px 4px 4px;
+        color: white;
+        cursor: pointer;
+        :hover {
+          background-color: #1d1c1c;
+        }
+      }
+    }
+    .text_editor {
+      margin: 0px;
+      padding: 0px 8px;
+      width: 100%;
+      > div {
+        margin-top: 8px;
+      }
+      .cm-null {
+        background: none !important;
+      }
+    }
+    .links {
+      display: flex;
+      @media (max-width: 800px) {
+        flex-direction: column;
+      }
+      > div {
+        flex: 1;
+        margin: 20px 10px;
+        position: relative;
+        > label {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+        > input {
+          margin-top: 4px;
+        }
+      }
+      .link_icon {
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        opacity: 0.6;
+      }
+    }
+  }
+  .full_name_box {
+    padding: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    input {
+      margin-top: 4px;
+      width: 50%;
+      @media (max-width: 800px) {
+        width: 100%;
+      }
+    }
+  }
+  .submit_box {
+    margin: 60px 0px;
+    display: flex;
+    button {
+      width: auto;
+      padding: 10.4px;
+      cursor: pointer;
+    }
+    > button:last-child {
+      margin-left: 10px;
+      border: none;
+      background-color: white;
+      :hover {
+        background-color: #cfeeff75;
+      }
+      > a {
+        color: var(--text-blue);
       }
     }
   }
