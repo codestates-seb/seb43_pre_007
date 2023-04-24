@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-import Button from '@/components/button/Button';
+import styled from 'styled-components';
 import faviconSprite from '@/public/faviconSprite.png';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
@@ -56,7 +55,7 @@ interface logout {
   termId: string;
 }
 
-const logout = () => {
+const Logout = () => {
   const [userLog, setUserLog] = useRecoilState(userLogState);
   const navi = useRouter();
 
@@ -115,7 +114,7 @@ const logout = () => {
   );
 };
 
-export default logout;
+export default Logout;
 
 const BasicContainer = styled.div`
   width: 100%;

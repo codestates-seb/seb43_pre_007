@@ -25,15 +25,19 @@ import {
 import { useRef, useState } from 'react';
 import axios from 'axios';
 import Input from '@/components/input/Input';
-import dynamic from 'next/dynamic';
 import { api } from '@/util/api';
+import dynamic from 'next/dynamic';
 
 //navigator에 의존하는 라이브러리이기 때문에, 클라이언트 측에서만 렌더링 되도록 dynamic을 사용하여 컴포넌트를 래핑해줌
-const DynamicTextEditor = dynamic(
-  () => import('@/components/text_editor/TextEditor'),
-  { ssr: false }
+const MarkDownEditor = dynamic(
+  () =>
+    import('@/components/markDownEditor/MarkDownEditor').then(
+      (res) => res.MarkDownEditor
+    ),
+  {
+    ssr: false,
+  }
 );
-
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -1031,7 +1035,7 @@ const EditContent = () => {
             >
               <label htmlFor={label}>{USER_EDIT_INPUT[label]}</label>
               {label === 'about_me' ? (
-                <DynamicTextEditor />
+                <MarkDownEditor />
               ) : (
                 <Input
                   id={label}
