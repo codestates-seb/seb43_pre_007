@@ -6,3 +6,10 @@ type User = {
   reputation: number;
   tags: string;
 };
+
+type Tags = {
+  tag_id: number;
+  name: string;
+  info: string;
+  count: number;
+};

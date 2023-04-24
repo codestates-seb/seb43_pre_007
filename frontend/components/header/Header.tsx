@@ -267,7 +267,7 @@ const Header = () => {
                         <div>
                           <span>help</span>
                           <span>chat</span>
-                          <span onClick={logOut}>log out</span>
+                          <a href="/users/logout">log out</a>
                         </div>
                       </div>
                     </div>
@@ -694,10 +694,19 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           cursor: pointer;
         }
       }
+      a {
+        :hover {
+          color: #024fdd;
+          cursor: pointer;
+        }
+      }
       > div {
         height: 100%;
         > div {
           div {
+            color: var(--text-blue);
+          }
+          a {
             color: var(--text-blue);
           }
           > div:first-child {

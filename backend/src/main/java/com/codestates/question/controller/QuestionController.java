@@ -6,9 +6,12 @@ import com.codestates.question.dto.QuestionDto;
 import com.codestates.question.entity.Question;
 import com.codestates.question.mapper.QuestionMapper;
 import com.codestates.question.service.QuestionService;
+import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/questions")
@@ -32,16 +36,28 @@ public class QuestionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto) {
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto,
+                                       Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
+
+        questionPostDto.setUserId(userId);
         Question question = questionService.createQuestion(mapper.questionPostDtoToQuestion(questionPostDto));
 
         return new ResponseEntity<>(mapper.questionToQuestionPOSTResponseDto(question), HttpStatus.CREATED);
-
     }
 
     @PatchMapping("/{question-id}/edit")
     public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-                                     @Valid @RequestBody QuestionDto.Patch questionPatchDto) {
+                                     @Valid @RequestBody QuestionDto.Patch questionPatchDto,
+                                        Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
+
+        //질문작성자가 아닌 사용자가 질문 수정 요청을 했을 경우
+        long findUserId = questionService.findQuestion(questionId).getUser().getUserId();
+        if(userId != findUserId) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         questionPatchDto.setQuestionId(questionId);
         questionService.updateQuestion(mapper.questionPatchDtoToQuestion(questionPatchDto)); //리턴값 필요없음
 
@@ -67,7 +83,15 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId,
+                                         Authentication authentication) {
+        Map<String,Object> principal = (Map) authentication.getPrincipal();
+        long userId = ((Number) principal.get("userId")).longValue();
+
+        //질문작성자가 아닌 사용자가 질문 삭제 요청을 했을 경우
+        long findUserId = questionService.findQuestion(questionId).getUser().getUserId();
+        if(userId != findUserId) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         questionService.deleteQuestion(questionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

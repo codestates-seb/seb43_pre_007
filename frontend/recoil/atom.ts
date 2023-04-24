@@ -35,3 +35,8 @@ export const pickCategoryState = atom({
   key: 'pickCategoryState',
   default: 0,
 });
+
+export const editorValState = atom({
+  key:'editorValState',
+  default:''
+})

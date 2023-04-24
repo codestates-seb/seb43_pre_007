@@ -36,15 +36,15 @@ public class TagService {
 
 
     // [태그조회] : 태그를 클릭하면 해당태그를 사용한 질문목록 페이지로 넘어감.
-    public Page<QuestionTag> findTag(String name, int page, int size) {
+    public Page<QuestionTag> findTag(long tagId, int page, int size) {
         //1. DB에서 태그찾기
         //2. 질문에 사용된 태그를 저장하는 questionTag 페이지 가져오기
         //3. 페이지의 컨텐츠 List로 저장
-        findVerifyTags(name);
+        findVerifyTags(tagId);
         Page<Tag> questionPage =tagRepository.findAll(PageRequest.of(page, size));
         List<Tag> questionTagList = questionPage.getContent();
 
-        questionTagList.stream().filter(q->!q.getQuestionTagList().contains(name))
+        questionTagList.stream().filter(q->!q.getQuestionTagList().contains(tagId))
                 .collect(Collectors.toList());
 
         questionPage = new PageImpl<>(questionTagList,questionPage.getPageable(),questionTagList.size());
@@ -58,13 +58,6 @@ public class TagService {
         return new PageImpl<>(questionTags,questionPage.getPageable(),questionPage.getTotalElements());
       }
 
-//    🟡생성자필요(null체크)🟡
-//    @ManyToOne
-//    @JoinColumn(name = "TAG_ID")
-//    private Tag tag;
-
-
-
 
     // [태그전체조회]
     public Page<Tag> findTags(int page, int size) {
@@ -76,15 +69,15 @@ public class TagService {
 
 
     // [태그존재여부]
-    private Tag findVerifyTags(String name) {
-        Optional<Tag> optionalTag = tagRepository.findByName(name);
+    private Tag findVerifyTags(long tagId) {
+        Optional<Tag> optionalTag = tagRepository.findById(tagId);
         Tag findTag = optionalTag.orElseThrow(()-> new BusinessLogicException(ExceptionCode.TAG_NOT_FOUND));
         return findTag;
     }
 
     // [postCount 증가]
     private void increamentPostCount(UserTag tag){
-        if(tag.getUser().getQuestion().contains(tag.getTag().getName())){
+        if(tag.getUser().getQuestions().contains(tag.getTag().getName())){
             tag.setPostsCount(tag.getPostsCount()+1);
         }
     }
