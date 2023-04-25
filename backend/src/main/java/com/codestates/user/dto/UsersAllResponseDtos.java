@@ -17,6 +17,7 @@ public class UsersAllResponseDtos {
     @JsonProperty("about_me")
     private String aboutMe;
     private String location;
+    private String imageUrl;
     private LocalDateTime creationDate;
     private int questionCount;
     private int answerCount;

@@ -1,8 +1,9 @@
 package com.codestates.tag.controller;
 
+import com.codestates.dto.CustomResponseDto;
 import com.codestates.dto.MultiResponseDto;
 import com.codestates.question.entity.QuestionTag;
-import com.codestates.tag.dto.TagDto;
+import com.codestates.tag.dto.OneTagResponseDto;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
@@ -32,24 +33,39 @@ public class TagController {
 
     //태그조회
     @GetMapping("/{tag-id}")
-    public ResponseEntity getTag(@Positive@PathVariable long tagId,
-                                 @Positive @RequestParam("page") int page,
-                                 @Positive @RequestParam("size") int size){
-        Page<QuestionTag> tagPage = tagService.findTag(tagId, page-1, size);
-        List<QuestionTag> tagList = tagPage.getContent();
-        List<TagDto.ResponseDto> responseDtos = tagMapper.tagToTagResponseDto(tagList);
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(responseDtos, tagPage), HttpStatus.OK);
+    public ResponseEntity getTag(@Positive @RequestParam("page") int page,
+                                 @Positive @RequestParam("size") int size,
+                                 @Positive @PathVariable("tag-id") long tagId) {
+
+        Page<QuestionTag> questionPage = tagService.findTag(page - 1, size, tagId);
+        List<QuestionTag> questionList = questionPage.getContent();
+
+        List<OneTagResponseDto> tagResponseDtoList = tagMapper.tagToTagResponseDto(questionList);
+
+//        MultiResponseDto data = new MultiResponseDto(tagResponseDtoList, questionPage);
+        Tag tag = tagService.findVerifyTags(tagId);
+        String name = tag.getName();
+        String info = tag.getInfo();
+
+        CustomResponseDto responseDto = new CustomResponseDto(name,info,tagResponseDtoList,questionPage);
+
+
+        //컴파일에러 검색
+        //if 문 추가해서 null 값 안뜨게 처리
+        //responseDto 필드 한겹 벗기
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+
 
     //태그전체조회
     @GetMapping
-    public ResponseEntity getTags(@Positive @RequestParam int page,
-                                  @Positive @RequestParam int size){
-        Page<Tag> tagPage = tagService.findTags(page,size);
+    public ResponseEntity getTags(@Positive @RequestParam("page") int page,
+                                  @Positive @RequestParam("size") int size){
+        Page<Tag> tagPage = tagService.findTags(page-1,size);
         List<Tag> tagList = tagPage.getContent();
-        List<TagDto.ResponseDtos> responseDtos = tagMapper.tagsToTagResponseDtos(tagList);
+
         return new ResponseEntity<>(
-                new MultiResponseDto<>(responseDtos,tagPage),HttpStatus.OK);
+                new MultiResponseDto<>(tagMapper.tagToTagResponseDtos(tagList),tagPage),HttpStatus.OK);
     }
 }

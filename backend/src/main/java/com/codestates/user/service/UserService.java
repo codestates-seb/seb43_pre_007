@@ -1,6 +1,6 @@
 package com.codestates.user.service;
 
-import com.codestates.__event.UserRegistrationEvent;
+import com.codestates.event.UserRegistrationEvent;
 import com.codestates.answer.entity.Answer;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -44,8 +44,8 @@ public class UserService {
         User saveUser = userRepository.save(user);
 
         // 신규회원등록시 인증 이메일전송을 위한 event 발생로직
-        publisher.publishEvent(new UserRegistrationEvent(saveUser));
-        return userRepository.save(user);
+        publisher.publishEvent(new UserRegistrationEvent(this,saveUser));
+        return saveUser;
     }
 
 
@@ -59,6 +59,8 @@ public class UserService {
                 .ifPresent(aboutMe->findUser.setAboutMe(aboutMe));
         Optional.ofNullable(user.getLocation())
                 .ifPresent(location->findUser.setLocation(location));
+        Optional.ofNullable(user.getImageUrl())
+                .ifPresent(imageUrl->findUser.setImageUrl(imageUrl));
 
         //questionCount 정보를 user 의 questionCount 필드에 불러오기
         findUser.setQuestionCount(getQuestionCount(user.getUserId()));
@@ -148,6 +150,12 @@ public class UserService {
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
+    }
+
+    // 이메일인증 실패시 가입전으로 롤백할때 user 정보 삭제
+    public void deleteUser(long userId) {
+        User user = findVerifiedUser(userId);
+        userRepository.delete(user);
     }
 
 

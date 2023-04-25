@@ -38,6 +38,9 @@ public class User {
     @Column
     private String location;
 
+    @Column
+    private String imageUrl;
+
     @Column(name="CREATED_AT",nullable = false)
     private LocalDateTime creationDate;
 

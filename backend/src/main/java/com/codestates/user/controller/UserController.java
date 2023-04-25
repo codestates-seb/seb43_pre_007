@@ -43,31 +43,6 @@ public class UserController {
     }
 
 
-//    // [로그인]
-//    @PostMapping("/login")
-//    public ResponseEntity<String> postLogin(@RequestHeader(name="Authorization") String token,
-//                                            @Valid @RequestBody LoginDto requestBody){
-//
-//        String secretKey = System.getenv("JWT_SECRET_KEY");
-//        Jws<Claims> jws;
-//
-//        try{
-//            jws = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build().parseClaimsJws(token);
-//        } catch (JwtException e){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//
-//        long jwtUserId = Long.parseLong(jws.getBody().getSubject());
-//        User user = userService.findUserEmail(requestBody);
-//        long dbUserId = user.getUserId();
-//
-//        if(jwtUserId != dbUserId){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
-
     // [회원프로필 수정]
     @PatchMapping("/{user-id}/edit")
     public ResponseEntity patchUser(@PathVariable("user-id") @Positive long userId,
