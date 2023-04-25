@@ -1,6 +1,6 @@
 package com.codestates.user.service;
 
-import com.codestates.event.UserRegistrationEvent;
+//import com.codestates.event.UserRegistrationEvent;
 import com.codestates.answer.entity.Answer;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -44,7 +44,7 @@ public class UserService {
         User saveUser = userRepository.save(user);
 
         // 신규회원등록시 인증 이메일전송을 위한 event 발생로직
-        publisher.publishEvent(new UserRegistrationEvent(this,saveUser));
+        //publisher.publishEvent(new UserRegistrationEvent(this,saveUser));
         return saveUser;
     }
 
