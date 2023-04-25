@@ -55,7 +55,7 @@ const DetailQuestion = () => {
           <QuestionContent>
             <div className="content">
               <QuestionForm
-                score={data.question.vote.score}
+                score={0}
                 body={data.question.body}
                 tags={data.question.tags}
                 question_id={data.question.question_id}
