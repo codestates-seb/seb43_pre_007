@@ -1,8 +1,35 @@
 import styled from 'styled-components';
-import { QuestionAskForm } from '@/components/questionAskForm/QuestionAskForm';
+import { api } from '@/util/api';
+import { useMutation } from 'react-query';
+import { ReqAddQuestion, ResQuestion } from '@/util/api/addQuestions';
+import {
+  QuestionAskData,
+  QuestionAskForm,
+} from '@/components/questionAskForm/QuestionAskForm';
+import { useRouter } from 'next/router';
 
 const Ask = () => {
-  const handleUpdateSubmit = (value: any) => {};
+  const route = useRouter();
+
+  const questionAsk = useMutation({
+    mutationFn: (req: ReqAddQuestion) =>
+      api.post<ResQuestion>('/questions/add', req),
+    onSuccess: async (res) => {
+      const { question_id } = res.data.question;
+
+      if (res.data.question.question_id)
+        route.push(`/questions/${question_id}`);
+    },
+  });
+
+  const handleUpdateSubmit = (value: QuestionAskData) => {
+    const tags = value.tags.map((tag) => ({
+      tag_id: tag === '자바' ? 1 : 2,
+      name: tag,
+    }));
+
+    questionAsk.mutate({ ...value, tags });
+  };
 
   return (
     <ScreenView>
