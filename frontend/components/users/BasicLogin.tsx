@@ -1,11 +1,11 @@
-import axios from 'axios';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
-import { api } from '@/util/api';
 import { useRecoilState } from 'recoil';
-import { userLogState } from '@/recoil/atom';
+import { userNameState, userImgState, userIdState } from '@/recoil/atom';
+import { api } from '@/util/api';
+import { setLocalStorage } from '@/util/local_storage/localStorage';
 const FormContainer = styled.div`
   width: 100%;
 
@@ -91,7 +91,9 @@ const FormInputs = styled.input<InvalidInput>`
 
 const BasicLogin = () => {
   // 전역 변수 recoil(클라이언트)
-  const [userLog, setUserLog] = useRecoilState(userLogState);
+  const [, setUserName] = useRecoilState(userNameState);
+  const [, setUserImg] = useRecoilState(userImgState);
+
   // 로그인 실패시 안내 문구
   const [loginFailed, setloginFailed] = useState(false);
   // 유효성검사
@@ -105,8 +107,10 @@ const BasicLogin = () => {
     email: '',
     password: '',
   });
+
+  const [, setUserId] = useRecoilState(userIdState);
   // next: navigation 기능
-  const navi = useRouter();
+  const router = useRouter();
   // Login 버튼 누르고 나서부터 계속 업데이트
   useEffect(() => {
     // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
@@ -156,24 +160,31 @@ const BasicLogin = () => {
     // 유효성 검사가 다 통과되면 로그인 요청
     if (emailcheck && passwordcheck) {
       return (
-        axios
+        api
           .post('/users/login', { email, password })
-          // 성공시
           .then((res) => {
-            navi.push('/questions');
-            alert('로그인 성공');
-            // 로컬스토리에 토큰 저장
-            localStorage.setItem('user', JSON.stringify(res.data.accessToken));
+            router.push('/questions');
+            localStorage.setItem(
+              'accessToken',
+              JSON.stringify(res.data.accessToken)
+            );
+            localStorage.setItem(
+              'refreshToken',
+              JSON.stringify(res.data.refreshToken)
+            );
+            localStorage.setItem('userId', `${res.data.user_id}`);
+            setUserId(res.data.user_id);
+            setUserName(res.data.display_name);
+            setUserImg(res.data.user_img);
             setloginFailed(false);
-            setUserLog(true);
-            // 로그인 성공하면 입력 폼 초기화
             resetInput();
+            alert('로그인 성공');
           })
           // 실패시
           .catch((err) => {
-            // 상태코드 401 = 로그인 정보가 없을 시
-            if (err.response.status === 400) {
-              alert('로그인 정보가 없습니다.');
+            // 상태코드 401 = 서버 데이터 비밀번호와 다를 시
+            if (err.response.status === 401) {
+              alert('이메일 혹은 비밀번호를 확인해 주세요.');
               setloginFailed(true);
             }
             // 상태코드 503 = 서버 상태가 안 좋을 시

@@ -1,9 +1,18 @@
 import { localState } from '@/util/local_storage/localStorage';
 import { atom } from 'recoil';
 
-export const userLogState = atom({
-  key: 'userLogState',
-  default: true, //true로하고 작업
+export const userIdState = atom<number>({
+  key: 'userIdState',
+  default: undefined,
+});
+
+export const userImgState = atom({
+  key: 'userImgState',
+  default: '',
+});
+export const userNameState = atom({
+  key: 'userNameState',
+  default: '',
 });
 
 export const myListState = atom<string[]>({
@@ -37,6 +46,6 @@ export const pickCategoryState = atom({
 });
 
 export const editorValState = atom({
-  key:'editorValState',
-  default:''
-})
+  key: 'editorValState',
+  default: '',
+});
