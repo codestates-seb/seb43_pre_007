@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -106,6 +105,7 @@ public class QuestionDto {
         private boolean isAccepted;
         private int viewCount;
         private int answerCount;
+        private QuestionVoteResponseDto vote = new QuestionVoteResponseDto(); //vote 추가
         private LocalDateTime creationDate;
         private LocalDateTime lastEditDate;
         private List<QuestionTagDto> tags;

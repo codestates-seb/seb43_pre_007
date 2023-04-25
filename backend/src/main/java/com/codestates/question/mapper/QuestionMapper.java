@@ -154,6 +154,7 @@ public interface QuestionMapper {
         QuestionUserResponseDto questionUserResponseDto = new QuestionUserResponseDto();
         questionUserResponseDto.setUserId(user.getUserId());
         questionUserResponseDto.setDisplayName(user.getDisplayName());
+        questionUserResponseDto.setImageUrl(user.getImageUrl());
 
         return questionUserResponseDto;
     }

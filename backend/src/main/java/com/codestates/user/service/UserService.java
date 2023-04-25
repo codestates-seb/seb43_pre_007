@@ -53,7 +53,7 @@ public class UserService {
     public User updateUser(User user) {
 
         User findUser = findVerifiedUser(user.getUserId());
-        Optional.ofNullable(findUser.getDisplayName())
+        Optional.ofNullable(user.getDisplayName())
                 .ifPresent(displayName->findUser.setDisplayName(displayName));
         Optional.ofNullable(user.getAboutMe())
                 .ifPresent(aboutMe->findUser.setAboutMe(aboutMe));
