@@ -164,8 +164,14 @@ const BasicLogin = () => {
           .post('/users/login', { email, password })
           .then((res) => {
             router.push('/questions');
-            localStorage.setItem('accessToken', `${res.data.accessToken}`);
-            localStorage.setItem('refreshToken', `${res.data.refreshToken}`);
+            localStorage.setItem(
+              'accessToken',
+              JSON.stringify(res.data.accessToken)
+            );
+            localStorage.setItem(
+              'refreshToken',
+              JSON.stringify(res.data.refreshToken)
+            );
             localStorage.setItem('userId', `${res.data.user_id}`);
             setUserId(res.data.user_id);
             setUserName(res.data.display_name);

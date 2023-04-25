@@ -23,21 +23,10 @@ import {
   pickState,
 } from '@/recoil/atom';
 import { useRef, useState } from 'react';
-import axios from 'axios';
-import Input from '@/components/input/Input';
 import { api } from '@/util/api';
-import dynamic from 'next/dynamic';
+import { MarkDownEditor } from '@/components/markDownEditor/MarkDownEditor';
+import Input from '@/components/input/Input';
 
-//navigator에 의존하는 라이브러리이기 때문에, 클라이언트 측에서만 렌더링 되도록 dynamic을 사용하여 컴포넌트를 래핑해줌
-const MarkDownEditor = dynamic(
-  () =>
-    import('@/components/markDownEditor/MarkDownEditor').then(
-      (res) => res.MarkDownEditor
-    ),
-  {
-    ssr: false,
-  }
-);
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
@@ -366,7 +355,6 @@ const ProfileContentContainer = styled.div`
       margin: 20px 0px;
     }
   }
-
   .stats {
     > div:first-child {
       font-size: 1.3rem;
@@ -389,7 +377,6 @@ const ProfileContentContainer = styled.div`
       }
     }
   }
-
   .communities {
     > div:first-child {
       display: flex;
@@ -420,7 +407,6 @@ const ProfileContentContainer = styled.div`
       }
     }
   }
-
   .right-content {
     margin: 0px 20px;
     @media (max-width: 980px) {
@@ -446,7 +432,6 @@ const ProfileContentContainer = styled.div`
         }
       }
     }
-
     .posts_img {
       margin-top: 12px;
       margin-bottom: 20px;
@@ -634,7 +619,6 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
       }
     }
   }
-
   > div:last-child {
     width: 88%;
     min-height: 40vh;
@@ -997,18 +981,13 @@ const EditContent = () => {
     };
   };
 
-  const test = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    axios('http://localhost:8080/questions/1').then((res) => console.log(res));
-  };
-
   const inputLabel = Object.keys(USER_EDIT_INPUT);
   const linkLabel = Object.keys(USER_EDIT_LINKS);
 
   return (
     <EditContentContainer>
       <div className="title">Edit your profile</div>
-      <form onSubmit={test}>
+      <form>
         <div className="form_title">Public information</div>
         <div className="form_content">
           <div className="img_content">
