@@ -1,16 +1,13 @@
 //경로 https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fusers
-import axios from 'axios';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
-import { userLogState } from '@/recoil/atom';
 import SosialLogin from '@/components/users/SosialLogin';
 import Link from 'next/link';
+import { api } from '@/util/api';
 
 const SignUp = () => {
-  const [userLog, setUserLog] = useRecoilState(userLogState);
   // 로그인 실패시 안내 문구
   const [loginFailed, setloginFailed] = useState(false);
   // 유효성검사
@@ -26,7 +23,7 @@ const SignUp = () => {
       email: '',
       password: '',
     });
-  const navi = useRouter();
+  const router = useRouter();
   useEffect(() => {
     // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
     if (email !== '') setemptyEmail(false);
@@ -70,24 +67,26 @@ const SignUp = () => {
     // 이벤트의 기본 동작을 취소하는 메서드
     e.preventDefault();
 
-    if (emailcheck || passwordcheck) {
-      axios
-        .post('/signup', { display_name, email, password })
+    if (emailcheck && passwordcheck) {
+      api
+        .post('/users', { display_name, email, password })
         // 성공시
         .then((res) => {
-          navi.push('/login');
-          alert('회원 가입 성공');
+          router.push('/users/login');
+          alert('회원 가입을 축하드립니다.');
           // 로그인 성공하면 입력 폼 초기화
           resetInput();
+          console.log(res);
         })
         // 실패시
         .catch((err) => {
-          // 상태코드 401 = 로그인 정보가 없을 시
-          if (err.response.status === 401) {
-            alert('로그인 정보가 없습니다.');
+          // 상태코드 400 = 유효성 검사 실패
+          if (err.response.status === 400) {
+            alert('이메일 또는 패스워드의 형식이 잘못되었습니다.');
           }
-          // 상태코드 409 =
-          else if (err.response.status === 409) {
+          // 상태코드 500 = 중복 이메일
+          else if (err.response.status === 500) {
+            alert('중복된 이메일 입니다.');
           }
           // 상태코드 503 = 서버 상태가 안 좋을 시
           else if (err.response.status === 503) {
@@ -248,7 +247,7 @@ const SignUp = () => {
         <SignUpContainer className="signup-container">
           <div className="signUp margin">
             Already have an account?
-            <Link href="/users/signup" className="blue">
+            <Link className="blue" href="/users/signup">
               Log in
             </Link>
           </div>
