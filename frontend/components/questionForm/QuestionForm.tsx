@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import RightSideBar from '@/components/side_bar/RightSideBar';
 import dynamic from 'next/dynamic';
 import { Chip } from '@/components/chip/Chip';
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import { parseDate } from '@/util/date';
 import { MarkDownEiditorSkeleton } from '../markDownEditor/MarkDownEiditorSkeleton';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
+import { api } from '@/util/api';
 
 const MarkDownEditor = dynamic(
   () =>
@@ -28,6 +30,17 @@ export type QuestionForm = {
 };
 
 export const QuestionForm = (props: QuestionForm) => {
+  const { push, query } = useRouter();
+
+  const deleteQuestion = useMutation({
+    mutationFn: () => api.delete(`/questions/${query.questionId}`),
+    onSuccess: () => push('/questions'),
+  });
+
+  const handleEditClick = () => {
+    push(`/questions/${props.question_id}/edit`);
+  };
+
   return (
     <QuestionContent>
       <QuestionLayOut>
@@ -52,7 +65,8 @@ export const QuestionForm = (props: QuestionForm) => {
         )}
         <div className="editing">
           <div className="link_container">
-            <Link href={`/questions/${props.question_id}/edit`}>Edit</Link>
+            <button onClick={handleEditClick}>Edit</button>
+            <button onClick={() => deleteQuestion.mutate()}>Delete</button>
           </div>
           <User>
             <p>{parseDate(props.creation_date)}</p>
@@ -114,15 +128,25 @@ const QuestionEditor = styled.div`
 
     .link_container {
       display: flex;
-      gap: 5px;
-      color: #9ca1a7;
-      font-size: 13px;
+      gap: 10px;
+
+      & > button {
+        display: flex;
+        gap: 5px;
+        color: #9ca1a7;
+        font-size: 11px;
+        height: fit-content;
+        background-color: unset;
+        border: none;
+        cursor: pointer;
+      }
     }
   }
 `;
 
 const TagContainer = styled.div`
   display: flex;
+  margin-top: 10px;
   gap: 5px;
 `;
 
@@ -185,5 +209,9 @@ const User = styled.div`
         background-color: #d0a684;
       }
     }
+  }
+
+  @media (max-width: 640px) {
+    width: 150px;
   }
 `;
