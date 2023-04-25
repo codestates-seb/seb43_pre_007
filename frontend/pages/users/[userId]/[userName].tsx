@@ -21,6 +21,7 @@ import {
   myListState,
   pickCategoryState,
   pickState,
+  userIdState,
   userImgState,
 } from '@/recoil/atom';
 import React, { useRef, useState } from 'react';
@@ -965,7 +966,7 @@ const SavesContentContainer = styled.div`
 //=======================Edit 컨텐츠=======================
 
 const EditContent = () => {
-  const userId = getLocalStorage('userid');
+  const [userId] = useRecoilState(userIdState);
   const router = useRouter();
   const [form, onChange, reset] = useInput<{ [key: string]: string }>({
     image_url: '',
