@@ -20,18 +20,8 @@ const Users = () => {
   const [page, setPage] = useState(Number(pageNum) || 1);
 
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (data && page < Math.round(data.total / 36)) {
-      const nextPage = page + 1;
-      queryClient.prefetchQuery(['users', nextPage], () =>
-        api(`/users?size=36&page=${nextPage}`).then((res) => res.data)
-      );
-    }
-  }, [page, queryClient]);
-
   const { isLoading, error, data } = useQuery<
-    { data: Users[]; total: number },
+    { data: Users[]; page_info: PageInfo },
     Error
   >(
     ['users', page],
@@ -48,6 +38,15 @@ const Users = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    if (data && page < data.page_info.total_pages) {
+      const nextPage = page + 1;
+      queryClient.prefetchQuery(['users', nextPage], () =>
+        api(`/users?size=36&page=${nextPage}`).then((res) => res.data)
+      );
+    }
+  }, [page, queryClient, data]);
 
   if (error) return <p>Error: {error.message}</p>;
   else
@@ -131,7 +130,7 @@ const Users = () => {
             <Pagenation
               initialPage={page}
               onPageChange={setPage}
-              pageSize={Math.round(data.total / 36)}
+              pageSize={data.page_info.total_pages}
             />
           </PageContainer>
         )}
