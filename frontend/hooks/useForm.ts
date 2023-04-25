@@ -27,8 +27,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
   const [errors, setErrors] = useState<ErrorRecord<T>>({});
 
   const checkValidation = (key: keyof T, value: unknown) => {
-    console.log(key, value);
-
     let newErrors = '';
     const validation = options?.validations?.[key];
 
