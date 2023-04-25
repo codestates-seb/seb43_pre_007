@@ -4,7 +4,7 @@ import { GoEye } from 'react-icons/go';
 import styled from 'styled-components';
 
 export type ChipProps = {
-  href: string;
+  href?: string;
   watch?: boolean;
   children: ReactNode;
 };
@@ -13,13 +13,13 @@ export const Chip = ({ href, watch, children }: ChipProps) => {
   const router = useRouter();
 
   const handleChipClick = () => {
-    router.push(href);
+    href && router.push(href);
   };
 
   return (
     <Container href={href} onClick={handleChipClick}>
       {watch && (
-        <i role="img">
+        <i role="eyesicon">
           <GoEye />
         </i>
       )}
@@ -28,7 +28,7 @@ export const Chip = ({ href, watch, children }: ChipProps) => {
   );
 };
 
-const Container = styled.button<{ href: string }>`
+const Container = styled.button<{ href?: string }>`
   display: inline-flex;
   padding: 5px 6px;
   width: fit-content;
