@@ -2,8 +2,10 @@ import styled from 'styled-components';
 import faviconSprite from '@/public/faviconSprite.png';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { userLogState } from '@/recoil/atom';
+import { userImgState, userNameState } from '@/recoil/atom';
 import axios from 'axios';
+import { api } from '@/util/api';
+import { setLocalStorage } from '@/util/local_storage/localStorage';
 
 // 서비스 목록
 const serviceList = [
@@ -50,21 +52,22 @@ const serviceList = [
   },
 ];
 
-interface logout {
-  e: React.FormEvent;
-}
-
 const Logout = () => {
-  const [userLog, setUserLog] = useRecoilState(userLogState);
-  const navi = useRouter();
+  const [, setUserName] = useRecoilState(userNameState);
+  const [, setUserImg] = useRecoilState(userImgState);
+
+  const router = useRouter();
 
   const logoutsubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    axios.post('/users/logout').then((res) => {
-      navi.push('/');
-      setUserLog(false);
-      localStorage.removeItem('user');
-    });
+    // api.post('/users/logout').then(() => {
+    router.push('/');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setLocalStorage('userid', '0');
+    setUserName('');
+    setUserImg('');
+    // });
   };
 
   return (
@@ -99,7 +102,7 @@ const Logout = () => {
             <button className="logout-submit" onClick={logoutsubmit}>
               Log out
             </button>
-            <button className="logout-cancel" onClick={() => navi.push('/')}>
+            <button className="logout-cancel" onClick={() => router.push('/')}>
               Cancel
             </button>
           </Logoutbuttons>

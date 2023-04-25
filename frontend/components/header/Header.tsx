@@ -2,22 +2,28 @@
 import styled from 'styled-components';
 import { GoSearch } from 'react-icons/go';
 import Button from '../button/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useOffClick } from '@/hooks/useOffClick';
 import { useRecoilState } from 'recoil';
-import { userLogState } from '@/recoil/atom';
+import { userImgState, userNameState } from '@/recoil/atom';
 import LeftSideBar from '../side_bar/LeftSideBar';
 import Input from '../input/Input';
 import { useInput } from '@/hooks/useInput';
 import { useOffResize } from '@/hooks/useOffResize';
+import { useRouter } from 'next/router';
+import {
+  getLocalStorage,
+  setLocalStorage,
+} from '@/util/local_storage/localStorage';
+import { api } from '@/util/api';
 
 type HeaderContainerProps = {
   leftNav: boolean;
   productsNav: boolean;
   searchNav: boolean;
-  userLog: boolean;
   rightNav: boolean;
+  userid: string;
 };
 
 const Header = () => {
@@ -29,7 +35,7 @@ const Header = () => {
     setLeftNav(!leftNav);
   };
 
-  //products 네비를 위한 상태 및 함수
+  //products 네비를 위한 상태 및 함수setUserLog
   const [productsNav, setProductNav, productsNavRef] =
     useOffClick<HTMLLIElement>(false);
   const prodeutsNavHandler = () => {
@@ -53,16 +59,32 @@ const Header = () => {
   //search input val
   const [form, onChange] = useInput({ searchContent: '' });
 
-  //유저 로그인 상태 및 함수
-  const [userLog, setUserLog] = useRecoilState(userLogState);
-  const logOut = () => {
-    setUserLog(false);
-  };
-
   //resize로 인해 off
   useOffResize(740, 'up', setLeftNav);
   useOffResize(740, 'down', setSearchNav);
   useOffResize(350, 'down', setRightNav);
+
+  //유저 로그인 상태 및 함수
+  const [userid, setuserid] = useState('');
+  const [userName, setUserName] = useRecoilState(userNameState);
+  const [, setUserImg] = useRecoilState(userImgState);
+
+  useEffect(() => {
+    setuserid(getLocalStorage('userid'));
+    console.log(userid);
+  }, [userName]);
+  // const userid = getLocalStorage('userid');
+  // 의문점 : email하고 password 를 전역으로 상태관리 해야할텐데
+  // 보안적으로 괜찮은가?
+  useEffect(() => {
+    if (getLocalStorage('accessToken')) {
+      api.get(`/users/${userid}`).then((res) => {
+        setLocalStorage('userid', '1');
+        setUserName(res.data.display_name);
+        setUserImg(res.data.user_img);
+      });
+    }
+  }, [userid]);
 
   return (
     <HeaderContainer
@@ -70,7 +92,7 @@ const Header = () => {
       productsNav={productsNav}
       searchNav={searchNav}
       rightNav={rightNav}
-      userLog={userLog}
+      userid={userid}
     >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
@@ -82,7 +104,7 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          {!userLog && (
+          {userid === '0' && (
             <li className="about">
               <a>About</a>
             </li>
@@ -94,7 +116,7 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          {!userLog && (
+          {userid === '0' && (
             <li className="for-teams">
               <a>For Teams</a>
             </li>
@@ -209,7 +231,7 @@ const Header = () => {
             <li className="nav-search">
               <GoSearch />
             </li>
-            {userLog ? (
+            {userid !== '0' ? (
               <>
                 <li className="user-img">
                   <Link href="/users/21615528/신동민">
@@ -508,7 +530,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: ${(props) => (props.userLog ? '61.7%' : '57.5%')};
+    width: ${(props) => (props.userid ? '61.7%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;
@@ -596,7 +618,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       @media (max-width: 350px) {
         overflow-x: scroll;
         width: ${(props) =>
-          props.userLog ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
+          props.userid ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
         ::-webkit-scrollbar {
           width: 1px;
           height: 10px;
@@ -607,7 +629,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
       @media (max-width: 220px) {
-        width: ${(props) => (props.userLog ? '60px' : '50px')};
+        width: ${(props) => (props.userid ? '60px' : '50px')};
       }
       display: flex;
       li {
@@ -616,7 +638,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         justify-content: center;
         white-space: nowrap; //부모 요소 내에서 텍스트가 줄 바꿈 유지
         @media (max-width: 350px) {
-          margin-bottom: ${(props) => (props.userLog ? '-10px' : '-1px')};
+          margin-bottom: ${(props) => (props.userid ? '-10px' : '-1px')};
         }
       }
       .nav-search {
@@ -630,7 +652,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           background-color: #ececec;
         }
         @media (max-width: 350px) {
-          height: ${(props) => (props.userLog ? '' : '38px')};
+          height: ${(props) => (props.userid ? '' : '38px')};
         }
         @media (max-width: 740px) {
           display: flex;

@@ -23,7 +23,7 @@ const SignUp = () => {
       email: '',
       password: '',
     });
-  const navi = useRouter();
+  const router = useRouter();
   useEffect(() => {
     // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
     if (email !== '') setemptyEmail(false);
@@ -72,7 +72,7 @@ const SignUp = () => {
         .post('/users', { display_name, email, password })
         // 성공시
         .then((res) => {
-          navi.push('/users/login');
+          router.push('/users/login');
           alert('회원 가입을 축하드립니다.');
           // 로그인 성공하면 입력 폼 초기화
           resetInput();
