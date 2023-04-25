@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TagsUserDto {
-    private long userId;
-    private String displayName;
+public class AllTagResponseDto {
+    private Long tagId;
+    private String name;
+    private String info;
+    private int questionAmount; //태경임시추가
 }
-

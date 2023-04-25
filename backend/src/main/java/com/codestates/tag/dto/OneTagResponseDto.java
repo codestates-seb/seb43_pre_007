@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TagsAllResponseDto {
-    private TagsUserDto user;
+public class OneTagResponseDto {
     private long questionId;
     private String title;
     private String body;
@@ -21,7 +21,11 @@ public class TagsAllResponseDto {
     @JsonProperty("is_accepted")
     private boolean isAccepted;
     private int answerCount;
+    private int score;
     private LocalDateTime creationDate;
-    private TagsResponseDto.TagsQuestionResponseDto tags;
-
+    private long userId;
+    private String displayName;
+    private String imageUrl;
+    private List<TagDto.TagQuestionResponseDto> tags;
 }
+

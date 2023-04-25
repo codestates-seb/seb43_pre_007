@@ -2,6 +2,7 @@ package com.codestates.tag.entity;
 
 import com.codestates.question.entity.QuestionTag;
 import com.codestates.user.entity.UserTag;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,11 +30,10 @@ public class Tag {
     //추가
     @Column(nullable = false)
     private int count;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<QuestionTag> questionTagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
     private List<UserTag> userTagList = new ArrayList<>();
-
 }

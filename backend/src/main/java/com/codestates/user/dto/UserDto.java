@@ -31,12 +31,14 @@ public class UserDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class PatchDto{
         private long userId; //추가
         private String displayName;
         @JsonProperty("about_me")
         private String aboutMe;
         private String location;
+        private String imageUrl;
 
         public PatchDto addUserId(long userId){
             Assert.notNull(userId,"user id must not be null!");
@@ -56,6 +58,7 @@ public class UserDto {
         @JsonProperty("about_me")
         private String aboutMe;
         private String location;
+        private String imageUrl;
         private LocalDateTime creationDate;
         private LocalDateTime lastModifiedDate;
         private int questionCount;
@@ -66,19 +69,28 @@ public class UserDto {
     @Setter
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserGetResponseDto{
-        @NotBlank
         private long userId;
-        @NotBlank
         private String displayName;
         @JsonProperty("about_me")
         private String aboutMe;
         private String location;
+        @JsonProperty("image_url")
+        private String imageUrl;
         private LocalDateTime creationDate;
         private int questionCount;
         private int answerCount;
         private List<UsersQuestionResponseDto> questions;
         private List<UsersAnswerResponseDto> answers;
         private List<UsersTagResponseDto.UserTagResponseDtos> tags;
+    }
+
+    @Getter
+    @Setter
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class UserAuthDto{
+        private long userId;
+        private String displayName;
+        private String imageUrl;
     }
 }
 

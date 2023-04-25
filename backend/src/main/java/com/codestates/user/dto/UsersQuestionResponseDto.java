@@ -19,4 +19,5 @@ public class UsersQuestionResponseDto {
     private boolean isAnswered;
     @JsonProperty("is_accepted")
     private boolean isAccepted;
+    private int score;
 }

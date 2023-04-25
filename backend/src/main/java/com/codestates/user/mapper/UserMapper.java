@@ -30,6 +30,7 @@ public interface UserMapper {
         userGetResponseDto.setDisplayName(user.getDisplayName());
         userGetResponseDto.setAboutMe(user.getAboutMe());
         userGetResponseDto.setLocation(user.getLocation());
+        userGetResponseDto.setImageUrl(user.getImageUrl());
         userGetResponseDto.setCreationDate(user.getCreationDate());
         userGetResponseDto.setQuestionCount(user.getQuestionCount());
         userGetResponseDto.setAnswerCount(user.getAnswerCount());
@@ -61,6 +62,7 @@ public interface UserMapper {
         usersQuestionResponseDto.setQuestionId(question.getQuestionId());
         usersQuestionResponseDto.setTitle(question.getTitle());
         usersQuestionResponseDto.setCreationDate(question.getCreationDate());
+        //        responseDto.setScore(questionTag.getQuestion().getScore());
         usersQuestionResponseDto.setAnswered(question.isAnswered());
         usersQuestionResponseDto.setAccepted(question.isAccepted());
         return usersQuestionResponseDto;
@@ -124,6 +126,7 @@ public interface UserMapper {
             UsersAllResponseDtos usersAllResponseDtos = new UsersAllResponseDtos();
             usersAllResponseDtos.setUserId(user.getUserId());
             usersAllResponseDtos.setDisplayName(user.getDisplayName());
+            usersAllResponseDtos.setImageUrl(user.getImageUrl());
             usersAllResponseDtos.setAboutMe(user.getAboutMe());
             usersAllResponseDtos.setLocation(user.getLocation());
             usersAllResponseDtos.setCreationDate(user.getCreationDate());
