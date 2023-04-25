@@ -173,8 +173,8 @@ const BasicLogin = () => {
           // 실패시
           .catch((err) => {
             // 상태코드 401 = 로그인 정보가 없을 시
-            if (err.response.status === 400) {
-              alert('로그인 정보가 없습니다.');
+            if (err.response.status === 401) {
+              alert('이메일 혹은 비밀번호를 확인해 주세요.');
               setloginFailed(true);
             }
             // 상태코드 503 = 서버 상태가 안 좋을 시
