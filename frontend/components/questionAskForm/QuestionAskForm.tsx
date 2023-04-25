@@ -16,27 +16,29 @@ const MarkDownEditor = dynamic(
   }
 );
 
-export type QuestionAskFormProps = {
-  value?: {
-    title: string;
-    content: string;
-    tags: string[];
-  };
-  onSubmit: (value: QuestionAskFormProps['value']) => void;
-};
-
-export type QuestionAskForm = {
+export type QuestionAskFormData = {
   title: string;
-  content: string;
+  body: string;
   tags: string;
 };
 
+export type QuestionAskData = {
+  title: string;
+  body: string;
+  tags: string[];
+};
+
+export type QuestionAskFormProps = {
+  value?: QuestionAskData;
+  onSubmit: (value: QuestionAskData) => void;
+};
+
 export const QuestionAskForm = (props: QuestionAskFormProps) => {
-  const { data, handleChange, errors, handleSubmit } = useForm<QuestionAskForm>(
-    {
+  const { data, handleChange, errors, handleSubmit } =
+    useForm<QuestionAskFormData>({
       initialValues: {
         title: props.value?.title || '',
-        content: props.value?.content || '',
+        body: props.value?.body || '',
         tags: props.value?.tags.length ? props.value?.tags.join(',') : '',
       },
       validations: {
@@ -46,7 +48,7 @@ export const QuestionAskForm = (props: QuestionAskFormProps) => {
             message: 'you need to require title',
           },
         },
-        content: {
+        body: {
           required: {
             value: true,
             message: 'you need to require content',
@@ -60,15 +62,25 @@ export const QuestionAskForm = (props: QuestionAskFormProps) => {
         },
       },
       onSubmit: handleAskFormSubmit,
-    }
-  );
+    });
 
   function handleAskFormSubmit() {
-    props.onSubmit({ ...data, tags: data.tags.split(',') });
+    const value = data.tags.split(',');
+    const tags = value.length > 0 ? value : [];
+
+    const a = {
+      ...data,
+      tags,
+    };
+
+    props.onSubmit({
+      ...data,
+      tags,
+    });
   }
 
   const handlemarkdownChange = (content: string) => {
-    handleChange('content')(content);
+    handleChange('body')(content);
   };
 
   return (
@@ -90,8 +102,11 @@ export const QuestionAskForm = (props: QuestionAskFormProps) => {
         <p>
           Include all the information someone would need to answer your question
         </p>
-        <MarkDownEditor onChange={handlemarkdownChange} />
-        {errors.content && <ErrorMessage>{errors.content}</ErrorMessage>}
+        <MarkDownEditor
+          onChange={handlemarkdownChange}
+          value={props.value?.body}
+        />
+        {errors.body && <ErrorMessage>{errors.body}</ErrorMessage>}
       </FormContent>
       <InputContainer>
         <h3>Tags</h3>
