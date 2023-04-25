@@ -28,6 +28,7 @@ const Users = () => {
         api(`/users?size=36&page=${nextPage}`).then((res) => res.data)
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, queryClient]);
 
   const { isLoading, error, data } = useQuery<

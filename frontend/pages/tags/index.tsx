@@ -25,13 +25,18 @@ const Tags = () => {
         api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, queryClient]);
 
   const { isLoading, error, data, refetch } = useQuery<
     { data: Tags[]; total: number },
     Error
-  >(['tags', page], () =>
-    api(`/tags?size=36&page=${page}`).then((res) => res.data)
+  >(
+    ['tags', page],
+    () => api(`/tags?size=36&page=${page}`).then((res) => res.data),
+    {
+      keepPreviousData: true,
+    }
   );
   useEffect(() => {
     router.push({
