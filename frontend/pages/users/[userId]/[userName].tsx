@@ -22,10 +22,23 @@ import {
   pickCategoryState,
   pickState,
 } from '@/recoil/atom';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { api } from '@/util/api';
-import { MarkDownEditor } from '@/components/markDownEditor/MarkDownEditor';
+import { useInput } from '@/hooks/useInput';
 import Input from '@/components/input/Input';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { getLocalStorage } from '@/util/local_storage/localStorage';
+
+const MarkDownEditor = dynamic(
+  () =>
+    import('@/components/markDownEditor/MarkDownEditor').then(
+      (res) => res.MarkDownEditor
+    ),
+  {
+    ssr: false,
+  }
+);
 
 //경로 https://stackoverflow.com/users/6117017/timbus-calin
 const UserDetail = () => {
@@ -951,6 +964,19 @@ const SavesContentContainer = styled.div`
 //=======================Edit 컨텐츠=======================
 
 const EditContent = () => {
+  const userId = getLocalStorage('userid')
+  const router = useRouter();
+  const [form, onChange, reset] = useInput<{ [key: string]: string }>({
+    image_url: '',
+    display_name: '',
+    location: '',
+    about_me: '',
+  });
+
+  const [mark, setMark] = useState('');
+  const changeMark: (v: string) => void = (v) => {
+    setMark(v);
+  };
   const target = useRef<HTMLInputElement>(null);
   const uploadClick = () => {
     if (target.current) target.current.click();
@@ -964,21 +990,35 @@ const EditContent = () => {
     const file = target.current.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    //서버 유무에 따라 추가 작업 결정
     reader.onloadend = () => {
       const formData = new FormData();
-      formData.append('data', file);
+      formData.append('file', file);
       api
-        .post('/img', formData, {
+        .post('/upload', formData, {
           headers: {
             'Content-Type': `multipart/form-data`,
           },
         })
-        .then((res) => setImg(res.data))
+        .then((res) => {
+          setImg(res.data);
+        })
         .catch(() => {
           alert('사진 등록에 실패하였습니다.');
         });
     };
+  };
+
+  const submitEvent = () => {
+    const data = { ...form, image_url: img, about_me: mark };
+    api.post(`/users/${userId}/edit`, data).catch(() => {
+      alert('잠시 후에 다시 시도해주세요.');
+    });
+    reset();
+    router.push('/');
+  };
+
+  const cancleEvent = () => {
+    router.push('/');
   };
 
   const inputLabel = Object.keys(USER_EDIT_INPUT);
@@ -1014,11 +1054,13 @@ const EditContent = () => {
             >
               <label htmlFor={label}>{USER_EDIT_INPUT[label]}</label>
               {label === 'about_me' ? (
-                <MarkDownEditor />
+                <MarkDownEditor onChange={changeMark} />
               ) : (
                 <Input
                   id={label}
                   name={label}
+                  value={form[label]}
+                  onChange={onChange}
                   placeholder={label === 'title' ? 'No title has been set' : ''}
                   paddingLeft="10px"
                 />
@@ -1044,10 +1086,10 @@ const EditContent = () => {
           </div>
         </div>
         <div className="submit_box">
-          <Button color="var(--text-white)">
+          <Button onClick={submitEvent} color="var(--text-white)">
             <a>Save profile</a>
           </Button>
-          <button>
+          <button onClick={cancleEvent}>
             <a>Cancel</a>
           </button>
         </div>

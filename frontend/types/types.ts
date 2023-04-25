@@ -19,10 +19,10 @@ type PageInfo = {
 type Tags = {
   tag_id: number;
   name: string;
+  info: string;
+  question_amount: number;
 };
 
 type Users = {
   data: User;
 };
-
-
