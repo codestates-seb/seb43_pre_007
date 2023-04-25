@@ -267,7 +267,7 @@ const Header = () => {
                         <div>
                           <span>help</span>
                           <span>chat</span>
-                          <a href="/users/logout">log out</a>
+                          <Link href={'/users/logout'}>log out</Link>
                         </div>
                       </div>
                     </div>

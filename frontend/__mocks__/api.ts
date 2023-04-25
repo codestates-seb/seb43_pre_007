@@ -3,6 +3,7 @@ import { signupusers } from './dummy';
 import { USERS } from './dummy/users';
 import { questions } from './dummy/questions';
 import { TAGS } from './dummy/tags';
+import { mock } from './dummy/question';
 
 export const handlers = [
   rest.get('/login', async (req, res, ctx) => {
@@ -56,5 +57,9 @@ export const handlers = [
     const total = TAGS.length;
     const data = TAGS.slice((page - 1) * size, page * size);
     return res(ctx.status(200), ctx.json({ data, total }));
+  }),
+
+  rest.get('/questions/:questionId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mock));
   }),
 ];

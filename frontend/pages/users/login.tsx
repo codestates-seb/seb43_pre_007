@@ -1,7 +1,8 @@
 //경로 https://stackoverflow.com/users/login?ssrc=head
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import SosialLogin from '@/components/users/SosialLogin';
 import BasicLogin from '@/components/users/BasicLogin';
+import Link from 'next/link';
 
 const BasicContainer = styled.div`
   width: 100%;
@@ -22,7 +23,6 @@ const BasicContainer = styled.div`
   }
   @media screen and (max-width: 641px) {
     padding: 24px 16px;
-    // background: blue;
   }
 `;
 
@@ -50,7 +50,7 @@ const SignUpContainer = styled.div`
     margin: -3px 4px;
     color: #0074cc;
     svg {
-      fill:#0074cc;
+      fill: #0074cc;
       margin: -3px -15px -3px 4px;
     }
   }
@@ -63,6 +63,7 @@ const SignUpContainer = styled.div`
     color: #3cacfa;
     svg {
       fill: #3cacfa;
+    }
   }
 `;
 
@@ -86,10 +87,10 @@ const Login = () => {
         <BasicLogin />
         <SignUpContainer className="signup-container">
           <div className="signUp margin">
-            Don't have an account?
-            <a className="blue" href="/users/signup">
+            {`Don't have an account?`}
+            <Link className="blue" href="/users/signup">
               Sign up
-            </a>
+            </Link>
           </div>
           <div className="employer ">
             Are you an employer?

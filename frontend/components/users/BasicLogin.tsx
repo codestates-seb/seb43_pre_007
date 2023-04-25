@@ -1,11 +1,11 @@
-import axios from 'axios';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
-import { api } from '@/util/api';
 import { useRecoilState } from 'recoil';
 import { userLogState } from '@/recoil/atom';
+import { api } from '@/util/api';
+import { setLocalStorage } from '@/util/local_storage/localStorage';
 const FormContainer = styled.div`
   width: 100%;
 
@@ -156,14 +156,15 @@ const BasicLogin = () => {
     // 유효성 검사가 다 통과되면 로그인 요청
     if (emailcheck && passwordcheck) {
       return (
-        axios
+        api
           .post('/users/login', { email, password })
           // 성공시
           .then((res) => {
             navi.push('/questions');
             alert('로그인 성공');
             // 로컬스토리에 토큰 저장
-            localStorage.setItem('user', JSON.stringify(res.data.accessToken));
+            setLocalStorage('accessToken', res.data.accessToken);
+            setLocalStorage('refreshToken', res.data.refreshToken);
             setloginFailed(false);
             setUserLog(true);
             // 로그인 성공하면 입력 폼 초기화
