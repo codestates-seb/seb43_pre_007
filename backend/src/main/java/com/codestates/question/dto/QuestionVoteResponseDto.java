@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class QuestionUserResponseDto {
-
-    private long userId;
-    private String displayName;
-    private String imageUrl; //이미지 추가
+public class QuestionVoteResponseDto {  //vote 추가
+    private int isVote;
+    private int downVoteCount;
+    private int upVoteCount;
+    private int score;
 }

@@ -62,7 +62,6 @@ public interface UserMapper {
         usersQuestionResponseDto.setQuestionId(question.getQuestionId());
         usersQuestionResponseDto.setTitle(question.getTitle());
         usersQuestionResponseDto.setCreationDate(question.getCreationDate());
-        //        responseDto.setScore(questionTag.getQuestion().getScore());
         usersQuestionResponseDto.setAnswered(question.isAnswered());
         usersQuestionResponseDto.setAccepted(question.isAccepted());
         return usersQuestionResponseDto;

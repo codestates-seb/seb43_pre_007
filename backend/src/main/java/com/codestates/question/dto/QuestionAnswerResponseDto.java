@@ -21,6 +21,8 @@ public class QuestionAnswerResponseDto {
     private String body;
     @JsonProperty("is_accepted")
     private boolean isAccepted;
+    private int isVote; //vote 추가
+    private int score; //vote 추가
     private LocalDateTime creationDate;
     private LocalDateTime lastEditDate;
 }

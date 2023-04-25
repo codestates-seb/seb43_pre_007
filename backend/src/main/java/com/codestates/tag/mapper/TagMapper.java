@@ -38,7 +38,6 @@ public interface TagMapper {
         responseDto.setAnswered(questionTag.getQuestion().isAnswered());
         responseDto.setAccepted(questionTag.getQuestion().isAccepted());
         responseDto.setAnswerCount(questionTag.getQuestion().getAnswerCount());
-//        responseDto.setScore(questionTag.getQuestion().getScore());
         responseDto.setCreationDate(questionTag.getQuestion().getCreationDate());
         responseDto.setUserId(questionTag.getQuestion().getUser().getUserId());
         responseDto.setDisplayName(questionTag.getQuestion().getUser().getDisplayName());
