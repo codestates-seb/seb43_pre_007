@@ -18,17 +18,8 @@ const Tags = () => {
 
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (data && page < Math.round(data.total / 36)) {
-      const nextPage = page + 1;
-      queryClient.prefetchQuery(['tags', nextPage], () =>
-        api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
-      );
-    }
-  }, [page, queryClient]);
-
-  const { isLoading, error, data, refetch } = useQuery<
-    { data: Tags[]; total: number },
+  const { isLoading, error, data } = useQuery<
+    { data: Tags[]; page_info: PageInfo },
     Error
   >(['tags', page], () =>
     api(`/tags?size=36&page=${page}`).then((res) => res.data)
@@ -39,7 +30,16 @@ const Tags = () => {
       query: { size: 36, page: page },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch]);
+  }, [page]);
+
+  useEffect(() => {
+    if (data && page < data.page_info.total_pages) {
+      const nextPage = page + 1;
+      queryClient.prefetchQuery(['tags', nextPage], () =>
+        api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
+      );
+    }
+  }, [data, page, queryClient]);
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -77,14 +77,8 @@ const Tags = () => {
             <div className="tag_name">
               <a>{tag.name}</a>
             </div>
-            <div className="tag_info">
-              {tag.info}
-              {tag.info}
-              {tag.info}
-              {tag.info}
-              {tag.info}
-            </div>
-            <div className="tag_count">{`${tag.count} questions`}</div>
+            <div className="tag_info">Not info</div>
+            <div className="tag_count">{`${0} questions`}</div>
           </Card>
         ))}
       </div>
@@ -92,7 +86,7 @@ const Tags = () => {
         <Pagenation
           initialPage={page}
           onPageChange={setPage}
-          pageSize={data ? Math.round(data.total / 36) : 0}
+          pageSize={data ? data.page_info.total_pages : 0}
         />
       </div>
     </TagsContainer>
