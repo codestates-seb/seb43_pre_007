@@ -76,7 +76,6 @@ const SignUp = () => {
           alert('회원 가입을 축하드립니다.');
           // 로그인 성공하면 입력 폼 초기화
           resetInput();
-          console.log(res);
         })
         // 실패시
         .catch((err) => {
@@ -310,7 +309,7 @@ const BasicContainer = styled.div`
         display: flex;
         margin-bottom: 24px;
         .svg-icon {
-          fill: hsl(206,100%,52%);
+          fill: hsl(206, 100%, 52%);
           margin-right: 8px;
         }
       }
@@ -321,7 +320,6 @@ const BasicContainer = styled.div`
     }
   }
 
-  
   @media screen and (max-width: 816px) {
     flex-direction: row;
     padding: 24px 16px;
@@ -332,10 +330,10 @@ const BasicContainer = styled.div`
       display: block;
     }
     .help-container {
-        display: none;
-      }
+      display: none;
     }
   }
+
   @media screen and (max-width: 641px) {
     padding: 24px 16px;
     // background: blue;
@@ -346,13 +344,13 @@ const BasicContainer = styled.div`
 `;
 const SignUpContainer = styled.div`
   width: 100%;
-  max-width: 316px;  
-display: flex;
+  max-width: 316px;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 16px;
-  
+
   text-align: center;
   font-size: 13px;
   div {
@@ -362,7 +360,7 @@ display: flex;
     margin: -3px 4px;
     color: #0074cc;
     svg {
-      fill:#0074cc;
+      fill: #0074cc;
       margin: -3px -15px -3px 4px;
     }
   }
@@ -375,6 +373,7 @@ display: flex;
     color: #3cacfa;
     svg {
       fill: #3cacfa;
+    }
   }
 `;
 const FormContainer = styled.div`
@@ -383,7 +382,7 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  item-ailgn: center;
+  align-items: center;
   padding: 24px;
 
   margin-bottom: 24px;

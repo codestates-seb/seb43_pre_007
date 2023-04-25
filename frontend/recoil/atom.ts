@@ -1,6 +1,11 @@
 import { localState } from '@/util/local_storage/localStorage';
 import { atom } from 'recoil';
 
+export const userIdState = atom<number>({
+  key: 'userIdState',
+  default: undefined,
+});
+
 export const userImgState = atom({
   key: 'userImgState',
   default: '',
