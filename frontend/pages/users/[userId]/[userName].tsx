@@ -21,6 +21,7 @@ import {
   myListState,
   pickCategoryState,
   pickState,
+  userImgState,
 } from '@/recoil/atom';
 import React, { useRef, useState } from 'react';
 import { api } from '@/util/api';
@@ -964,7 +965,7 @@ const SavesContentContainer = styled.div`
 //=======================Edit 컨텐츠=======================
 
 const EditContent = () => {
-  const userId = getLocalStorage('userid')
+  const userId = getLocalStorage('userid');
   const router = useRouter();
   const [form, onChange, reset] = useInput<{ [key: string]: string }>({
     image_url: '',
@@ -981,9 +982,7 @@ const EditContent = () => {
   const uploadClick = () => {
     if (target.current) target.current.click();
   };
-  const [img, setImg] = useState(
-    'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
-  );
+  const [img, setImg] = useRecoilState(userImgState);
 
   const saveImgFile = () => {
     if (!target.current?.files) return;
