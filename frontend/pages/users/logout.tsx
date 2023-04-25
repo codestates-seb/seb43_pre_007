@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import faviconSprite from '@/public/faviconSprite.png';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { userImgState, userNameState } from '@/recoil/atom';
-import axios from 'axios';
-import { api } from '@/util/api';
+import { userIdState, userImgState, userNameState } from '@/recoil/atom';
 import { setLocalStorage } from '@/util/local_storage/localStorage';
 
 // 서비스 목록
@@ -53,6 +51,7 @@ const serviceList = [
 ];
 
 const Logout = () => {
+  const [, setUserId] = useRecoilState(userIdState);
   const [, setUserName] = useRecoilState(userNameState);
   const [, setUserImg] = useRecoilState(userImgState);
 
@@ -60,14 +59,13 @@ const Logout = () => {
 
   const logoutsubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // api.post('/users/logout').then(() => {
-    router.push('/');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    setLocalStorage('userid', '0');
+    localStorage.setItem('userId', '0');
+    setUserId(0);
     setUserName('');
     setUserImg('');
-    // });
+    router.push('/');
   };
 
   return (
@@ -131,9 +129,9 @@ const BasicContainer = styled.div`
 
   .container {
     display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .title {
     width: 100%;
@@ -145,16 +143,17 @@ const BasicContainer = styled.div`
   .logout-checkbox {
     height: 1.5em;
     margin-bottom: 12px;
-      font-size: 12px;
-      input {
-        margin-right: 4px;
-      }
+    font-size: 12px;
+    input {
+      margin-right: 4px;
+    }
   }
   .logout-ex {
     font-size: 0.75em;
     color: #6a737c;
     margin-top: 32px;
   }
+
   .form-logout {
     width: 100%;
     max-width: 316px;
@@ -166,11 +165,11 @@ const BasicContainer = styled.div`
     background: #ffffff;
     .service-list {
       padding-bottom: 12px;
-      border-bottom: 1px solid hsl(210,8%,85%);
+      border-bottom: 1px solid hsl(210, 8%, 85%);
       margin-bottom: 14px;
       a {
         width: 276px;
-        color: hsl(206,100%,40%);
+        color: hsl(206, 100%, 40%);
         display: flex;
         font-size: 15px;
         span {
@@ -202,12 +201,11 @@ const BasicContainer = styled.div`
         }
         .superuser {
           background-position: 0 -6282px;
-        }     
+        }
+      }
     }
-  
   }
 
-  
   @media screen and (max-width: 816px) {
     padding: 24px 16px;
     div:first-child {
@@ -227,16 +225,14 @@ const BasicContainer = styled.div`
 `;
 
 const Logoutbuttons = styled.div`
-
   display: flex;
   flex-direction: row;
-  
+
   button {
     width: 5.3em;
     height: 3em;
     margin: 2px;
     font-size: 0.8rem;
-
   }
   .logout-cancel {
     color: #0a95ff;
@@ -256,6 +252,5 @@ const Logoutbuttons = styled.div`
       box-shadow: 0px 0px 0px 4px hsl(205, 46%, 92%);
       border-color: hsl(206, 100%, 40%);
     }
-  
-
+  }
 `;

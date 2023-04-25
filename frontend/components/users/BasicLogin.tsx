@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { userNameState, userImgState } from '@/recoil/atom';
+import { userNameState, userImgState, userIdState } from '@/recoil/atom';
 import { api } from '@/util/api';
 import { setLocalStorage } from '@/util/local_storage/localStorage';
 const FormContainer = styled.div`
@@ -107,6 +107,8 @@ const BasicLogin = () => {
     email: '',
     password: '',
   });
+
+  const [, setUserId] = useRecoilState(userIdState);
   // next: navigation 기능
   const router = useRouter();
   // Login 버튼 누르고 나서부터 계속 업데이트
@@ -160,19 +162,17 @@ const BasicLogin = () => {
       return (
         api
           .post('/users/login', { email, password })
-          // 성공시
           .then((res) => {
             router.push('/questions');
-            alert('로그인 성공');
-            // 로컬스토리에 토큰 저장
-            setLocalStorage('accessToken', res.data.accessToken);
-            setLocalStorage('refreshToken', res.data.refreshToken);
-            setLocalStorage('userid', '1');
+            localStorage.setItem('accessToken', `${res.data.accessToken}`);
+            localStorage.setItem('refreshToken', `${res.data.refreshToken}`);
+            localStorage.setItem('userId', `${res.data.user_id}`);
+            setUserId(res.data.user_id);
             setUserName(res.data.display_name);
             setUserImg(res.data.user_img);
             setloginFailed(false);
-            // 로그인 성공하면 입력 폼 초기화
             resetInput();
+            alert('로그인 성공');
           })
           // 실패시
           .catch((err) => {

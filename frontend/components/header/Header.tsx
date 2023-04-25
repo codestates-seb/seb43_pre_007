@@ -6,16 +6,12 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useOffClick } from '@/hooks/useOffClick';
 import { useRecoilState } from 'recoil';
-import { userImgState, userNameState } from '@/recoil/atom';
+import { userIdState, userImgState, userNameState } from '@/recoil/atom';
 import LeftSideBar from '../side_bar/LeftSideBar';
 import Input from '../input/Input';
 import { useInput } from '@/hooks/useInput';
 import { useOffResize } from '@/hooks/useOffResize';
-import { useRouter } from 'next/router';
-import {
-  getLocalStorage,
-  setLocalStorage,
-} from '@/util/local_storage/localStorage';
+import { getLocalStorage } from '@/util/local_storage/localStorage';
 import { api } from '@/util/api';
 
 type HeaderContainerProps = {
@@ -23,7 +19,7 @@ type HeaderContainerProps = {
   productsNav: boolean;
   searchNav: boolean;
   rightNav: boolean;
-  userid: string;
+  userId: number;
 };
 
 const Header = () => {
@@ -65,26 +61,23 @@ const Header = () => {
   useOffResize(350, 'down', setRightNav);
 
   //유저 로그인 상태 및 함수
-  const [userid, setuserid] = useState('');
+  const [userId, setuserId] = useRecoilState(userIdState);
   const [userName, setUserName] = useRecoilState(userNameState);
   const [, setUserImg] = useRecoilState(userImgState);
 
   useEffect(() => {
-    setuserid(getLocalStorage('userid'));
-    console.log(userid);
-  }, [userName]);
-  // const userid = getLocalStorage('userid');
-  // 의문점 : email하고 password 를 전역으로 상태관리 해야할텐데
-  // 보안적으로 괜찮은가?
+    setuserId(Number(getLocalStorage('userId')));
+  }, []);
+
   useEffect(() => {
     if (getLocalStorage('accessToken')) {
-      api.get(`/users/${userid}`).then((res) => {
-        setLocalStorage('userid', '1');
+      api.get(`/users/${userId}`).then((res) => {
+        localStorage.setItem('userId', res.data.userId);
         setUserName(res.data.display_name);
         setUserImg(res.data.user_img);
       });
     }
-  }, [userid]);
+  }, [setUserImg, setUserName, userId]);
 
   return (
     <HeaderContainer
@@ -92,7 +85,7 @@ const Header = () => {
       productsNav={productsNav}
       searchNav={searchNav}
       rightNav={rightNav}
-      userid={userid}
+      userId={userId}
     >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
@@ -104,7 +97,7 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          {userid === '0' && (
+          {userId === 0 && (
             <li className="about">
               <a>About</a>
             </li>
@@ -116,7 +109,7 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          {userid === '0' && (
+          {userId === 0 && (
             <li className="for-teams">
               <a>For Teams</a>
             </li>
@@ -231,7 +224,7 @@ const Header = () => {
             <li className="nav-search">
               <GoSearch />
             </li>
-            {userid !== '0' ? (
+            {userId !== 0 ? (
               <>
                 <li className="user-img">
                   <Link href="/users/21615528/신동민">
@@ -530,7 +523,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: ${(props) => (props.userid ? '61.7%' : '57.5%')};
+    width: ${(props) => (props.userId ? '61.7%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;
@@ -618,7 +611,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       @media (max-width: 350px) {
         overflow-x: scroll;
         width: ${(props) =>
-          props.userid ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
+          props.userId ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
         ::-webkit-scrollbar {
           width: 1px;
           height: 10px;
@@ -629,7 +622,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
       @media (max-width: 220px) {
-        width: ${(props) => (props.userid ? '60px' : '50px')};
+        width: ${(props) => (props.userId ? '60px' : '50px')};
       }
       display: flex;
       li {
@@ -638,7 +631,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         justify-content: center;
         white-space: nowrap; //부모 요소 내에서 텍스트가 줄 바꿈 유지
         @media (max-width: 350px) {
-          margin-bottom: ${(props) => (props.userid ? '-10px' : '-1px')};
+          margin-bottom: ${(props) => (props.userId ? '-10px' : '-1px')};
         }
       }
       .nav-search {
@@ -652,7 +645,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           background-color: #ececec;
         }
         @media (max-width: 350px) {
-          height: ${(props) => (props.userid ? '' : '38px')};
+          height: ${(props) => (props.userId ? '' : '38px')};
         }
         @media (max-width: 740px) {
           display: flex;
