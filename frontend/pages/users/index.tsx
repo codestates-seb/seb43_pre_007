@@ -31,7 +31,7 @@ const Users = () => {
   }, [page, queryClient]);
 
   const { isLoading, error, data } = useQuery<
-    { data: User[]; total: number },
+    { data: Users[]; total: number },
     Error
   >(
     ['users', page],
@@ -96,20 +96,27 @@ const Users = () => {
                 </div>
               </div>
               <div className="content">
-                {data.data?.map((user: User) => (
-                  <div key={user.id} className="grid-item">
+                {data.data?.map((user: Users) => (
+                  <div key={user.data.user_id} className="grid-item">
                     <div>
-                      <img src={user.user_img} alt="" />
+                      <img
+                        src={
+                          'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
+                        }
+                        alt=""
+                      />
                     </div>
                     <div>
                       <Link href={'/users/21615528/신동민'}>
-                        {user.first_name}
+                        {user.data.display_name}
                       </Link>
-                      <span>{user.last_name}</span>
-                      <span>{user.reputation.toLocaleString()}</span>
+                      <span>{user.data.location}</span>
+                      <span>{user.data.question_count.toLocaleString()}</span>
                     </div>
                     <div>
-                      {<a>{user.tags}</a>}
+                      {user.data.tags.map((x) => (
+                        <a key={x.tag_id}>{x.name}</a>
+                      ))}
                       {/* <a>git</a>, <a>github</a>, <a>go</a> */}
                     </div>
                   </div>
