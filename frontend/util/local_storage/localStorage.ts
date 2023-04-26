@@ -1,3 +1,10 @@
+export const tokenLocalStorage = (key: string) => {
+  if (typeof window !== 'undefined') {
+    const data = localStorage.getItem(key);
+    return data;
+  }
+};
+
 /**
  * @param key 로컬 스토리지 키 값
  * @returns 키에 해당하는 로컬스토리지 데이터

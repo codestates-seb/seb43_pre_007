@@ -120,7 +120,7 @@ const BasicLogin = () => {
       if (email === '') setemptyEmail(true);
       if (password === '') setemptyPassword(true);
     }
-  }, [email, password,loginFailed]);
+  }, [email, password, loginFailed]);
   // 로그인 눌렀을때
   const onSubmit = async (e: React.FormEvent) => {
     // email이 "username@domain.com" 형태의 이메일인지 유효성검사
@@ -162,20 +162,12 @@ const BasicLogin = () => {
         api
           .post('/users/login', { email, password })
           .then((res) => {
-            console.log(res)
             router.push('/questions');
-            localStorage.setItem(
-              'accessToken',
-              JSON.stringify(res.data.accessToken)
-            );
-            localStorage.setItem(
-              'refreshToken',
-              JSON.stringify(res.data.refreshToken)
-            );
-            localStorage.setItem('userId', `${res.data.user_id}`);
+            localStorage.setItem('accessToken', res.data.access_token);
+            localStorage.setItem('refreshToken', res.data.refresh_token);
             setUserId(res.data.user_id);
             setUserName(res.data.display_name);
-            setUserImg(res.data.user_img);
+            setUserImg(res.data.user_img || '');
             setloginFailed(false);
             resetInput();
           })
