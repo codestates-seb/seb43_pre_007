@@ -41,6 +41,7 @@ public class UserDetailService implements UserDetailsService {
         UserDetail(User user) {
             setUserId(user.getUserId());
             setDisplayName(user.getDisplayName());
+            setImageUrl(user.getImageUrl());
             setEmail(user.getEmail());
             setPassword(user.getPassword());
            //setRoles(user.getRoles());  권한가져오기

@@ -1,5 +1,8 @@
 package com.codestates.__auth.handler;
 
+import com.codestates.__auth.dto.LoginResponseDto;
+import com.codestates.__auth.userdetails.UserDetailService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -18,26 +21,26 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         //인증성공시, 로그를 기록하거나 사용자정보를 response 로 전송하는 등의 추가작업 가능
         log.info("# 로그인 인증 성공");
 
-// 로그인성공시 응답바디 작성
-//        UserDetailService.UserDetail userDetail = (UserDetailService.UserDetail) authentication.getPrincipal();
-//        Long userId = userDetail.getUserId();
-//        String displayName = userDetail.getDisplayName();
-//
-//        String accessToken = response.getHeader("Authorization");
-//        String refreshToken = response.getHeader("Refresh");
-//
-//        if (accessToken != null && accessToken.startsWith("Bearer ")) {
-//            accessToken = accessToken.substring(7);
-//        }
-//
-//        LoginResponseDto loginResponseDto = new LoginResponseDto();
-//        loginResponseDto.setUserId(userId);
-//        loginResponseDto.setDisplayName(displayName);
-//        loginResponseDto.setAccessToken(accessToken);
-//        loginResponseDto.setRefreshToken(refreshToken);
-//
-//        response.setContentType("application/json;charset=UTF-8");
-//        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponseDto));
+        UserDetailService.UserDetail userDetail = (UserDetailService.UserDetail) authentication.getPrincipal();
+        Long userId = userDetail.getUserId();
+        String displayName = userDetail.getDisplayName();
+        String imageUrl = userDetail.getImageUrl();
 
+        String accessToken = response.getHeader("Authorization");
+        String refreshToken = response.getHeader("Refresh");
+
+        if (accessToken != null && accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
+        }
+
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        loginResponseDto.setUserId(userId);
+        loginResponseDto.setDisplayName(displayName);
+        loginResponseDto.setImage(imageUrl);
+        loginResponseDto.setAccessToken(accessToken);
+        loginResponseDto.setRefreshToken(refreshToken);
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponseDto));
     }
 }
