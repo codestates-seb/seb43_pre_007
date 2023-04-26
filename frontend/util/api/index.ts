@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { tokenLocalStorage } from '../local_storage/localStorage';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -10,6 +11,7 @@ const api = axios.create({
   timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
+    Authorization: `Bearer ${tokenLocalStorage('accessToken')}`,
   },
 });
 

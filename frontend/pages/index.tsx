@@ -80,6 +80,7 @@ const Container = styled.div`
     flex-direction: column;
     > div:nth-child(2) {
       flex: 1;
+      min-height: 65vh;
     }
   }
 `;

@@ -162,6 +162,7 @@ const BasicLogin = () => {
         api
           .post('/users/login', { email, password })
           .then((res) => {
+            console.log(res)
             router.push('/questions');
             localStorage.setItem('accessToken', res.data.access_token);
             localStorage.setItem('refreshToken', res.data.refresh_token);

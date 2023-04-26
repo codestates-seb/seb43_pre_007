@@ -65,7 +65,7 @@ const Header = () => {
   const [userId, setUserId] = useRecoilState(userIdState);
   const [, setUserName] = useRecoilState(userNameState);
   const [, setUserImg] = useRecoilState(userImgState);
-
+  
   return (
     <HeaderContainer
       leftNav={leftNav}

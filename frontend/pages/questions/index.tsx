@@ -33,9 +33,7 @@ const Questions = () => {
 
   const handlePagefilter = (filter: { [key: string]: string | number }) => {
     const setQuery = { ...query, ...filter };
-
     if ('perPage' in filter) setQuery['page'] = INIT_FILTER.PAGE;
-
     push({
       pathname: '/questions',
       query: setQuery,
@@ -101,6 +99,7 @@ const Container = styled.div`
   > div:first-child {
     flex: 1;
     display: flex;
+    min-height: 65vh;
     flex-direction: column;
     > div:nth-child(2) {
       flex: 1;
