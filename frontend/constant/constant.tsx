@@ -153,7 +153,7 @@ export const USER_EDIT_LINKS_ICON = [
 
 export const HEADERS = {
   headers: {
-    Authorization: tokenLocalStorage('accessToken'),
+    Authorization: `Bearer ${tokenLocalStorage('accessToken')}`,
     Refresh: tokenLocalStorage('refreshToken'),
   },
 };
