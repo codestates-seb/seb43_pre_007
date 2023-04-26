@@ -11,8 +11,9 @@ import LeftSideBar from '../side_bar/LeftSideBar';
 import Input from '../input/Input';
 import { useInput } from '@/hooks/useInput';
 import { useOffResize } from '@/hooks/useOffResize';
-import { getLocalStorage } from '@/util/local_storage/localStorage';
 import { api } from '@/util/api';
+import { tokenLocalStorage } from '@/util/local_storage/localStorage';
+import axios from 'axios';
 
 type HeaderContainerProps = {
   leftNav: boolean;
@@ -23,11 +24,6 @@ type HeaderContainerProps = {
 };
 
 const Header = () => {
-  const [mounted, setMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   //좌측 네비를 위한 상태 및 함수
   const [leftNav, setLeftNav] = useState(false);
   const leftNavHandler = () => {
@@ -66,18 +62,9 @@ const Header = () => {
   useOffResize(350, 'down', setRightNav);
 
   //유저 로그인 상태 및 함수
-  const [userId] = useRecoilState(userIdState);
+  const [userId, setUserId] = useRecoilState(userIdState);
   const [, setUserName] = useRecoilState(userNameState);
   const [, setUserImg] = useRecoilState(userImgState);
-
-  // useEffect(() => {
-  //   if (getLocalStorage('accessToken') && getLocalStorage('userId')) {
-  //     api.get(`/users/${userId}`).then((res) => {
-  //       setUserName(res.data.display_name);
-  //       setUserImg(res.data.user_img);
-  //     });
-  //   }
-  // }, [setUserImg, setUserName, userId]);
 
   return (
     <HeaderContainer
@@ -89,7 +76,6 @@ const Header = () => {
     >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
-          {/* 왼쪽 네비 버튼 */}
           <span></span>
         </a>
         {leftNav && <LeftSideBar width={220} />}
@@ -97,7 +83,7 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          {!userId && (
+          {userId === 0 && (
             <li className="about">
               <a>About</a>
             </li>
@@ -109,14 +95,13 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          {!userId && (
+          {userId === 0 && (
             <li className="for-teams">
               <a>For Teams</a>
             </li>
           )}
         </ol>
         <div className="products-menu">
-          {/* products 버튼 누르면 나오는 div*/}
           <div></div>
           <ol>
             <li>
@@ -209,11 +194,9 @@ const Header = () => {
                 </div>
                 <div>
                   <div>
-                    {mounted && (
-                      <Button color={'var(--text-aqua)'}>
-                        <Link href="/questions/ask">Ask a question</Link>
-                      </Button>
-                    )}
+                    <Button color={'var(--text-aqua)'}>
+                      <Link href="/questions/ask">Ask a question</Link>
+                    </Button>
                   </div>
                   <div>Search help</div>
                 </div>
@@ -222,92 +205,90 @@ const Header = () => {
           </div>
         </form>
         <nav>
-          {mounted && (
-            <ol className="right-ol">
-              <li className="nav-search">
-                <GoSearch />
-              </li>
-              {userId !== 0 ? (
-                <>
-                  <li className="user-img">
-                    <Link href="/users/21615528/신동민">
-                      {/* users데이터를 가져오면 동적으로 바꿔줘야함 */}
-                      <img
-                        src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
-                        alt=""
-                      />
-                    </Link>
-                    <span>1</span>
-                  </li>
-                  <li className="right-icons">
-                    <a>
-                      <svg width="20" height="18" viewBox="0 0 20 18">
-                        <path d="M4.63 1h10.56a2 2 0 0 1 1.94 1.35L20 10.79V15a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-4.21l2.78-8.44c.25-.8 1-1.36 1.85-1.35Zm8.28 12 2-2h2.95l-2.44-7.32a1 1 0 0 0-.95-.68H5.35a1 1 0 0 0-.95.68L1.96 11h2.95l2 2h6Z"></path>
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="right-icons">
-                    <a>
-                      <svg width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M15 2V1H3v1H0v4c0 1.6 1.4 3 3 3v1c.4 1.5 3 2.6 5 3v2H5s-1 1.5-1 2h10c0-.4-1-2-1-2h-3v-2c2-.4 4.6-1.5 5-3V9c1.6-.2 3-1.4 3-3V2h-3ZM3 7c-.5 0-1-.5-1-1V4h1v3Zm8.4 2.5L9 8 6.6 9.4l1-2.7L5 5h3l1-2.7L10 5h2.8l-2.3 1.8 1 2.7h-.1ZM16 6c0 .5-.5 1-1 1V4h1v2Z"></path>
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="right-icons">
-                    <a>
-                      <svg width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8Zm.81 12.13c-.02.71-.55 1.15-1.24 1.13-.66-.02-1.17-.49-1.15-1.2.02-.72.56-1.18 1.22-1.16.7.03 1.2.51 1.17 1.23ZM11.77 8c-.59.66-1.78 1.09-2.05 1.97a4 4 0 0 0-.09.75c0 .05-.03.16-.18.16H7.88c-.16 0-.18-.1-.18-.15.06-1.35.66-2.2 1.83-2.88.39-.29.7-.75.7-1.24.01-1.24-1.64-1.82-2.35-.72-.21.33-.18.73-.18 1.1H5.75c0-1.97 1.03-3.26 3.03-3.26 1.75 0 3.47.87 3.47 2.83 0 .57-.2 1.05-.48 1.44Z"></path>
-                      </svg>
-                    </a>
-                  </li>
-                  <li
-                    className="right-icons"
-                    ref={rightNavRef}
-                    onClick={rightNavHandler}
-                  >
-                    <a>
-                      <svg width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M15 1H3a2 2 0 0 0-2 2v2h16V3a2 2 0 0 0-2-2ZM1 13c0 1.1.9 2 2 2h8v3l3-3h1a2 2 0 0 0 2-2v-2H1v2Zm16-7H1v4h16V6Z"></path>
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="right-nav">
+          <ol className="right-ol">
+            <li className="nav-search">
+              <GoSearch />
+            </li>
+            {userId !== 0 ? (
+              <>
+                <li className="user-img">
+                  <Link href="/users/21615528/신동민">
+                    {/* users데이터를 가져오면 동적으로 바꿔줘야함 */}
+                    <img
+                      src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
+                      alt=""
+                    />
+                  </Link>
+                  <span>1</span>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="20" height="18" viewBox="0 0 20 18">
+                      <path d="M4.63 1h10.56a2 2 0 0 1 1.94 1.35L20 10.79V15a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-4.21l2.78-8.44c.25-.8 1-1.36 1.85-1.35Zm8.28 12 2-2h2.95l-2.44-7.32a1 1 0 0 0-.95-.68H5.35a1 1 0 0 0-.95.68L1.96 11h2.95l2 2h6Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M15 2V1H3v1H0v4c0 1.6 1.4 3 3 3v1c.4 1.5 3 2.6 5 3v2H5s-1 1.5-1 2h10c0-.4-1-2-1-2h-3v-2c2-.4 4.6-1.5 5-3V9c1.6-.2 3-1.4 3-3V2h-3ZM3 7c-.5 0-1-.5-1-1V4h1v3Zm8.4 2.5L9 8 6.6 9.4l1-2.7L5 5h3l1-2.7L10 5h2.8l-2.3 1.8 1 2.7h-.1ZM16 6c0 .5-.5 1-1 1V4h1v2Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-icons">
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8Zm.81 12.13c-.02.71-.55 1.15-1.24 1.13-.66-.02-1.17-.49-1.15-1.2.02-.72.56-1.18 1.22-1.16.7.03 1.2.51 1.17 1.23ZM11.77 8c-.59.66-1.78 1.09-2.05 1.97a4 4 0 0 0-.09.75c0 .05-.03.16-.18.16H7.88c-.16 0-.18-.1-.18-.15.06-1.35.66-2.2 1.83-2.88.39-.29.7-.75.7-1.24.01-1.24-1.64-1.82-2.35-.72-.21.33-.18.73-.18 1.1H5.75c0-1.97 1.03-3.26 3.03-3.26 1.75 0 3.47.87 3.47 2.83 0 .57-.2 1.05-.48 1.44Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li
+                  className="right-icons"
+                  ref={rightNavRef}
+                  onClick={rightNavHandler}
+                >
+                  <a>
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M15 1H3a2 2 0 0 0-2 2v2h16V3a2 2 0 0 0-2-2ZM1 13c0 1.1.9 2 2 2h8v3l3-3h1a2 2 0 0 0 2-2v-2H1v2Zm16-7H1v4h16V6Z"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li className="right-nav">
+                  <div>
                     <div>
                       <div>
+                        <span>CURRENT COMMUNITY</span>
+                      </div>
+                      <div>
                         <div>
-                          <span>CURRENT COMMUNITY</span>
+                          <span></span>
+                          <span>Stack Overflow</span>
                         </div>
                         <div>
-                          <div>
-                            <span></span>
-                            <span>Stack Overflow</span>
-                          </div>
-                          <div>
-                            <span>help</span>
-                            <span>chat</span>
-                            <Link href={'/users/logout'}>log out</Link>
-                          </div>
+                          <span>help</span>
+                          <span>chat</span>
+                          <Link href={'/users/logout'}>log out</Link>
                         </div>
                       </div>
                     </div>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Button color={'var(--text-aqua)'}>
-                      <Link href="/users/login">Log in</Link>
-                    </Button>
-                  </li>
-                  <li>
-                    <Button color={'var(--text-white)'}>
-                      <Link href="/users/signup">Sign Up</Link>
-                    </Button>
-                  </li>
-                </>
-              )}
-            </ol>
-          )}
+                  </div>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Button color={'var(--text-aqua)'}>
+                    <Link href="/users/login">Log in</Link>
+                  </Button>
+                </li>
+                <li>
+                  <Button color={'var(--text-white)'}>
+                    <Link href="/users/signup">Sign Up</Link>
+                  </Button>
+                </li>
+              </>
+            )}
+          </ol>
         </nav>
       </div>
     </HeaderContainer>

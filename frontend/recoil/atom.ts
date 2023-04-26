@@ -1,9 +1,9 @@
-import { getLocalStorage, localState } from '@/util/local_storage/localStorage';
+import { localState } from '@/util/local_storage/localStorage';
 import { atom } from 'recoil';
 
 export const userIdState = atom<number>({
   key: 'userIdState',
-  default: Number(getLocalStorage('userId')) || 0,
+  default: 0,
 });
 
 export const userImgState = atom({

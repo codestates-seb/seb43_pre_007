@@ -7,7 +7,7 @@ import { api } from '@/util/api';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { PageInfo, Tags } from '@/types/types';
 
 //경로 https://stackoverflow.com/tags
@@ -17,7 +17,19 @@ const Tags = () => {
   const pageNum = new URLSearchParams(router.asPath).get('page');
   const [page, setPage] = useState(Number(pageNum) || 1);
 
-  const { isLoading, error, data } = useQuery<
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (data && page < data.page_info.total_pages) {
+      const nextPage = page + 1;
+      queryClient.prefetchQuery(['tags', nextPage], () =>
+        api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, queryClient]);
+
+  const { isLoading, error, data, refetch } = useQuery<
     { data: Tags[]; page_info: PageInfo },
     Error
   >(['tags', page], () =>
@@ -29,63 +41,65 @@ const Tags = () => {
       query: { size: 36, page: page },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, refetch]);
 
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <TagsContainer>
-      <div className="title">Tags</div>
-      <p className="title_sub">
-        A tag is a keyword or label that categorizes your question with other,
-        similar questions. Using the right tags makes it easier for others to
-        find and answer your question.
-      </p>
-      <a>Show all tag synonyms</a>
-      <div className="sub">
-        <div>
-          <i>
-            <GoSearch />
-          </i>
-          <Input paddingLeft="28px" placeholder="Filter by tag name" />
+    <>
+      <TagsContainer>
+        <div className="title">Tags</div>
+        <p className="title_sub">
+          A tag is a keyword or label that categorizes your question with other,
+          similar questions. Using the right tags makes it easier for others to
+          find and answer your question.
+        </p>
+        <a>Show all tag synonyms</a>
+        <div className="sub">
+          <div>
+            <i>
+              <GoSearch />
+            </i>
+            <Input paddingLeft="28px" placeholder="Filter by tag name" />
+          </div>
+          <div>
+            <FilterButton
+              filters={['Reputation', 'Name', 'New']}
+              onChange={setPickFilter}
+            />
+          </div>
         </div>
-        <div>
-          <FilterButton
-            filters={['Reputation', 'Name', 'New']}
-            onChange={setPickFilter}
-          />
+        {isLoading && (
+          <div className="loading_message">
+            <p>Loading...</p>
+          </div>
+        )}
+        <div className="content">
+          {data?.data.map((tag) => (
+            <Card key={tag.tag_id}>
+              <div className="tag_name">
+                <a>{tag.name}</a>
+              </div>
+              <div className="tag_info">
+                {tag.info}
+                {tag.info}
+                {tag.info}
+                {tag.info}
+                {tag.info}
+              </div>
+              <div className="tag_count">{`${tag.question_amount} questions`}</div>
+            </Card>
+          ))}
         </div>
-      </div>
-      {isLoading && (
-        <div className="loading_message">
-          <p>Loading...</p>
-        </div>
-      )}
-      <div className="content">
-        {data?.data.map((tag) => (
-          <Card key={tag.tag_id}>
-            <div className="tag_name">
-              <a>{tag.name}</a>
-            </div>
-            <div className="tag_info">
-              {tag.info}
-              {tag.info}
-              {tag.info}
-              {tag.info}
-              {tag.info}
-            </div>
-            <div className="tag_count">{`${tag.question_amount} questions`}</div>
-          </Card>
-        ))}
-      </div>
-      <div className="pagenation_box">
+      </TagsContainer>
+      <PageBox className="pagenation_box">
         <Pagenation
           initialPage={page}
           onPageChange={setPage}
           pageSize={data ? data.page_info.total_pages : 0}
         />
-      </div>
-    </TagsContainer>
+      </PageBox>
+    </>
   );
 };
 
@@ -213,4 +227,12 @@ const TagsContainer = styled.div`
     justify-content: end;
     margin: 30px 0px;
   }
+`;
+
+const PageBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  margin: 30px 0px;
+  padding: 24px;
 `;

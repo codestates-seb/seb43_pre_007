@@ -61,7 +61,6 @@ const Logout = () => {
     e.preventDefault();
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.setItem('userId', '0');
     setUserId(0);
     setUserName('');
     setUserImg('');

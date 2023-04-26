@@ -1,3 +1,4 @@
+import { tokenLocalStorage } from '@/util/local_storage/localStorage';
 import Link from 'next/link';
 
 export const PUBLIC_LI = ['Questions', 'Tags', 'Users', 'Companies'];
@@ -149,3 +150,10 @@ export const USER_EDIT_LINKS_ICON = [
     ></path>
   </svg>,
 ];
+
+export const HEADERS = {
+  headers: {
+    Authorization: tokenLocalStorage('accessToken'),
+    Refresh: tokenLocalStorage('refreshToken'),
+  },
+};
