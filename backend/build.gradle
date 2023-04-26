@@ -50,8 +50,8 @@ dependencies {
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'com.querydsl:querydsl-jpa'
-	annotationProcessor 'com.querydsl:querydsl-apt:jpa'
+	//implementation 'com.querydsl:querydsl-jpa'
+	//annotationProcessor 'com.querydsl:querydsl-apt:jpa'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
