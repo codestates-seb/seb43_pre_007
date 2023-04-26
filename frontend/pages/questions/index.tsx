@@ -1,23 +1,22 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { QuestionItem } from '@/components/questionItem/QuestionItem';
-import { FilterButton } from '@/components/button/FilterButton';
-import { addCommaToNumber } from '@/util/addCommaToNum';
-import { useQuery } from 'react-query';
-import { ResQuestion } from '@/util/api/questions';
-import { PerPage } from '@/components/perPage/PerPage';
-import { api } from '@/util/api';
+import Button from '@/components/button/Button';
 import styled from 'styled-components';
 import Pagenation from '@/components/pagenation/Pagenation';
-import Button from '@/components/button/Button';
+import RightSideBar from '@/components/side_bar/RightSideBar';
+import { api } from '@/util/api';
+import { PerPage } from '@/components/perPage/PerPage';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 import { objToQuery } from '@/util/objectToQuery';
+import { ResQuestion } from '@/util/api/questions';
+import { FilterButton } from '@/components/button/FilterButton';
+import { addCommaToNumber } from '@/util/addCommaToNum';
+import { QuestionList } from '../../components/questionList/QuestionList';
 import {
   INIT_FILTER,
   QUESTION_FILTER_LIST,
   QUESTION_PER_PAGE_LIST,
 } from '@/constant/constant';
-import { Skeleton } from '@/components/skeleton/Skeleton';
-import RightSideBar from '@/components/side_bar/RightSideBar';
 
 const Questions = () => {
   const { push, query, isReady } = useRouter();
@@ -43,10 +42,6 @@ const Questions = () => {
     });
   };
 
-  const handleWriteClick = () => {
-    push('/questions/ask');
-  };
-
   return (
     <>
       <Head>
@@ -59,13 +54,13 @@ const Questions = () => {
           <QuestionHeader>
             <div>
               <h1>All Questions</h1>
-              <CustomButton onClick={handleWriteClick}>
+              <CustomButton onClick={() => push('/questions/ask')}>
                 Ask Question
               </CustomButton>
             </div>
             <div>
               <div className="question_cnt">
-                {addCommaToNumber(data?.page_info?.total_elements || 0)}{' '}
+                {addCommaToNumber(data?.page_info?.total_elements || 0)}
                 questions
               </div>
               <FilterButton
@@ -75,42 +70,7 @@ const Questions = () => {
               />
             </div>
           </QuestionHeader>
-          {!isLoading && data?.data?.length ? (
-            <QuestionList>
-              {data?.data?.map(({ question, user }) => {
-                return (
-                  <QuestionItem
-                    id={question.question_id}
-                    title={question.title}
-                    body={question.body}
-                    isVote={question.vote.is_vote}
-                    isScore={question.vote.score}
-                    answerCount={question.answer_count}
-                    creationData={question.creation_date}
-                    userName={user.display_name}
-                    key={question.question_id}
-                    tags={question.tags.map((tag) => ({
-                      id: tag.tag_id,
-                      name: tag.name,
-                    }))}
-                  />
-                );
-              })}
-            </QuestionList>
-          ) : (
-            <SkeletonContainer>
-              <div>
-                <Skeleton width={`100px`} height={'20px'} />
-                <Skeleton width={`100px`} height={'20px'} />
-                <Skeleton width={`100px`} height={'20px'} />
-              </div>
-              <div>
-                <Skeleton width={`100%`} height={'20px'} />
-                <Skeleton width={`100%`} height={'20px'} />
-                <Skeleton width={`100%`} height={'20px'} />
-              </div>
-            </SkeletonContainer>
-          )}
+          <QuestionList isLoading={isLoading} content={data} />
           <QuestionFooter>
             <Pagenation
               initialPage={Number(page) || INIT_FILTER.PAGE}
@@ -182,11 +142,6 @@ const CustomButton = styled(Button)`
   color: white;
 `;
 
-const QuestionList = styled.ul`
-  border-top: 1px solid #d6d9dc;
-  border-bottom: 1px solid #d6d9dc;
-`;
-
 const QuestionFooter = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -197,22 +152,5 @@ const QuestionFooter = styled.div`
 
   @media (max-width: 640px) {
     margin: 70px 0 0 0;
-  }
-`;
-
-const SkeletonContainer = styled.div`
-  padding: 16px 16px 0 16px;
-  width: 100%;
-  display: flex;
-  gap: 10px;
-
-  & > div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    &:last-child {
-      width: 100%;
-    }
   }
 `;

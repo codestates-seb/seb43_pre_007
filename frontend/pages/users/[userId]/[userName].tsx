@@ -24,10 +24,19 @@ import {
 } from '@/recoil/atom';
 import { useRef, useState } from 'react';
 import { api } from '@/util/api';
-import { MarkDownEditor } from '@/components/markDownEditor/MarkDownEditor';
 import Input from '@/components/input/Input';
+import dynamic from 'next/dynamic';
 
-//경로 https://stackoverflow.com/users/6117017/timbus-calin
+const MarkDownEditor = dynamic(
+  () =>
+    import('@/components/markDownEditor/MarkDownEditor').then(
+      (res) => res.MarkDownEditor
+    ),
+  {
+    ssr: false,
+  }
+);
+
 const UserDetail = () => {
   const [pick, setPick] = useRecoilState(pickState);
   const pickHandler = (idx: number) => {
