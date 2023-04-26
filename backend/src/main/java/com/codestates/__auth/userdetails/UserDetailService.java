@@ -18,11 +18,11 @@ import java.util.Optional;
 public class UserDetailService implements UserDetailsService {
    //private final CustomAuthorityUtils authorityUtils; 권한생성 클래스
     private final UserRepository userRepository;
+
     public UserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
-
-
 
     @Override // DB 에서 조회한 사용자정보를 UserDetails 객체에 담아 반환하는 메서드
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,9 +37,10 @@ public class UserDetailService implements UserDetailsService {
     //Todo: UserDetail 내부클래스 (인증•인가에 사용되는 객체)
     //      엔티티필드값을 UserDetails 인터페이스에서 요구하는 값으로 매핑해서 반환
     //      엔티티 변경시 UserDetail 객체도 자동업데이트
-    private final class UserDetail extends User implements UserDetails {
+    public final class UserDetail extends User implements UserDetails {
         UserDetail(User user) {
             setUserId(user.getUserId());
+            setDisplayName(user.getDisplayName());
             setEmail(user.getEmail());
             setPassword(user.getPassword());
            //setRoles(user.getRoles());  권한가져오기

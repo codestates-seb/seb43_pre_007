@@ -84,6 +84,10 @@ public class JwtTokenizer {
                 .compact();
     }
 
+    public String getUserIdFromToken(String token){
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+        return claims.getBody().getSubject();
+    }
 
 
 // Todo : getClaims 메서드 - JWT 서명 유효성 검증 후 Claims 를 반환한다.
