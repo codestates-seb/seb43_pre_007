@@ -1,6 +1,6 @@
-package com.codestates.__auth.handler;
+package com.codestates.auth.handler;
 
-import com.codestates.__auth.utils.ErrorResponder;
+import com.codestates.auth.utils.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

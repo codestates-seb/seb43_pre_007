@@ -1,4 +1,4 @@
-package com.codestates.__response;
+package com.codestates.auth.utils;
 
 import com.codestates.exception.ExceptionCode;
 import lombok.Getter;

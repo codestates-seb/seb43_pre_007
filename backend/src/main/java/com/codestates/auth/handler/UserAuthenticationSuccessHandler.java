@@ -1,7 +1,7 @@
-package com.codestates.__auth.handler;
+package com.codestates.auth.handler;
 
-import com.codestates.__auth.dto.LoginResponseDto;
-import com.codestates.__auth.userdetails.UserDetailService;
+import com.codestates.auth.dto.LoginResponseDto;
+import com.codestates.auth.userdetails.UserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

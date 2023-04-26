@@ -7,16 +7,17 @@ import {
   QuestionAskForm,
 } from '@/components/questionAskForm/QuestionAskForm';
 import { useRouter } from 'next/router';
+import { HEADERS } from '@/constant/constant';
 
 const Ask = () => {
   const route = useRouter();
+  console.log(HEADERS)
 
   const questionAsk = useMutation({
     mutationFn: (req: ReqAddQuestion) =>
       api.post<ResQuestion>('/questions/add', req),
     onSuccess: async (res) => {
       const { question_id } = res.data.question;
-
       if (res.data.question.question_id)
         route.push(`/questions/${question_id}`);
     },

@@ -1,12 +1,14 @@
-package com.codestates.__config;
+package com.codestates.auth.security;
 
-import com.codestates.__auth.filter.JwtAuthenticationFilter;
-import com.codestates.__auth.filter.JwtVerificationFilter;
-import com.codestates.__auth.handler.UserAuthenticationEntryPoint;
-import com.codestates.__auth.handler.UserAuthenticationFailureHandler;
-import com.codestates.__auth.handler.UserAuthenticationSuccessHandler;
-import com.codestates.__auth.jwt.JwtTokenizer;
-import com.codestates.__auth.userdetails.UserDetailService;
+import com.codestates.auth.filter.JwtAuthenticationFilter;
+import com.codestates.auth.filter.JwtVerificationFilter;
+import com.codestates.auth.handler.UserAuthenticationEntryPoint;
+import com.codestates.auth.handler.UserAuthenticationFailureHandler;
+import com.codestates.auth.handler.UserAuthenticationSuccessHandler;
+import com.codestates.auth.jwt.JwtTokenizer;
+import com.codestates.auth.userdetails.UserDetailService;
+import com.codestates.oauth.handler.OAuth2AuthenticationSuccessHandler;
+import com.codestates.oauth.service.OAuth2Service;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,13 +31,17 @@ import java.util.Arrays;
 public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
-    public final UserDetailService userDetailService;
+    private final UserDetailService userDetailService;
+    private final OAuth2Service oAuth2Service;
+//    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserDetailService userDetailService) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserDetailService userDetailService, OAuth2Service oAuth2Service, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
         this.jwtTokenizer = jwtTokenizer;
         this.userDetailService = userDetailService;
+        this.oAuth2Service = oAuth2Service;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -66,6 +72,17 @@ public class SecurityConfiguration {
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
+//                .oauth2Login(oauth2 -> oauth2
+//                        .loginProcessingUrl("/oauth2/authorize/google")
+//                        .authorizationEndpoint(authorization -> authorization
+//                                .baseUri("/oauth2/authorize/google")
+//                                .authorizationRequestRepository(cookieAuthorizationRequestRepository))
+//                        .and()
+//                        .userInfoEndpoint()
+//                        .userService(oAuth2Service)
+//                        .and()
+//                        .successHandler(oAuth2AuthenticationSuccessHandler)
+//                        .failureHandler())
 
 //Todo ----- 인증오류,권한오류(현재빠져있음) 발생시 처리방법 설정부분 -----
                 .exceptionHandling()
@@ -77,10 +94,14 @@ public class SecurityConfiguration {
 
     }
 
+
+
     @Bean // 사용자 비밀번호를 암호화 하기 위한 PasswordEncoder 생성메서드를 Bean 으로 등록
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
+
 
     @Bean
         // CORS 설정로직으로, 요청을 허용할 Origin 과 HTTP Method 설정
@@ -96,6 +117,7 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
+
 
 
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
