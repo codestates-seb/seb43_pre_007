@@ -2,8 +2,6 @@ export const tokenLocalStorage = (key: string) => {
   if (typeof window !== 'undefined') {
     const data = localStorage.getItem(key);
     return data;
-  } else {
-    return undefined;
   }
 };
 
