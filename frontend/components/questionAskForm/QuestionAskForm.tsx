@@ -16,19 +16,30 @@ const MarkDownEditor = dynamic(
   }
 );
 
-type QuestionAskForm = {
+export type QuestionAskFormData = {
   title: string;
-  content: string;
+  body: string;
   tags: string;
 };
 
-export const QuestionAskForm = () => {
-  const { data, handleChange, errors, handleSubmit } = useForm<QuestionAskForm>(
-    {
+export type QuestionAskData = {
+  title: string;
+  body: string;
+  tags: string[];
+};
+
+export type QuestionAskFormProps = {
+  value?: QuestionAskData;
+  onSubmit: (value: QuestionAskData) => void;
+};
+
+export const QuestionAskForm = (props: QuestionAskFormProps) => {
+  const { data, handleChange, errors, handleSubmit } =
+    useForm<QuestionAskFormData>({
       initialValues: {
-        title: '',
-        content: '',
-        tags: '',
+        title: props.value?.title || '',
+        body: props.value?.body || '',
+        tags: props.value?.tags.length ? props.value?.tags.join(',') : '',
       },
       validations: {
         title: {
@@ -37,7 +48,7 @@ export const QuestionAskForm = () => {
             message: 'you need to require title',
           },
         },
-        content: {
+        body: {
           required: {
             value: true,
             message: 'you need to require content',
@@ -51,13 +62,25 @@ export const QuestionAskForm = () => {
         },
       },
       onSubmit: handleAskFormSubmit,
-    }
-  );
+    });
 
-  function handleAskFormSubmit() {}
+  function handleAskFormSubmit() {
+    const value = data.tags.split(',');
+    const tags = value.length > 0 ? value : [];
+
+    const a = {
+      ...data,
+      tags,
+    };
+
+    props.onSubmit({
+      ...data,
+      tags,
+    });
+  }
 
   const handlemarkdownChange = (content: string) => {
-    handleChange('content')(content);
+    handleChange('body')(content);
   };
 
   return (
@@ -79,13 +102,19 @@ export const QuestionAskForm = () => {
         <p>
           Include all the information someone would need to answer your question
         </p>
-        <MarkDownEditor onChange={handlemarkdownChange} />
-        {errors.content && <ErrorMessage>{errors.content}</ErrorMessage>}
+        <MarkDownEditor
+          onChange={handlemarkdownChange}
+          value={props.value?.body}
+        />
+        {errors.body && <ErrorMessage>{errors.body}</ErrorMessage>}
       </FormContent>
       <InputContainer>
         <h3>Tags</h3>
         <p>Add up to 5 tags to describe what your question is about</p>
-        <InputChip onChange={(tags) => handleChange('tags')(tags.join(''))} />
+        <InputChip
+          value={data.tags ? data.tags.split(',') : []}
+          onChange={(tags) => handleChange('tags')(tags.join(','))}
+        />
         {errors.tags && <ErrorMessage>{errors.tags}</ErrorMessage>}
       </InputContainer>
       <SubmitButton>Post your question</SubmitButton>
@@ -99,10 +128,9 @@ const Container = styled.form`
   position: relative;
   flex-direction: column;
   display: flex;
-  width: calc(100% - 340px);
+  width: 100%;
   color: #232629;
   background-color: white;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   h3 {
     font-size: 14px;
@@ -112,10 +140,6 @@ const Container = styled.form`
   p {
     margin: 5px 0;
     font-size: 11px;
-  }
-
-  @media (max-width: 770px) {
-    width: 100%;
   }
 `;
 
@@ -134,7 +158,7 @@ const SubmitButton = styled(Button)`
   width: 135px;
   height: 38px;
   color: white;
-  left: 0;
+  left: 13px;
   bottom: -60px;
 `;
 

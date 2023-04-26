@@ -46,7 +46,7 @@ export const InputChip = ({ onChange, value }: InputChipProps) => {
     <Container onClick={handleContainerClick}>
       {chips.map((chip, index) => (
         <div key={index} className="chip" onClick={handleDeleteChip(index)}>
-          <Chip href="">
+          <Chip>
             {chip}
             <span className="close">x</span>
           </Chip>
