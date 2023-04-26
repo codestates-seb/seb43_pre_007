@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import { FilterButton } from '@/components/button/FilterButton';
-import Input from '@/components/input/Input';
-import Pagenation from '@/components/pagenation/Pagenation';
-import { DAYS_FILTER } from '@/constant/constant';
-import { api } from '@/util/api';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { GoSearch } from 'react-icons/go';
-import { useQuery, useQueryClient } from 'react-query';
+import Input from '@/components/input/Input';
 import styled from 'styled-components';
+import Pagenation from '@/components/pagenation/Pagenation';
+import { api } from '@/util/api';
+import { GoSearch } from 'react-icons/go';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
+import { DAYS_FILTER } from '@/constant/constant';
+import { FilterButton } from '@/components/button/FilterButton';
+import { PageInfo, User } from '@/types/types';
+import { useEffect, useState } from 'react';
 
 //경로 https://stackoverflow.com/users
 const Users = () => {
@@ -19,9 +20,8 @@ const Users = () => {
   const [pickDaysFilter, setPickDaysFilter] = useState(1);
   const [page, setPage] = useState(Number(pageNum) || 1);
 
-  const queryClient = useQueryClient();
   const { isLoading, error, data } = useQuery<
-    { data: Users[]; page_info: PageInfo },
+    { data: User[]; page_info: PageInfo },
     Error
   >(
     ['users', page],
@@ -38,15 +38,6 @@ const Users = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
-  useEffect(() => {
-    if (data && page < data.page_info.total_pages) {
-      const nextPage = page + 1;
-      queryClient.prefetchQuery(['users', nextPage], () =>
-        api(`/users?size=36&page=${nextPage}`).then((res) => res.data)
-      );
-    }
-  }, [page, queryClient, data]);
 
   if (error) return <p>Error: {error.message}</p>;
   else
@@ -95,8 +86,8 @@ const Users = () => {
                 </div>
               </div>
               <div className="content">
-                {data.data?.map((user: Users) => (
-                  <div key={user.data.user_id} className="grid-item">
+                {data.data?.map((user: User) => (
+                  <div key={user.user_id} className="grid-item">
                     <div>
                       <img
                         src={
@@ -107,16 +98,15 @@ const Users = () => {
                     </div>
                     <div>
                       <Link href={'/users/21615528/신동민'}>
-                        {user.data.display_name}
+                        {user.display_name}
                       </Link>
-                      <span>{user.data.location}</span>
-                      <span>{user.data.question_count.toLocaleString()}</span>
+                      <span>{user.location}</span>
+                      <span>{user.question_count.toLocaleString()}</span>
                     </div>
                     <div>
-                      {user.data.tags.map((x) => (
+                      {user.tags.map((x) => (
                         <a key={x.tag_id}>{x.name}</a>
                       ))}
-                      {/* <a>git</a>, <a>github</a>, <a>go</a> */}
                     </div>
                   </div>
                 ))}

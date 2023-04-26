@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { userNameState, userImgState, userIdState } from '@/recoil/atom';
 import { api } from '@/util/api';
-import { setLocalStorage } from '@/util/local_storage/localStorage';
 const FormContainer = styled.div`
   width: 100%;
 
@@ -121,7 +120,7 @@ const BasicLogin = () => {
       if (email === '') setemptyEmail(true);
       if (password === '') setemptyPassword(true);
     }
-  }, [email, password]);
+  }, [email, password,loginFailed]);
   // 로그인 눌렀을때
   const onSubmit = async (e: React.FormEvent) => {
     // email이 "username@domain.com" 형태의 이메일인지 유효성검사
@@ -163,6 +162,7 @@ const BasicLogin = () => {
         api
           .post('/users/login', { email, password })
           .then((res) => {
+            console.log(res)
             router.push('/questions');
             localStorage.setItem(
               'accessToken',
@@ -178,7 +178,6 @@ const BasicLogin = () => {
             setUserImg(res.data.user_img);
             setloginFailed(false);
             resetInput();
-            alert('로그인 성공');
           })
           // 실패시
           .catch((err) => {

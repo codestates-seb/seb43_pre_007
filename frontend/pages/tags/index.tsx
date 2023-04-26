@@ -7,7 +7,8 @@ import { api } from '@/util/api';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
+import { PageInfo, Tags } from '@/types/types';
 
 //경로 https://stackoverflow.com/tags
 const Tags = () => {
@@ -16,19 +17,8 @@ const Tags = () => {
   const pageNum = new URLSearchParams(router.asPath).get('page');
   const [page, setPage] = useState(Number(pageNum) || 1);
 
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (data && page < Math.round(data.total / 36)) {
-      const nextPage = page + 1;
-      queryClient.prefetchQuery(['tags', nextPage], () =>
-        api(`/tags?size=36&page=${nextPage}`).then((res) => res.data)
-      );
-    }
-  }, [page, queryClient]);
-
-  const { isLoading, error, data, refetch } = useQuery<
-    { data: Tags[]; total: number },
+  const { isLoading, error, data } = useQuery<
+    { data: Tags[]; page_info: PageInfo },
     Error
   >(['tags', page], () =>
     api(`/tags?size=36&page=${page}`).then((res) => res.data)
@@ -39,7 +29,7 @@ const Tags = () => {
       query: { size: 36, page: page },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch]);
+  }, [page]);
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -84,7 +74,7 @@ const Tags = () => {
               {tag.info}
               {tag.info}
             </div>
-            <div className="tag_count">{`${tag.count} questions`}</div>
+            <div className="tag_count">{`${tag.question_amount} questions`}</div>
           </Card>
         ))}
       </div>
@@ -92,7 +82,7 @@ const Tags = () => {
         <Pagenation
           initialPage={page}
           onPageChange={setPage}
-          pageSize={data ? Math.round(data.total / 36) : 0}
+          pageSize={data ? data.page_info.total_pages : 0}
         />
       </div>
     </TagsContainer>
