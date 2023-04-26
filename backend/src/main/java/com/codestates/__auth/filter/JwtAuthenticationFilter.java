@@ -91,7 +91,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.put("userId", user.getUserId()); //UserId 넣기
         claims.put("username", user.getEmail());
 
-        String subject = user.getEmail(); //✅UserId 식별자로 대체해보기
+        String subject = String.valueOf(user.getUserId()); //태경수정✅UserId 식별자로 대체해보기
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         String accessToken = jwtTokenizer.generateAccessToken(claims,subject,expiration,base64EncodedSecretKey);
