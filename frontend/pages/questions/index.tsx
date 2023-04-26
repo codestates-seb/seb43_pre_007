@@ -100,6 +100,11 @@ const Container = styled.div`
 
   > div:first-child {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    > div:nth-child(2) {
+      flex: 1;
+    }
   }
 `;
 
