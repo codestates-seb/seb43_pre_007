@@ -1,12 +1,12 @@
-package com.codestates.__config;
+package com.codestates.auth.security;
 
-import com.codestates.__auth.filter.JwtAuthenticationFilter;
-import com.codestates.__auth.filter.JwtVerificationFilter;
-import com.codestates.__auth.handler.UserAuthenticationEntryPoint;
-import com.codestates.__auth.handler.UserAuthenticationFailureHandler;
-import com.codestates.__auth.handler.UserAuthenticationSuccessHandler;
-import com.codestates.__auth.jwt.JwtTokenizer;
-import com.codestates.__auth.userdetails.UserDetailService;
+import com.codestates.auth.filter.JwtAuthenticationFilter;
+import com.codestates.auth.filter.JwtVerificationFilter;
+import com.codestates.auth.handler.UserAuthenticationEntryPoint;
+import com.codestates.auth.handler.UserAuthenticationFailureHandler;
+import com.codestates.auth.handler.UserAuthenticationSuccessHandler;
+import com.codestates.auth.jwt.JwtTokenizer;
+import com.codestates.auth.userdetails.UserDetailService;
 import com.codestates.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.codestates.oauth.service.OAuth2Service;
 import org.springframework.context.annotation.Bean;

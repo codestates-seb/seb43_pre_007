@@ -1,4 +1,4 @@
-package com.codestates.__auth.jwt;
+package com.codestates.auth.jwt;
 
 import com.codestates.oauth.response.OauthJwtTokenResponse;
 import io.jsonwebtoken.Claims;

@@ -1,6 +1,6 @@
-package com.codestates.__auth.filter;
+package com.codestates.auth.filter;
 
-import com.codestates.__auth.jwt.JwtTokenizer;
+import com.codestates.auth.jwt.JwtTokenizer;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

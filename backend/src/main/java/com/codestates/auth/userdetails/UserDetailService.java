@@ -1,4 +1,4 @@
-package com.codestates.__auth.userdetails;
+package com.codestates.auth.userdetails;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
