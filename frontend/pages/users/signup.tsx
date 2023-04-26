@@ -33,7 +33,7 @@ const SignUp = () => {
       if (email === '') setemptyEmail(true);
       if (password === '') setemptyPassword(true);
     }
-  }, [email, password]);
+  }, [email, password, loginFailed]);
   //로그인 눌렀을때
   const SignUpSubmit = (e: React.FormEvent) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -66,12 +66,12 @@ const SignUp = () => {
 
     // 이벤트의 기본 동작을 취소하는 메서드
     e.preventDefault();
-
+    
     if (emailcheck && passwordcheck) {
       api
         .post('/users', { display_name, email, password })
         // 성공시
-        .then((res) => {
+        .then(() => {
           router.push('/users/login');
           alert('회원 가입을 축하드립니다.');
           // 로그인 성공하면 입력 폼 초기화
@@ -90,8 +90,6 @@ const SignUp = () => {
           // 상태코드 503 = 서버 상태가 안 좋을 시
           else if (err.response.status === 503) {
             alert('서버 상태가 안 좋습니다. 잠시 후 다시 시도해 주세요.');
-          } else {
-            console.log(err.status);
           }
         });
     }

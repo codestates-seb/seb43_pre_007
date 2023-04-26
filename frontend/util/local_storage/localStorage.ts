@@ -4,12 +4,8 @@
  */
 export const getLocalStorage = (key: string) => {
   if (typeof window !== 'undefined') {
-    const data = localStorage.getItem(key);
-
-    if (data) {
-      return JSON.parse(data);
-    }
-    return null;
+    const data = localStorage.getItem(key) || '';
+    return JSON.parse(data);
   }
 };
 
