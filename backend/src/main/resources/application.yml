@@ -25,14 +25,6 @@ logging:
         orm:
           jpa: DEBUG
 
-
-# ----- ${JWT_SECRET_KEY} -----
-jwt:
-  key: "가나다라마바사아자차카타파하1234567890987654321"
-  access-token-expiration-minutes: 40
-  refresh-token-expiration-minutes: 420
-
-
 # ----- email 인증 -----
 mail:
   smtp:
