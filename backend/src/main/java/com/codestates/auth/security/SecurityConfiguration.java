@@ -111,7 +111,7 @@ public class SecurityConfiguration {
         // UrlBased...Source 객체 : CorsConfiguration 객체등록 및 CORS 설정을 등록할 URL 패턴지정
         CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "stackoverflo.site", "stackoverflowclone.site", "won-stackoverflow.site"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
