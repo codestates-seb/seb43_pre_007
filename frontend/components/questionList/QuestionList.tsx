@@ -32,7 +32,7 @@ export const QuestionList = ({ isLoading, content }: QuestionListProps) => {
                   userName={user.display_name}
                   isScore={question.vote.score}
                   isVote={question.vote.is_vote}
-                  viewCount={question.answer_count}
+                  viewCount={question.view_count}
                   creationData={question.creation_date}
                   tags={question.tags.map((tag) => ({
                     id: tag.tag_id,
