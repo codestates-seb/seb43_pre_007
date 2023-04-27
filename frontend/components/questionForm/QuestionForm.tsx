@@ -8,6 +8,8 @@ import { MarkDownEiditorSkeleton } from '../markDownEditor/MarkDownEiditorSkelet
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 import { api } from '@/util/api';
+import { useRecoilState } from 'recoil';
+import { userDataState } from '@/recoil/atom';
 
 const MarkDownEditor = dynamic(
   () =>
@@ -32,6 +34,7 @@ export type QuestionForm = {
 
 export const QuestionForm = (props: QuestionForm) => {
   const { push, query } = useRouter();
+  const [userData] = useRecoilState(userDataState);
 
   const deleteQuestion = useMutation({
     mutationFn: () => api.delete(`/questions/${query.questionId}`),
@@ -66,8 +69,12 @@ export const QuestionForm = (props: QuestionForm) => {
         )}
         <div className="editing">
           <div className="link_container">
-            <button onClick={handleEditClick}>Edit</button>
-            <button onClick={() => deleteQuestion.mutate()}>Delete</button>
+            {userData.user_id === props.userId && (
+              <>
+                <button onClick={handleEditClick}>Edit</button>
+                <button onClick={() => deleteQuestion.mutate()}>Delete</button>
+              </>
+            )}
           </div>
           <User>
             <p>{parseDate(props.creation_date)}</p>
