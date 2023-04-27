@@ -66,17 +66,19 @@ const DetailQuestion = () => {
               <AnswersInfo>
                 <h2>{data.answers.length} Answers</h2>
               </AnswersInfo>
-              {data.answers.map((ans) => (
-                <QuestionForm
-                  userId={data.user.user_id}
-                  key={ans.answer_id}
-                  score={ans.score}
-                  body={ans.body}
-                  question_id={ans.answer_id}
-                  creation_date={ans.creation_date}
-                  display_name={ans.user.display_name}
-                />
-              ))}
+              <div className="answers">
+                {data.answers.map((ans) => (
+                  <QuestionForm
+                    userId={data.user.user_id}
+                    key={ans.answer_id}
+                    score={ans.score}
+                    body={ans.body}
+                    question_id={ans.answer_id}
+                    creation_date={ans.creation_date}
+                    display_name={ans.user.display_name}
+                  />
+                ))}
+              </div>
               <YourAnswerContainer>
                 <h2>Your Answer</h2>
                 <MarkDownEditor />
@@ -172,7 +174,7 @@ const AnswersInfo = styled.div`
 `;
 
 const YourAnswerContainer = styled.div`
-  margin-top: 10px;
+  margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid #e3e6e8;
   width: 100%;
@@ -198,7 +200,15 @@ const QuestionContent = styled.div`
   }
 
   .content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
   }
 `;
 

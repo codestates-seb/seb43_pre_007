@@ -128,6 +128,7 @@ const QuestionLayOut = styled.div`
 
 const QuestionEditor = styled.div`
   flex: 1;
+  width: calc(100% - 40px);
 
   .editing {
     margin-top: 24px;
