@@ -10,28 +10,26 @@ import { ResQuestion } from '@/util/api/questions';
 import { FilterButton } from '@/components/button/FilterButton';
 import { QuestionList } from '@/components/questionList/QuestionList';
 import { INIT_FILTER, QUESTION_FILTER_LIST } from '@/constant/constant';
-
+import { DEAFALT_SEARCH_PARAMS } from '@/constant/constant';
 const Home = () => {
   const { push, query, isReady } = useRouter();
   const { filter } = query;
 
   const { isLoading, data } = useQuery(
     ['questions', query],
-    () =>
-      api
-        .get<ResQuestion>(`/questions${objToQuery(query)}`)
-        .then((res) => res.data),
+    () => {
+      const parmas = { ...DEAFALT_SEARCH_PARAMS, ...query };
+      return api
+        .get<ResQuestion>(`/questions${objToQuery(parmas)}`)
+        .then((res) => res.data);
+    },
     { enabled: isReady }
   );
 
   const handlePagefilter = (filter: { [key: string]: string | number }) => {
-    const setQuery = { ...query, ...filter };
-
-    if ('perPage' in filter) setQuery['page'] = INIT_FILTER.PAGE;
-
     push({
-      pathname: '/questions',
-      query: setQuery,
+      pathname: '/',
+      query: { ...query, ...filter },
     });
   };
 

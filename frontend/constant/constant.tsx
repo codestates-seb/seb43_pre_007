@@ -110,7 +110,7 @@ export const FOOTER_SOCIAL = [
 
 export const DAYS_FILTER = ['week', 'month', 'quarter', 'year', 'all'];
 
-export const INIT_FILTER = { FILTER: 'Newest', PER_PAGE: 10, PAGE: 1 };
+export const INIT_FILTER = { FILTER: 'Newest', SIZE: 10, PAGE: 1 };
 
 export const QUESTION_PER_PAGE_LIST = [10, 20, 30];
 
@@ -155,3 +155,5 @@ export const DEFAULT_IMG =
   'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2';
 export const DEFAULT_IMG2 =
   'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2';
+
+export const DEAFALT_SEARCH_PARAMS = { size: 10, page: 1 };
