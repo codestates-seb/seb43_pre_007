@@ -6,11 +6,14 @@ import { Question } from '@/util/api/question';
 import { parseDate } from '@/util/date';
 import { QuestionForm } from '@/components/questionForm/QuestionForm';
 import { Skeleton } from '@/components/skeleton/Skeleton';
+import { useMutation } from 'react-query';
 import { MarkDownEiditorSkeleton } from '@/components/markDownEditor/MarkDownEiditorSkeleton';
 import RightSideBar from '@/components/side_bar/RightSideBar';
 import dynamic from 'next/dynamic';
 import Button from '@/components/button/Button';
 import Link from 'next/link';
+import { AddAnswer } from '@/util/api/answers';
+import { FormEvent, useRef } from 'react';
 
 const MarkDownEditor = dynamic(
   () =>
@@ -24,7 +27,8 @@ const MarkDownEditor = dynamic(
 );
 
 const DetailQuestion = () => {
-  const { isReady, query } = useRouter();
+  const answer = useRef<string>();
+  const { isReady, query, reload } = useRouter();
 
   const { isLoading, data } = useQuery(
     ['detailQuestion'],
@@ -34,6 +38,25 @@ const DetailQuestion = () => {
         .then((res) => res.data),
     { enabled: isReady }
   );
+
+  const addAnswer = useMutation({
+    mutationFn: (data: AddAnswer) => api.post(`/answers/add`, data),
+    onSuccess: () => reload(),
+  });
+
+  const handleAnserChnage = (v: string) => {
+    answer.current = v;
+  };
+
+  const handleAnswerSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (answer.current)
+      addAnswer.mutate({
+        question_id: Number(query.questionId),
+        body: answer.current,
+      });
+  };
 
   return (
     <Container>
@@ -66,21 +89,25 @@ const DetailQuestion = () => {
               <AnswersInfo>
                 <h2>{data.answers.length} Answers</h2>
               </AnswersInfo>
-              {data.answers.map((ans) => (
-                <QuestionForm
-                  userId={data.user.user_id}
-                  key={ans.answer_id}
-                  score={ans.score}
-                  body={ans.body}
-                  question_id={ans.answer_id}
-                  creation_date={ans.creation_date}
-                  display_name={ans.user.display_name}
-                />
-              ))}
+              <div className="answers">
+                {data.answers.map((ans) => (
+                  <QuestionForm
+                    userId={data.user.user_id}
+                    key={ans.answer_id}
+                    score={ans.score}
+                    body={ans.body}
+                    question_id={ans.answer_id}
+                    creation_date={ans.creation_date}
+                    display_name={ans.user.display_name}
+                  />
+                ))}
+              </div>
               <YourAnswerContainer>
                 <h2>Your Answer</h2>
-                <MarkDownEditor />
-                <ActionButton>Post Your Answer</ActionButton>
+                <form onSubmit={handleAnswerSubmit}>
+                  <MarkDownEditor onChange={handleAnserChnage} />
+                  <ActionButton>Post Your Answer</ActionButton>
+                </form>
               </YourAnswerContainer>
             </div>
             <RightSideBar />
@@ -172,7 +199,7 @@ const AnswersInfo = styled.div`
 `;
 
 const YourAnswerContainer = styled.div`
-  margin-top: 10px;
+  margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid #e3e6e8;
   width: 100%;
@@ -198,7 +225,15 @@ const QuestionContent = styled.div`
   }
 
   .content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
   }
 `;
 
