@@ -65,10 +65,12 @@ const Header = () => {
   //새로고침 유저 대비
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   useEffect(() => {
-    api('/auth').then((res) => {
-      setUserData(res.data);
-      setIsLogin(true);
-    });
+    api('/auth')
+      .then((res) => {
+        setUserData(res.data);
+        setIsLogin(true);
+      })
+      .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

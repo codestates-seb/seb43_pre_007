@@ -17,21 +17,6 @@ export const userDataState = atom<UserData>({
   },
 });
 
-export const modalState = atom({
-  key: 'modalState',
-  default: false,
-});
-
-export const modalNameState = atom({
-  key: 'modalNameState',
-  default: '',
-});
-
-export const modalValState = atom({
-  key: 'modalValState',
-  default: '',
-});
-
 export const pickState = atom({
   key: 'pickState',
   default: 0,
