@@ -58,6 +58,7 @@ const DetailQuestion = () => {
                 score={0}
                 body={data.question.body}
                 tags={data.question.tags}
+                userId={data.user.user_id}
                 question_id={data.question.question_id}
                 creation_date={data.question.creation_date}
                 display_name={data.user.display_name}
@@ -67,6 +68,7 @@ const DetailQuestion = () => {
               </AnswersInfo>
               {data.answers.map((ans) => (
                 <QuestionForm
+                  userId={data.user.user_id}
                   key={ans.answer_id}
                   score={ans.score}
                   body={ans.body}

@@ -21,6 +21,7 @@ const MarkDownEditor = dynamic(
 );
 
 export type QuestionForm = {
+  userId: number;
   score: number;
   body: string;
   tags?: Array<{ tag_id: number; name: string }>;
@@ -74,7 +75,7 @@ export const QuestionForm = (props: QuestionForm) => {
               {/* 유저 이미지 */}
               {/* <img src={} alt="user Image" /> */}
               <div>
-                <Link href={`/users/${props.display_name}`}>
+                <Link href={`/users/${props.userId}/${props.display_name}`}>
                   {props.display_name}
                 </Link>
                 <div className="user_score">
