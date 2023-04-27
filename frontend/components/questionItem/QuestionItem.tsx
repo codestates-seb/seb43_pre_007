@@ -9,6 +9,7 @@ export type QuestionItemProps = {
   id: string;
   body: string;
   title: string;
+  userId: number;
   isVote: number;
   isScore: number;
   userName: string;
@@ -20,8 +21,8 @@ export type QuestionItemProps = {
 export const QuestionItem = (props: QuestionItemProps) => {
   const router = useRouter();
 
-  const handleUserRouterClick = (e: MouseEvent<HTMLSpanElement>) => {
-    router.push(`/users/${props.userName}`);
+  const handleUserRouterClick = () => {
+    router.push(`/users/${props.userId}/${props.userName}`);
   };
 
   return (
