@@ -3,7 +3,7 @@ import { api } from '@/util/api';
 import { Question } from '@/util/api/question';
 import { useRouter } from 'next/router';
 import { QuestionAskForm } from '@/components/questionAskForm/QuestionAskForm';
-import { ReqUpdateQuestion } from '@/util/api/addQuestions';
+import { ReqAddQuestion } from '@/util/api/addQuestions';
 import { useMutation, useQuery } from 'react-query';
 
 const QuestionEdit = () => {
@@ -19,22 +19,13 @@ const QuestionEdit = () => {
   );
 
   const fetch = useMutation({
-    mutationFn: (req: ReqUpdateQuestion) =>
+    mutationFn: (req: ReqAddQuestion) =>
       api.patch(`/questions/${query.questionId}/edit`, req),
     onSuccess: (_) => push(`/questions/${query.questionId}`),
   });
 
-  const handleUpdateSubmit = (value: {
-    title: string;
-    body: string;
-    tags: string[];
-  }) => {
-    const tags = value.tags.map((tag) => ({
-      tag_id: tag === '자바' ? 1 : 2,
-      name: tag,
-    }));
-
-    if (value) fetch.mutate({ ...value, tags });
+  const handleUpdateSubmit = (value: ReqAddQuestion) => {
+    fetch.mutate(value);
   };
 
   return (
