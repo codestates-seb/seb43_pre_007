@@ -66,7 +66,7 @@ const SignUp = () => {
 
     // 이벤트의 기본 동작을 취소하는 메서드
     e.preventDefault();
-    
+
     if (emailcheck && passwordcheck) {
       api
         .post('/users', { display_name, email, password })
@@ -272,12 +272,12 @@ const SignUp = () => {
 const BasicContainer = styled.div`
   width: 100%;
   height: 100vh;
-  padding: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #f1f2f3;
   padding: 47px;
+  padding-top: 120px;
   .form-container {
     display: flex;
     flex-direction: column;
@@ -321,6 +321,7 @@ const BasicContainer = styled.div`
   @media screen and (max-width: 816px) {
     flex-direction: row;
     padding: 24px 16px;
+    padding-top: 80px;
     .RWDshow {
       margin: 0px 0px 24px 0px;
       text-align: center;
@@ -333,8 +334,6 @@ const BasicContainer = styled.div`
   }
 
   @media screen and (max-width: 641px) {
-    padding: 24px 16px;
-    // background: blue;
     .RWDshow {
       max-width: 268px;
     }
