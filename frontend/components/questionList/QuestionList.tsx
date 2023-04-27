@@ -29,7 +29,7 @@ export const QuestionList = ({ isLoading, content }: QuestionListProps) => {
                   body={question.body}
                   isVote={question.vote.is_vote}
                   isScore={question.vote.score}
-                  answerCount={question.answer_count}
+                  viewCount={question.answer_count}
                   creationData={question.creation_date}
                   userName={user.display_name}
                   key={question.question_id}

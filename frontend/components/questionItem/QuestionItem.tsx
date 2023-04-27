@@ -12,7 +12,7 @@ export type QuestionItemProps = {
   isVote: number;
   isScore: number;
   userName: string;
-  answerCount: number;
+  viewCount: number;
   creationData: string;
   tags: Array<{ id: string; name: string }>;
 };
@@ -37,7 +37,7 @@ export const QuestionItem = (props: QuestionItemProps) => {
             <span>answers</span>
           </div>
           <div className="views_cnt" aria-hidden>
-            <span>{props.answerCount}</span>
+            <span>{props.viewCount}</span>
             <span>views</span>
           </div>
         </QuestionHeader>
