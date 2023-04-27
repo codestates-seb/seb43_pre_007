@@ -26,7 +26,7 @@ const SignUp = () => {
         password: data.password,
         display_name: data.displayName,
       }),
-    onSuccess: () => router.push('/questions'),
+    onSuccess: () => router.push('/users/login'),
   });
 
   const { data, handleChange, errors, handleSubmit } = useForm<SignUpFormProps>(
