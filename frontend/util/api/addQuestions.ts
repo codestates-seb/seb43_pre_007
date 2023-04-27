@@ -1,7 +1,7 @@
 export type ReqAddQuestion = {
   title: string;
   body: string;
-  tags: Array<{ tag_id: number; name: string }>;
+  tags: Array<string>;
 };
 
 export type ResQuestion = {
@@ -25,12 +25,6 @@ export type ResQuestion = {
       up_vote_count: number;
       score: number;
     };
-    tags: Array<{ tag_id: number; name: string }>;
+    tags: Array<string>;
   };
-};
-
-export type ReqUpdateQuestion = {
-  title: string;
-  body: string;
-  tags: Array<{ tag_id: number; name: string }>;
 };

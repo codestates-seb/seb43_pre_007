@@ -9,10 +9,11 @@ export type QuestionItemProps = {
   id: string;
   body: string;
   title: string;
+  userId: number;
   isVote: number;
   isScore: number;
   userName: string;
-  answerCount: number;
+  viewCount: number;
   creationData: string;
   tags: Array<{ id: string; name: string }>;
 };
@@ -20,8 +21,8 @@ export type QuestionItemProps = {
 export const QuestionItem = (props: QuestionItemProps) => {
   const router = useRouter();
 
-  const handleUserRouterClick = (e: MouseEvent<HTMLSpanElement>) => {
-    router.push(`/users/${props.userName}`);
+  const handleUserRouterClick = () => {
+    router.push(`/users/${props.userId}/${props.userName}`);
   };
 
   return (
@@ -37,7 +38,7 @@ export const QuestionItem = (props: QuestionItemProps) => {
             <span>answers</span>
           </div>
           <div className="views_cnt" aria-hidden>
-            <span>{props.answerCount}</span>
+            <span>{props.viewCount}</span>
             <span>views</span>
           </div>
         </QuestionHeader>

@@ -13,6 +13,7 @@ import { FilterButton } from '@/components/button/FilterButton';
 import { addCommaToNumber } from '@/util/addCommaToNum';
 import { QuestionList } from '../../components/questionList/QuestionList';
 import {
+  DEAFALT_SEARCH_PARAMS,
   INIT_FILTER,
   QUESTION_FILTER_LIST,
   QUESTION_PER_PAGE_LIST,
@@ -20,20 +21,24 @@ import {
 
 const Questions = () => {
   const { push, query, isReady } = useRouter();
-  const { page, perPage, filter } = query;
+  const { page, size, filter } = query;
 
   const { isLoading, data } = useQuery(
     ['questions', query],
-    () =>
-      api
-        .get<ResQuestion>(`/questions${objToQuery(query)}`)
-        .then((res) => res.data),
+    () => {
+      const parmas = { ...DEAFALT_SEARCH_PARAMS, ...query };
+
+      return api
+        .get<ResQuestion>(`/questions${objToQuery(parmas)}`)
+        .then((res) => res.data);
+    },
     { enabled: isReady }
   );
 
   const handlePagefilter = (filter: { [key: string]: string | number }) => {
     const setQuery = { ...query, ...filter };
-    if ('perPage' in filter) setQuery['page'] = INIT_FILTER.PAGE;
+
+    if ('size' in filter) setQuery['page'] = INIT_FILTER.PAGE;
     push({
       pathname: '/questions',
       query: setQuery,
@@ -76,9 +81,9 @@ const Questions = () => {
               onPageChange={(page) => handlePagefilter({ page })}
             />
             <PerPage
-              current={Number(perPage) || INIT_FILTER.PER_PAGE}
+              current={Number(size) || INIT_FILTER.SIZE}
               perPageList={QUESTION_PER_PAGE_LIST}
-              onChangePage={(perPage) => handlePagefilter({ perPage })}
+              onChangePage={(size) => handlePagefilter({ size })}
             />
           </QuestionFooter>
         </div>

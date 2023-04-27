@@ -25,14 +25,15 @@ export const QuestionList = ({ isLoading, content }: QuestionListProps) => {
               return (
                 <QuestionItem
                   id={question.question_id}
-                  title={question.title}
                   body={question.body}
-                  isVote={question.vote.is_vote}
-                  isScore={question.vote.score}
-                  answerCount={question.answer_count}
-                  creationData={question.creation_date}
-                  userName={user.display_name}
+                  userId={user.user_id}
+                  title={question.title}
                   key={question.question_id}
+                  userName={user.display_name}
+                  isScore={question.vote.score}
+                  isVote={question.vote.is_vote}
+                  viewCount={question.view_count}
+                  creationData={question.creation_date}
                   tags={question.tags.map((tag) => ({
                     id: tag.tag_id,
                     name: tag.name,

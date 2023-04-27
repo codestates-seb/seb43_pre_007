@@ -14,6 +14,7 @@ const Ask = () => {
   const questionAsk = useMutation({
     mutationFn: (req: ReqAddQuestion) =>
       api.post<ResQuestion>('/questions/add', req),
+
     onSuccess: async (res) => {
       const { question_id } = res.data.question;
       if (res.data.question.question_id)
@@ -22,12 +23,7 @@ const Ask = () => {
   });
 
   const handleUpdateSubmit = (value: QuestionAskData) => {
-    const tags = value.tags.map((tag) => ({
-      tag_id: tag === '자바' ? 1 : 2,
-      name: tag,
-    }));
-
-    questionAsk.mutate({ ...value, tags });
+    questionAsk.mutate(value);
   };
 
   return (
