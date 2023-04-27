@@ -33,7 +33,7 @@ public class QuestionDto {
         private String body;
 
         @Size(min = 1, max = 5)
-        private List<QuestionTagDto> tags;
+        private List<String> tags;
 
     }
 

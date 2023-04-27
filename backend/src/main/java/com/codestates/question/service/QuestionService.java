@@ -6,6 +6,8 @@ import com.codestates.question.dto.QuestionUserResponseDto;
 import com.codestates.question.entity.Question;
 import com.codestates.question.entity.QuestionTag;
 import com.codestates.question.repository.QuestionRepository;
+import com.codestates.tag.entity.Tag;
+import com.codestates.tag.repository.TagRepository;
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;
 import org.springframework.data.domain.Page;
@@ -21,11 +23,14 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final TagRepository tagRepository;
     private final UserService userService;
 
     public QuestionService(QuestionRepository questionRepository,
+                           TagRepository tagRepository,
                            UserService userService) {
         this.questionRepository = questionRepository;
+        this.tagRepository =tagRepository;
         this.userService = userService;
     }
 
@@ -38,6 +43,21 @@ public class QuestionService {
         User user = userService.findUser(userId);
         question.setUser(user);
 
+        //questionTag 해결
+        List<QuestionTag> questionTags = question.getTags()
+                .stream().map(questionTag ->{
+                    String tagName = questionTag.getTag().getName();
+                    Optional<Tag> optionalTag = tagRepository.findByName(tagName);
+
+                    if(optionalTag.isPresent()) questionTag.setTag(optionalTag.get());
+                    else{
+                        questionTag.getTag().setInfo("Newly added tags require a description");
+                        Tag newTag = tagRepository.save(questionTag.getTag());
+                        questionTag.setTag(newTag);
+                    }
+                    return questionTag;
+                }).collect(Collectors.toList());
+        question.setTags( questionTags );
 
         return questionRepository.save(question);
     }

@@ -33,12 +33,10 @@ public interface QuestionMapper {
 
         //questionTag 해결
         List<QuestionTag> questionTags = questionPostDto.getTags()
-                        .stream().map(questionTagDto ->{
+                        .stream().map(questionTagString ->{
                             QuestionTag questionTag = new QuestionTag();
-
                             Tag tag = new Tag();
-                            tag.setTagId(questionTagDto.getTagId());
-                            tag.setName(questionTagDto.getName());
+                            tag.setName(questionTagString);
                             questionTag.setTag(tag);
 
                             questionTag.setQuestion(question);
