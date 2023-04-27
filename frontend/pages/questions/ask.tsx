@@ -7,11 +7,9 @@ import {
   QuestionAskForm,
 } from '@/components/questionAskForm/QuestionAskForm';
 import { useRouter } from 'next/router';
-import { HEADERS } from '@/constant/constant';
 
 const Ask = () => {
   const route = useRouter();
-  console.log(HEADERS)
 
   const questionAsk = useMutation({
     mutationFn: (req: ReqAddQuestion) =>

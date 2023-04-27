@@ -151,5 +151,7 @@ export const USER_EDIT_LINKS_ICON = [
   </svg>,
 ];
 
-export const DEFAULT_IMG = 'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2'
-export const DEFAULT_IMG2 = 'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
+export const DEFAULT_IMG =
+  'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2';
+export const DEFAULT_IMG2 =
+  'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2';
