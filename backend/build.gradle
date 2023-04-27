@@ -43,6 +43,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // aws s3 image
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	runtimeOnly 'com.h2database:h2'
+	implementation 'com.mysql:mysql-connector-j' //mysql
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'

@@ -1,6 +1,6 @@
 package com.codestates.auth.jwt;
 
-import com.codestates.oauth.response.OauthJwtTokenResponse;
+//import com.codestates.oauth.response.OauthJwtTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -102,28 +102,28 @@ public class JwtTokenizer {
     }
 
 
-    public OauthJwtTokenResponse generateOauthToken(String userId) {
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        //만료시간 설정
-        long expirationTime = refreshTokenExpirationMinutes;
-        Date expirationDate = new Date(expirationTime);
-
-        //JWT 토큰생성
-        String token = Jwts.builder()
-                .setId(userId)
-                .setIssuedAt(now)
-                .setExpiration(expirationDate)
-                .claim("userId", userId)
-                .signWith(SignatureAlgorithm.ES256, secretKey)
-                .compact();
-
-
-        //리프레시 토큰생성
-        String refreshToken = UUID.randomUUID().toString();
-        return new OauthJwtTokenResponse(token, refreshToken, expirationTime);
-    }
+//    public OauthJwtTokenResponse generateOauthToken(String userId) {
+//        long nowMillis = System.currentTimeMillis();
+//        Date now = new Date(nowMillis);
+//
+//        //만료시간 설정
+//        long expirationTime = refreshTokenExpirationMinutes;
+//        Date expirationDate = new Date(expirationTime);
+//
+//        //JWT 토큰생성
+//        String token = Jwts.builder()
+//                .setId(userId)
+//                .setIssuedAt(now)
+//                .setExpiration(expirationDate)
+//                .claim("userId", userId)
+//                .signWith(SignatureAlgorithm.ES256, secretKey)
+//                .compact();
+//
+//
+//        //리프레시 토큰생성
+//        String refreshToken = UUID.randomUUID().toString();
+//        return new OauthJwtTokenResponse(token, refreshToken, expirationTime);
+//    }
 
 
     // Todo : verifySignature 메서드 - 단순히 JWT 서명 유효성 검증만 한다.
