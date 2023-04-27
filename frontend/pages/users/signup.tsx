@@ -1,102 +1,80 @@
-//경로 https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fusers
-import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { useInput } from '@/hooks/useInput';
-import { useRouter } from 'next/router';
-import SosialLogin from '@/components/users/SosialLogin';
-import Link from 'next/link';
 import { api } from '@/util/api';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
+import styled from 'styled-components';
+import Link from 'next/link';
+import useForm from '@/hooks/useForm';
+import SosialLogin from '@/components/users/SosialLogin';
+
+type SignUpFormData = {
+  email: string;
+  password: string;
+  displayName: string;
+};
+
+type SignUpFormProps = SignUpFormData & {
+  onSubmit: (data: SignUpFormData) => void;
+};
 
 const SignUp = () => {
-  // 로그인 실패시 안내 문구
-  const [loginFailed, setloginFailed] = useState(false);
-  // 유효성검사
-  //email,password 비어있는지 + 유효성 검사 통과 했는지
-  const [emptyEmail, setemptyEmail] = useState(false);
-  const [emptyPassword, setemptyPassword] = useState(false);
-  const [invalidEmail, setinvalidEmail] = useState(false);
-  const [invalidPassword, setinvalidPassword] = useState(false);
-  // useInput 훅을 이용하여 이벤트의 email, password 값으로 설정
-  const [{ display_name, email, password }, onInputChange, resetInput] =
-    useInput({
-      display_name: '',
-      email: '',
-      password: '',
-    });
   const router = useRouter();
-  useEffect(() => {
-    // email이 비어있다면 emptyEmail 메세지 출력 + input창 border 색상 빨간색으로 변경
-    if (email !== '') setemptyEmail(false);
-    // email이 비어있다면 emptyPassword 메세지 출력 + input창 border 색상 빨간색으로 변경
-    if (password !== '') setemptyPassword(false);
-    if (loginFailed) {
-      if (email === '') setemptyEmail(true);
-      if (password === '') setemptyPassword(true);
-    }
-  }, [email, password, loginFailed]);
-  //로그인 눌렀을때
-  const SignUpSubmit = (e: React.FormEvent) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    // 유효성 검사 확인
-    let emailcheck = false;
-    let passwordcheck = false;
-    // 비어있는지 검사
 
-    if (email === '') setemptyEmail(true);
-    if (emailRegex.test(email)) {
-      emailcheck = true;
-      setemptyEmail(false);
-      setinvalidEmail(true);
-    }
+  const signup = useMutation({
+    mutationFn: () =>
+      api.post('/users', {
+        email: data.email,
+        password: data.password,
+        display_name: data.displayName,
+      }),
+    onSuccess: () => router.push('/questions'),
+  });
 
-    // 유효한 이메일이 아니면 포함되어야 하는 형식 메세지 출력 + border 변경
-    if (password === '') setemptyPassword(true);
-    if (passwordRegex.test(password)) {
-      passwordcheck = true;
-      setemptyPassword(false);
-      setinvalidPassword(true);
+  const { data, handleChange, errors, handleSubmit } = useForm<SignUpFormProps>(
+    {
+      initialValues: {
+        email: '',
+        password: '',
+        displayName: '',
+      },
+      validations: {
+        email: {
+          required: {
+            value: true,
+            message: 'you need to require email',
+          },
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: 'The email is not a valid email address.',
+          },
+        },
+        password: {
+          required: {
+            value: true,
+            message: 'you need to require password',
+          },
+          pattern: {
+            value:
+              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/,
+            message: 'The password is not a valid password.',
+          },
+        },
+        displayName: {
+          required: {
+            value: true,
+            message: 'you need to require displayName',
+          },
+        },
+      },
+      onSubmit: handleSignUpSubmit,
     }
+  );
 
-    // 이메일 & 비밀번호 유효성 검사 통과 못할 시
-    if (!emailcheck && !passwordcheck) {
-      setloginFailed(true);
-    }
-
-    // 이벤트의 기본 동작을 취소하는 메서드
-    e.preventDefault();
-    
-    if (emailcheck && passwordcheck) {
-      api
-        .post('/users', { display_name, email, password })
-        // 성공시
-        .then(() => {
-          router.push('/users/login');
-          alert('회원 가입을 축하드립니다.');
-          // 로그인 성공하면 입력 폼 초기화
-          resetInput();
-        })
-        // 실패시
-        .catch((err) => {
-          // 상태코드 400 = 유효성 검사 실패
-          if (err.response.status === 400) {
-            alert('이메일 또는 패스워드의 형식이 잘못되었습니다.');
-          }
-          // 상태코드 500 = 중복 이메일
-          else if (err.response.status === 500) {
-            alert('중복된 이메일 입니다.');
-          }
-          // 상태코드 503 = 서버 상태가 안 좋을 시
-          else if (err.response.status === 503) {
-            alert('서버 상태가 안 좋습니다. 잠시 후 다시 시도해 주세요.');
-          }
-        });
-    }
-  };
+  function handleSignUpSubmit() {
+    signup.mutate();
+  }
 
   return (
-    <BasicContainer>
+    <BasicContainer onSubmit={handleSubmit}>
       <div className="help-container">
         <h1>Join the Stack Overflow community</h1>
         <ul>
@@ -155,63 +133,44 @@ const SignUp = () => {
             <FormInputs
               id="display-name"
               name="display_name"
-              value={display_name}
-              onChange={onInputChange}
-              border={null}
+              value={data.displayName}
+              onChange={handleChange('displayName')}
+              border={errors.displayName && '#DE4F54'}
             />
+            {errors.displayName && <p>{errors.displayName}</p>}
           </div>
           <div className="login-email">
             <label>Email</label>
             <FormInputs
               name="email"
-              value={email}
-              onChange={onInputChange}
-              border={
-                emptyEmail
-                  ? '#DE4F54'
-                  : loginFailed && !emptyEmail && !invalidEmail
-                  ? '#DE4F54'
-                  : null
-              }
+              value={data.email}
+              onChange={handleChange('email')}
+              border={errors.email && '#DE4F54'}
             />
-            {emptyEmail ? (
-              <p className="red">Email cannot be empty.</p>
-            ) : loginFailed && !emptyEmail && !invalidEmail ? (
-              <p>Please enter a valid email address.</p>
-            ) : null}
+            {errors.email && <p>{errors.email}</p>}
           </div>
           <div className="login-password">
             <label>Password</label>
             <FormInputs
               name="password"
-              value={password}
+              value={data.password}
               type="password"
-              onChange={onInputChange}
-              border={
-                emptyPassword
-                  ? '#DE4F54'
-                  : loginFailed && !emptyPassword && !invalidPassword
-                  ? '#DE4F54'
-                  : null
-              }
+              onChange={handleChange('password')}
+              border={errors.password && '#DE4F54'}
             />
-            {emptyPassword ? (
-              <p className="red">Password cannot be empty.</p>
-            ) : loginFailed && !emptyPassword && !invalidPassword ? (
-              <p>Please enter a valid Password.</p>
-            ) : null}
+            {errors.password && <p>{errors.password}</p>}
             <p className="passwordvalid">
               Passwords must contain at least eight characters, including at
               least 1 letter and 1 number.
             </p>
-            <div className="checkbox-input">
+            <label className="checkbox-input">
               <input type="checkbox"></input>
               Opt-in to receive occasional product updates, user research
               invitations, company announcements, and digests.
-            </div>
+            </label>
           </div>
           <div className="login-button">
-            <button onClick={SignUpSubmit}>Log in</button>
+            <button>Log in</button>
           </div>
           <span className="privacy">
             By clicking “Sign up”, you agree to our&nbsp;
@@ -269,15 +228,15 @@ const SignUp = () => {
   );
 };
 
-const BasicContainer = styled.div`
+const BasicContainer = styled.form`
   width: 100%;
   height: 100vh;
-  padding: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #f1f2f3;
-  padding: 47px;
+  padding-top: 120px;
+
   .form-container {
     display: flex;
     flex-direction: column;
@@ -320,7 +279,8 @@ const BasicContainer = styled.div`
 
   @media screen and (max-width: 816px) {
     flex-direction: row;
-    padding: 24px 16px;
+    padding-top: 80px;
+
     .RWDshow {
       margin: 0px 0px 24px 0px;
       text-align: center;
@@ -333,8 +293,6 @@ const BasicContainer = styled.div`
   }
 
   @media screen and (max-width: 641px) {
-    padding: 24px 16px;
-    // background: blue;
     .RWDshow {
       max-width: 268px;
     }
@@ -393,6 +351,7 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: start;
     width: 100%;
     max-width: 268px;
     margin: 6px 0px;
@@ -402,6 +361,7 @@ const FormContainer = styled.div`
     font-weight: 600;
   }
   p {
+    margin-top: 5px;
     color: #d03956;
     font-size: 0.7rem;
   }
@@ -431,6 +391,7 @@ const FormContainer = styled.div`
       margin-right: 4px;
     }
   }
+
   .privacy {
     font-size: 0.7rem;
     margin: 0px;
@@ -438,6 +399,7 @@ const FormContainer = styled.div`
       word-break: keep-all;
     }
   }
+
   .checkbox-input {
     margin-top: 20px;
     display: flex;
@@ -446,6 +408,7 @@ const FormContainer = styled.div`
     font-size: 0.75em;
     font-weight: 400;
     color: var(--black-700);
+    cursor: pointer;
     > input {
       margin-right: 4px;
       cursor: pointer;
@@ -483,7 +446,7 @@ const FormContainer = styled.div`
   }
 `;
 interface InvalidInput {
-  border: string | null;
+  border: string | undefined;
 }
 const FormInputs = styled.input<InvalidInput>`
   width: 100%;
