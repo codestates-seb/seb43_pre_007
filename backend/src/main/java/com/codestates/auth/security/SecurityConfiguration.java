@@ -7,8 +7,8 @@ import com.codestates.auth.handler.UserAuthenticationFailureHandler;
 import com.codestates.auth.handler.UserAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
 import com.codestates.auth.userdetails.UserDetailService;
-import com.codestates.oauth.handler.OAuth2AuthenticationSuccessHandler;
-import com.codestates.oauth.service.OAuth2Service;
+//import com.codestates.oauth.handler.OAuth2AuthenticationSuccessHandler;
+//import com.codestates.oauth.service.OAuth2Service;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,15 +32,17 @@ public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
     private final UserDetailService userDetailService;
-    private final OAuth2Service oAuth2Service;
+//    private final OAuth2Service oAuth2Service;
 //    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+//    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserDetailService userDetailService, OAuth2Service oAuth2Service, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserDetailService userDetailService
+                                 //,OAuth2Service oAuth2Service, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler
+                                 ) {
         this.jwtTokenizer = jwtTokenizer;
         this.userDetailService = userDetailService;
-        this.oAuth2Service = oAuth2Service;
-        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        //this.oAuth2Service = oAuth2Service;
+        //this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
     }
 
     @Bean
