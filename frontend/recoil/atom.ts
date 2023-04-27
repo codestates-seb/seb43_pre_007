@@ -1,38 +1,20 @@
-import { localState } from '@/util/local_storage/localStorage';
+import { UserData } from '@/types/types';
 import { atom } from 'recoil';
 
-export const userIdState = atom<number>({
-  key: 'userIdState',
-  default: 0,
-});
-
-export const userImgState = atom({
-  key: 'userImgState',
-  default: '',
-});
-export const userNameState = atom({
-  key: 'userNameState',
-  default: '',
-});
-
-export const myListState = atom<string[]>({
-  key: 'myListState',
-  default: localState('myList', []),
-});
-
-export const modalState = atom({
-  key: 'modalState',
+export const isLoginState = atom({
+  key: 'isLoginState',
   default: false,
 });
 
-export const modalNameState = atom({
-  key: 'modalNameState',
-  default: '',
-});
-
-export const modalValState = atom({
-  key: 'modalValState',
-  default: '',
+export const userDataState = atom<UserData>({
+  key: 'userDataState',
+  default: {
+    access_token: '',
+    display_name: '',
+    image: '',
+    refresh_token: '',
+    user_id: 0,
+  },
 });
 
 export const pickState = atom({

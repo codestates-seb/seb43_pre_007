@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import Button from '@/components/button/Button';
 import { FilterButton } from '@/components/button/FilterButton';
@@ -5,27 +6,22 @@ import Card from '@/components/card/Card';
 import MenuItem from '@/components/menu_item/MenuItem';
 import SelectContent from '@/components/select_content/SelectContent';
 import {
+  DEFAULT_IMG2,
   DETAIL_ACTIVITY_CONTENT,
   DETAIL_NAV,
-  DETAIL_SAVES,
   USER_EDIT_INPUT,
   USER_EDIT_LINKS,
   USER_EDIT_LINKS_ICON,
 } from '@/constant/constant';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import {
-  modalNameState,
-  modalState,
-  modalValState,
-  myListState,
-  pickCategoryState,
-  pickState,
-} from '@/recoil/atom';
-import { useRef, useState } from 'react';
+import { pickCategoryState, pickState, userDataState } from '@/recoil/atom';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '@/util/api';
 import Input from '@/components/input/Input';
 import dynamic from 'next/dynamic';
+import { useInput } from '@/hooks/useInput';
+import { useRouter } from 'next/router';
 
 const MarkDownEditor = dynamic(
   () =>
@@ -38,6 +34,7 @@ const MarkDownEditor = dynamic(
 );
 
 const UserDetail = () => {
+  const [userData] = useRecoilState(userDataState);
   const [pick, setPick] = useRecoilState(pickState);
   const pickHandler = (idx: number) => {
     setPick(idx);
@@ -60,7 +57,7 @@ const UserDetail = () => {
           />
         </div>
         <div>
-          <div>신동민</div>
+          <div>{userData.display_name}</div>
           <div>
             <div>
               <div>
@@ -138,14 +135,6 @@ const UserDetail = () => {
           pickCategoryHandler={pickCategoryHandler}
           selectPickCategory={selectPickCategory}
           pick={pick}
-        />
-      )}
-      {pick === 2 && (
-        <SavesContent
-          pickCategory={pickCategory}
-          pickCategoryHandler={pickCategoryHandler}
-          pick={pick}
-          selectPickCategory={selectPickCategory}
         />
       )}
       {pick === 3 && <EditContent />}
@@ -747,226 +736,39 @@ const ActiveContentContainer = styled.div<ActiveContentContainerProps>`
   }
 `;
 
-//========================Saves 컨텐츠========================
-
-type SavesContentProps = {
-  pickCategory: number;
-  pickCategoryHandler: (i: number) => void;
-  pick: number;
-  selectPickCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-};
-
-const SavesContent = ({
-  pickCategory,
-  pickCategoryHandler,
-  pick,
-  selectPickCategory,
-}: SavesContentProps) => {
-  const [myList] = useRecoilState(myListState);
-  const [, setModal] = useRecoilState(modalState);
-  const [, setModalName] = useRecoilState(modalNameState);
-  const [, setModalVal] = useRecoilState(modalValState);
-  const onAdd = () => {
-    setModal(true);
-    setModalVal('');
-    setModalName('New list');
-  };
-  const onEdit = () => {
-    setModalVal(myList[pickCategory - 2]);
-    setModal(true);
-    setModalName('Edit list');
-  };
-  return (
-    <SavesContentContainer>
-      <div>
-        <div>
-          <ul>
-            {DETAIL_SAVES.map((category, i) => (
-              <li key={category}>
-                <MenuItem
-                  idx={i}
-                  pick={pickCategory}
-                  onClick={() => pickCategoryHandler(i)}
-                >
-                  {category}
-                </MenuItem>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <div>MY LISTS</div>
-          <div onClick={onAdd}>+</div>
-        </div>
-        <ul>
-          {myList.map((list, i) => (
-            <MenuItem
-              idx={i + 2}
-              pick={pickCategory}
-              onClick={() => pickCategoryHandler(i + 2)}
-              key={`${list}+${i}`}
-            >
-              {list}
-            </MenuItem>
-          ))}
-        </ul>
-      </div>
-      <SelectContent
-        selectPickCategory={selectPickCategory}
-        pickCategory={pickCategory}
-        categories={[...DETAIL_SAVES, ...myList]}
-        sub={DETAIL_NAV[pick]}
-      />
-      <div>
-        <div>
-          <div>{[...DETAIL_SAVES, ...myList][pickCategory]}</div>
-          <div>
-            {pickCategory < 2 ? (
-              <Button color="var(--text-white)" onClick={onAdd}>
-                <a>Create new list</a>
-              </Button>
-            ) : (
-              <Button
-                color="var(--text-aqua)"
-                className="edit_btn"
-                onClick={onEdit}
-              >
-                <a>
-                  <svg width="18" height="18" viewBox="0 0 18 18">
-                    <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
-                  </svg>
-                  Edit list
-                </a>
-              </Button>
-            )}
-          </div>
-        </div>
-        <div>0 saved items</div>
-        <div>
-          <svg width="196" height="196" viewBox="0 0 196 196">
-            <path
-              d="M35 177.5c-19.5-9-29.35-26.54-26-82 3.35-55.46 14.8-66.9 32.5-73 17.7-6.1 86.22-21.95 120 5.5s37.46 52.67 23 96.5c-14.46 43.84-22.26 63.24-60 61-11.4-.68-22.3-.85-32.5-1.02-23.56-.38-43.4-.7-57-6.98ZM33 42v26a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V42a7 7 0 0 0-7-7H40a7 7 0 0 0-7 7Zm7 39a7 7 0 0 0-7 7v27a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V88a7 7 0 0 0-7-7H40Z"
-              opacity=".07"
-            ></path>
-            <path
-              d="M42 48a4 4 0 0 1 4-4h112a7 7 0 0 1 7 7v23a7 7 0 0 1-7 7H49a7 7 0 0 1-7-7V48Zm0 47a4 4 0 0 1 4-4h112a7 7 0 0 1 7 7v22a7 7 0 0 1-7 7H49a7 7 0 0 1-7-7V95Zm-1 36h3.19a2 2 0 1 1 0 4H40a3 3 0 0 0-3 3v4.44a2 2 0 1 1-4 0V138a7 7 0 0 1 7-7h1Zm11.65 2c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.38a2 2 0 1 1 0 4H92.3a2 2 0 0 1-2-2Zm18.84 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2H153a7 7 0 0 1 7 7v4.44a2 2 0 1 1-4 0v-4.58a3 3 0 0 0-3-2.86h-4.19a2 2 0 0 1-2-2ZM35 151.56a2 2 0 0 1 2 2v4.51a3 3 0 0 0 3 2.93h4.19a2 2 0 1 1 0 4h-4.35a7 7 0 0 1-6.84-7v-4.44c0-1.1.9-2 2-2Zm123 0a2 2 0 0 1 2 2v4.74a7 7 0 0 1-7 6.69h-4.19a2 2 0 1 1 0-4h4.33a3 3 0 0 0 2.86-3v-4.43c0-1.1.9-2 2-2ZM52.65 163c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 1 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.38a2 2 0 1 1 0 4H92.3a2 2 0 0 1-2-2Zm18.84 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Zm18.83 0c0-1.1.9-2 2-2h8.37a2 2 0 0 1 0 4h-8.37a2 2 0 0 1-2-2Z"
-              opacity=".2"
-            ></path>
-            <path d="M124.48 14.24 120.25 10 116 14.24l4.24 4.25 4.25-4.25ZM52 58a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm12-4c0-1.1.9-2 2-2h80a2 2 0 1 1 0 4H66a2 2 0 0 1-2-2ZM33 42a7 7 0 0 1 7-7h113a7 7 0 0 1 7 7v26a7 7 0 0 1-7 7H40a7 7 0 0 1-7-7V42Zm7-3a3 3 0 0 0-3 3v26a3 3 0 0 0 3 3h113a3 3 0 0 0 3-3V42a3 3 0 0 0-3-3H40Zm16 62a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm10-2a2 2 0 1 0 0 4h80a2 2 0 1 0 0-4H66ZM40 81a7 7 0 0 0-7 7v27a7 7 0 0 0 7 7h113a7 7 0 0 0 7-7V88a7 7 0 0 0-7-7H40Zm-3 7a3 3 0 0 1 3-3h113a3 3 0 0 1 3 3v27a3 3 0 0 1-3 3H40a3 3 0 0 1-3-3V88Zm150.97 54.49L179.5 134l-8.49 8.49 8.49 8.48 8.48-8.48Zm-8.48 2.82-2.83-2.82 2.83-2.83 2.82 2.83-2.82 2.82ZM8 97a2 2 0 0 1 2 2v4h4a2 2 0 1 1 0 4h-4v4a2 2 0 1 1-4 0v-4H2a2 2 0 1 1 0-4h4v-4c0-1.1.9-2 2-2Z"></path>
-          </svg>
-          <p>You have no saved items</p>
-        </div>
-      </div>
-    </SavesContentContainer>
-  );
-};
-
-const SavesContentContainer = styled.div`
-  display: flex;
-  margin-top: 20px;
-  @media (max-width: 980px) {
-    flex-direction: column;
-  }
-  > div:first-child {
-    width: 19%;
-    margin-right: 28px;
-    @media (max-width: 980px) {
-      display: none;
-    }
-    > div:first-child {
-      > ul {
-        li {
-          margin-bottom: 2px;
-        }
-      }
-    }
-    > div:nth-child(2) {
-      margin-top: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      > div:first-child {
-        font-size: 0.7rem;
-        font-weight: 900;
-      }
-      > div:last-child {
-        font-weight: 900;
-        font-size: 1.05rem;
-        color: var(--text-blue);
-        cursor: pointer;
-      }
-    }
-    > ul {
-      a {
-        padding: 10px;
-        font-size: 0.8rem;
-        margin-top: 4px;
-        opacity: 0.9;
-      }
-    }
-  }
-  > div:nth-child(2) {
-    @media (min-width: 980px) {
-      display: none;
-    }
-  }
-  > div:last-child {
-    width: 81%;
-    @media (max-width: 980px) {
-      width: 100%;
-    }
-    > div:first-child {
-      display: flex;
-      justify-content: space-between;
-      > div:first-child {
-        font-size: 1.3rem;
-      }
-      > div:last-child {
-        button {
-          padding: 10px 9px;
-          svg {
-            margin-top: -0.3em;
-            margin-bottom: -0.3em;
-            margin-right: 3px;
-          }
-        }
-        .edit_btn {
-          background-color: white;
-          opacity: 0.8;
-          :hover {
-            background-color: #eeeded;
-          }
-        }
-      }
-    }
-    > div:nth-child(2) {
-      margin-top: 20px;
-      font-size: 1.16rem;
-    }
-    > div:last-child {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 48px;
-      opacity: 0.6;
-      > p {
-        margin-top: 30px;
-        font-size: 0.8rem;
-      }
-    }
-  }
-`;
-
 //=======================Edit 컨텐츠=======================
 
 const EditContent = () => {
+  const router = useRouter();
+  const [userData] = useRecoilState(userDataState);
+  const [form, onChange] = useInput<{ [key: string]: string }>({
+    display_name: '',
+    location: '',
+    about_me: '',
+  });
+  const submitEvent = () => {
+    api
+      .post(`/users/${userData.user_id}/edit`, { ...form, image_url: img })
+      .then(() => {
+        router.push('/');
+      })
+      .catch(() => alert('잠시 후에 다시 시도해주세요.'));
+  };
+  const cancelEvent = () => {
+    router.push('/');
+  };
+
   const target = useRef<HTMLInputElement>(null);
   const uploadClick = () => {
     if (target.current) target.current.click();
   };
-  const [img, setImg] = useState(
-    'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
-  );
+  const [img, setImg] = useState('');
+  useEffect(() => {
+    if (userData.image) {
+      return setImg(userData.image);
+    }
+    setImg(DEFAULT_IMG2);
+  }, []);
 
   const saveImgFile = () => {
     if (!target.current?.files) return;
@@ -976,9 +778,9 @@ const EditContent = () => {
     //서버 유무에 따라 추가 작업 결정
     reader.onloadend = () => {
       const formData = new FormData();
-      formData.append('data', file);
+      formData.append('file', file);
       api
-        .post('/img', formData, {
+        .post('/upload', formData, {
           headers: {
             'Content-Type': `multipart/form-data`,
           },
@@ -1028,6 +830,8 @@ const EditContent = () => {
                 <Input
                   id={label}
                   name={label}
+                  value={form[label]}
+                  onChange={onChange}
                   placeholder={label === 'title' ? 'No title has been set' : ''}
                   paddingLeft="10px"
                 />
@@ -1053,10 +857,10 @@ const EditContent = () => {
           </div>
         </div>
         <div className="submit_box">
-          <Button color="var(--text-white)">
+          <Button onClick={submitEvent} color="var(--text-white)">
             <a>Save profile</a>
           </Button>
-          <button>
+          <button onClick={cancelEvent}>
             <a>Cancel</a>
           </button>
         </div>

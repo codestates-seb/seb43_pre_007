@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import LeftSideBar from '../side_bar/LeftSideBar';
-import Modal from '../modal/modal';
 
 type ContainerProps = {
   children: JSX.Element;
@@ -9,7 +8,6 @@ type ContainerProps = {
 const Container = ({ children }: ContainerProps) => {
   return (
     <>
-      <Modal />
       <PagesContainer>
         <div>
           <LeftSideBar width={164} />

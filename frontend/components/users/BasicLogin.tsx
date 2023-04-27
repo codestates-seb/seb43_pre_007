@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useInput } from '@/hooks/useInput';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { userNameState, userImgState, userIdState } from '@/recoil/atom';
 import { api } from '@/util/api';
+import { isLoginState, userDataState } from '@/recoil/atom';
 const FormContainer = styled.div`
   width: 100%;
 
@@ -89,10 +89,8 @@ const FormInputs = styled.input<InvalidInput>`
 `;
 
 const BasicLogin = () => {
-  // 전역 변수 recoil(클라이언트)
-  const [, setUserName] = useRecoilState(userNameState);
-  const [, setUserImg] = useRecoilState(userImgState);
-
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  const [userData, setUserData] = useRecoilState(userDataState);
   // 로그인 실패시 안내 문구
   const [loginFailed, setloginFailed] = useState(false);
   // 유효성검사
@@ -107,7 +105,6 @@ const BasicLogin = () => {
     password: '',
   });
 
-  const [, setUserId] = useRecoilState(userIdState);
   // next: navigation 기능
   const router = useRouter();
   // Login 버튼 누르고 나서부터 계속 업데이트
@@ -162,14 +159,12 @@ const BasicLogin = () => {
         api
           .post('/users/login', { email, password })
           .then((res) => {
-            console.log(res)
-            router.push('/questions');
+            setUserData(res.data);
+            router.push('/');
             localStorage.setItem('accessToken', res.data.access_token);
             localStorage.setItem('refreshToken', res.data.refresh_token);
-            setUserId(res.data.user_id);
-            setUserName(res.data.display_name);
-            setUserImg(res.data.user_img || '');
             setloginFailed(false);
+            setIsLogin(true);
             resetInput();
           })
           // 실패시

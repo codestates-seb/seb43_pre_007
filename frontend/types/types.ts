@@ -7,7 +7,7 @@ export type User = {
   question_count: number;
   answer_count: number;
   tags: Tags[];
-  image_url:string;
+  image_url: string;
 };
 
 export type PageInfo = {
@@ -20,6 +20,14 @@ export type PageInfo = {
 export type Tags = {
   tag_id: number;
   name: string;
-  info:string;
-  question_amount:number;
+  info: string;
+  question_amount: number;
+};
+
+export type UserData = {
+  access_token?: string;
+  display_name: string;
+  image?: string;
+  refresh_token?: string;
+  user_id: number;
 };

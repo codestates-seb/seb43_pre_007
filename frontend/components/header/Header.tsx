@@ -5,23 +5,21 @@ import Button from '../button/Button';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useOffClick } from '@/hooks/useOffClick';
-import { useRecoilState } from 'recoil';
-import { userIdState, userImgState, userNameState } from '@/recoil/atom';
 import LeftSideBar from '../side_bar/LeftSideBar';
 import Input from '../input/Input';
 import { useInput } from '@/hooks/useInput';
 import { useOffResize } from '@/hooks/useOffResize';
+import { useRecoilState } from 'recoil';
+import { isLoginState, userDataState } from '@/recoil/atom';
 import { api } from '@/util/api';
-import { tokenLocalStorage } from '@/util/local_storage/localStorage';
-import axios from 'axios';
-import { HEADERS } from '@/constant/constant';
+import { DEFAULT_IMG } from '@/constant/constant';
 
 type HeaderContainerProps = {
   leftNav: boolean;
   productsNav: boolean;
   searchNav: boolean;
   rightNav: boolean;
-  userId: number;
+  isLogin: boolean;
 };
 
 const Header = () => {
@@ -62,18 +60,27 @@ const Header = () => {
   useOffResize(740, 'down', setSearchNav);
   useOffResize(350, 'down', setRightNav);
 
-  //유저 로그인 상태 및 함수
-  const [userId, setUserId] = useRecoilState(userIdState);
-  const [, setUserName] = useRecoilState(userNameState);
-  const [, setUserImg] = useRecoilState(userImgState);
-  
+  //유저 데이터
+  const [userData, setUserData] = useRecoilState(userDataState);
+  //새로고침 유저 대비
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  useEffect(() => {
+    api('/auth')
+      .then((res) => {
+        setUserData(res.data);
+        setIsLogin(true);
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <HeaderContainer
       leftNav={leftNav}
       productsNav={productsNav}
       searchNav={searchNav}
       rightNav={rightNav}
-      userId={userId}
+      isLogin={isLogin}
     >
       <div>
         <a className="s-menu-bar" onClick={leftNavHandler}>
@@ -84,7 +91,7 @@ const Header = () => {
           <span>Stack Overflow</span>
         </Link>
         <ol className="s-navigation">
-          {userId === 0 && (
+          {!isLogin && (
             <li className="about">
               <a>About</a>
             </li>
@@ -96,7 +103,7 @@ const Header = () => {
           >
             <a>Products</a>
           </li>
-          {userId === 0 && (
+          {!isLogin && (
             <li className="for-teams">
               <a>For Teams</a>
             </li>
@@ -210,13 +217,14 @@ const Header = () => {
             <li className="nav-search">
               <GoSearch />
             </li>
-            {userId !== 0 ? (
+            {isLogin ? (
               <>
                 <li className="user-img">
-                  <Link href="/users/21615528/신동민">
-                    {/* users데이터를 가져오면 동적으로 바꿔줘야함 */}
+                  <Link
+                    href={`/users/${userData.user_id}/${userData.display_name}`}
+                  >
                     <img
-                      src="https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=48&d=identicon&r=PG&f=y&so-version=2"
+                      src={userData.image ? `${userData.image}` : DEFAULT_IMG}
                       alt=""
                     />
                   </Link>
@@ -509,7 +517,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   }
 
   form {
-    width: ${(props) => (props.userId ? '61.7%' : '57.5%')};
+    width: ${(props) => (props.isLogin ? '61.7%' : '57.5%')};
     height: 100%;
     padding: 0px calc(8px * 1);
     position: relative;
@@ -597,7 +605,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
       @media (max-width: 350px) {
         overflow-x: scroll;
         width: ${(props) =>
-          props.userId ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
+          props.isLogin ? 'calc((100vw - 60%))' : 'calc((100vw - 100%))'};
         ::-webkit-scrollbar {
           width: 1px;
           height: 10px;
@@ -608,7 +616,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         }
       }
       @media (max-width: 220px) {
-        width: ${(props) => (props.userId ? '60px' : '50px')};
+        width: ${(props) => (props.isLogin ? '60px' : '50px')};
       }
       display: flex;
       li {
@@ -617,7 +625,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
         justify-content: center;
         white-space: nowrap; //부모 요소 내에서 텍스트가 줄 바꿈 유지
         @media (max-width: 350px) {
-          margin-bottom: ${(props) => (props.userId ? '-10px' : '-1px')};
+          margin-bottom: ${(props) => (props.isLogin ? '-10px' : '-1px')};
         }
       }
       .nav-search {
@@ -631,7 +639,7 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
           background-color: #ececec;
         }
         @media (max-width: 350px) {
-          height: ${(props) => (props.userId ? '' : '38px')};
+          height: ${(props) => (props.isLogin ? '' : '38px')};
         }
         @media (max-width: 740px) {
           display: flex;

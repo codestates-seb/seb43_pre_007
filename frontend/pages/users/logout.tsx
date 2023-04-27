@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import faviconSprite from '@/public/faviconSprite.png';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { userIdState, userImgState, userNameState } from '@/recoil/atom';
-import { setLocalStorage } from '@/util/local_storage/localStorage';
+import { isLoginState, userDataState } from '@/recoil/atom';
 
 // 서비스 목록
 const serviceList = [
@@ -51,19 +50,21 @@ const serviceList = [
 ];
 
 const Logout = () => {
-  const [, setUserId] = useRecoilState(userIdState);
-  const [, setUserName] = useRecoilState(userNameState);
-  const [, setUserImg] = useRecoilState(userImgState);
-
   const router = useRouter();
+
+  const [, setUserData] = useRecoilState(userDataState);
+  const [, setIsLogin] = useRecoilState(isLoginState);
 
   const logoutsubmit = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    setUserId(0);
-    setUserName('');
-    setUserImg('');
+    setIsLogin(false);
+    setUserData({
+      display_name: '',
+      image: '',
+      user_id: 0,
+    });
     router.push('/');
   };
 
