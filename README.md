@@ -56,3 +56,11 @@ Clone Stack Over Flow
 |Spring Data Jpa|S3|EC2|RDS|JWT|
 |------|---|---|------|----|
 |![datajpa](https://user-images.githubusercontent.com/117655658/234901935-b447cc1c-df76-4ae0-ae8a-70006c267a7b.png)|![s3](https://user-images.githubusercontent.com/117655658/234901955-6fe68994-fffa-43b8-a1e0-0e5e31b95c0b.png)|![ec2](https://user-images.githubusercontent.com/117655658/234901974-b461f748-9f12-4601-b4af-8126d10820d0.png)|![rds](https://user-images.githubusercontent.com/117655658/234901990-6b558729-1f8c-466b-991c-9e7b56607aba.png)|![jwt](https://user-images.githubusercontent.com/117655658/234902005-f3679329-e641-4c5f-a4cf-3b49b2621211.png)|
+
+## API 명세서
+![api1](https://user-images.githubusercontent.com/117655658/235028667-4389eea2-6b2b-467b-a4ef-1767fb76e3aa.PNG)
+![api2](https://user-images.githubusercontent.com/117655658/235028677-f06a8a8a-b042-4777-805e-aeaed3aec2e9.PNG)
+
+## 요구사항 명세서
+![요구사항명세서](https://user-images.githubusercontent.com/117655658/235028694-18b6af50-7e2e-40b4-94ff-d11a5f8a57bd.PNG)
+
