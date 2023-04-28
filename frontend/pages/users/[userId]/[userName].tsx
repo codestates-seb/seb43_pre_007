@@ -34,6 +34,7 @@ const MarkDownEditor = dynamic(
 );
 
 const UserDetail = () => {
+  const router = useRouter();
   const [userData] = useRecoilState(userDataState);
   const [pick, setPick] = useRecoilState(pickState);
   const pickHandler = (idx: number) => {
@@ -47,6 +48,7 @@ const UserDetail = () => {
   const selectPickCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPickCategory(Number(e.target.value));
   };
+  
   return (
     <UsersDetailContainer>
       <div className="profile">
@@ -57,7 +59,7 @@ const UserDetail = () => {
           />
         </div>
         <div>
-          <div>{userData.display_name}</div>
+          <div>{userData.display_name || router.query.userName}</div>
           <div>
             <div>
               <div>
@@ -87,14 +89,16 @@ const UserDetail = () => {
         </div>
         <div>
           <div>
-            <Button>
-              <span>
-                <svg width="18" height="18" viewBox="0 0 18 18">
-                  <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
-                </svg>
-              </span>
-              <span onClick={() => pickHandler(3)}>Edit profile</span>
-            </Button>
+            {userData.display_name === router.query.userName && (
+              <Button>
+                <span>
+                  <svg width="18" height="18" viewBox="0 0 18 18">
+                    <path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"></path>
+                  </svg>
+                </span>
+                <span onClick={() => pickHandler(3)}>Edit profile</span>
+              </Button>
+            )}
           </div>
           <div>
             <Button>
