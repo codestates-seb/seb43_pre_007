@@ -7,7 +7,7 @@ import { api } from '@/util/api';
 import { GoSearch } from 'react-icons/go';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import { DAYS_FILTER } from '@/constant/constant';
+import { DAYS_FILTER, DEFAULT_IMG2 } from '@/constant/constant';
 import { FilterButton } from '@/components/button/FilterButton';
 import { PageInfo, User } from '@/types/types';
 import { useEffect, useState } from 'react';
@@ -89,15 +89,12 @@ const Users = () => {
                 {data.data?.map((user: User) => (
                   <div key={user.user_id} className="grid-item">
                     <div>
-                      <img
-                        src={
-                          'https://www.gravatar.com/avatar/fa28bb5d084ba33bf405fbd8b3b1349b?s=256&d=identicon&r=PG&f=y&so-version=2'
-                        }
-                        alt=""
-                      />
+                      <img src={DEFAULT_IMG2} alt="" />
                     </div>
                     <div>
-                      <Link href={'/users/21615528/신동민'}>
+                      <Link
+                        href={`/users/${user.user_id}/${user.display_name}`}
+                      >
                         {user.display_name}
                       </Link>
                       <span>{user.location}</span>
