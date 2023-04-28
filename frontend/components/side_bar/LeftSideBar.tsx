@@ -14,6 +14,7 @@ type LeftSideBarProps = {
 const LeftSideBar = ({ width }: LeftSideBarProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
+  const navArr = PUBLIC_LI.map((li) => li.toLowerCase());
 
   return (
     <SideBarContainer width={width} className="left-side-bar">
@@ -30,18 +31,16 @@ const LeftSideBar = ({ width }: LeftSideBarProps) => {
             <li>
               <ol>
                 <li className="nav-main">PUBLIC</li>
-                {PUBLIC_LI.map((li) => (
+                {PUBLIC_LI.map((li, i) => (
                   <li
                     key={li}
                     className={
-                      currentPath.includes(`/${li.toLowerCase()}`)
+                      currentPath.includes(`/${navArr[i]}`)
                         ? 'nav-serve focus-link'
                         : 'nav-serve'
                     }
                   >
-                    <Link
-                      href={li === 'Companies' ? '' : `/${li.toLowerCase()}`}
-                    >
+                    <Link href={li === 'Companies' ? '' : `/${navArr[i]}`}>
                       {li === 'Questions' && <IoEarthSharp />}
                       {li}
                     </Link>
